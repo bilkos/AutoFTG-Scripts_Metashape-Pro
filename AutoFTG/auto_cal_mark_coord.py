@@ -1,3 +1,22 @@
+# AutoFTG - Scripts for Agisoft Metashape Pro
+# Scripts for process automation
+# This is an assembly of existing scripts from other users, and some additional 
+# scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia.
+# 
+# Author: Boriws Bilc
+# 
+# References:
+# -----------
+# Agisoft GitHub repository - https://github.com/agisoft-llc/metashape-scripts
+# 
+# Scripts used:
+# -------------
+# Copy Bounding Box Script
+#  https://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py
+#  Copies bounding boxes from chunk to other chunks.
+# 
+
+   
 import Metashape
 import os, sys, time
 from os import path
@@ -46,8 +65,8 @@ class CopyBoundingBoxDlg(QtWidgets.QDialog):
 		layout.addWidget(self.labelTo, 1, 0)
 		layout.addWidget(self.toChunks, 1, 1)
 
-		layout.addWidget(self.btnQuit, 2, 0)
-		layout.addWidget(self.btnOk, 2, 1)
+		layout.addWidget(self.btnQuit, 3, 0)
+		layout.addWidget(self.btnOk, 3, 1)
 
 		self.setLayout(layout)
 
@@ -100,7 +119,7 @@ class CopyBoundingBoxDlg(QtWidgets.QDialog):
 
 			chunk.region = new_region
 		
-		print("Script finished!")
+		print("Region copied!\nFrom: " + fromChunk.label + "\nTo: " + str(len(toChunks)) + "\n\nDone!")
 		self.reject()
 		
 
@@ -204,19 +223,19 @@ def marker_targets():
 def run_samplepoints():
 	doc = Metashape.app.document
 	chunk = doc.chunk
-	sampling = Metashape.app.getBool("Sample Points: Uniform sampling\n\nDefault spacing: 0.05m (5cm)\n\nContinue with these settings?")
-	sample_int = 0.05
-
+	sample_int = 0.10
+	sampling = Metashape.app.getBool("Start with default settings?\nTo change values choose 'No'.\n\nMode: Uniform sampling\nDefault spacing: 0.05m\n\n*Default Dense Cloud will be replaced!")
+	
 	if sampling == True:
 		# Sample points
 		chunk.samplePoints(source_data=Metashape.ModelData, uniform_sampling=True, points_spacing=sample_int)
-		Metashape.app.messageBox("Sample Points\n\nDone!.")
+		Metashape.app.messageBox("Sample Points process complete!\n\nNew point spacing: " + sample_int + "m")
 		doc.save()
 		Metashape.app.update()
 	else:
 		sample_int = Metashape.app.getFloat("Enter point spacing (m):", sample_int)
 		chunk.samplePoints(source_data=Metashape.ModelData, uniform_sampling=True, points_spacing=sample_int)
-		Metashape.app.messageBox("Sample Points process complete!")
+		Metashape.app.messageBox("Sample Points process complete!\n\nNew point spacing: " + sample_int + "m")
 		doc.save()
 		Metashape.app.update()	
 
@@ -241,8 +260,6 @@ def newchunk_kalota():
 	addcalib = Metashape.app.getBool("Import camera calibration?\n\nCamera: HH3_031 by dibit")
 	if addcalib == True:
 		cam_calibration1()
-	startmarkerdet =  Metashape.app.getBool("Continue with marker detection?")
-	if startmarkerdet == True:
 		marker_targets()
 
 
@@ -289,7 +306,7 @@ def newchunk_stbbet():
 		marker_targets()
 
 def navodila_proces():
-	Metashape.app.messageBox("Osnovni koraki postopka obdelave:\n\n1. Ustvari nov chunk - Menu: AtuoFTG -> Create Chunk\n*2. Nastavi kalibracijo kamere\n*3. Detekcija markerjev in uvoz tock\n\n4. Align Photos\n\n5. Preveri markerje\n6. Copy Region\n\n7. Build Dense Cloud\n\n8. Pocisti tocke na celu izkopa oz.\n   obrezi tocke na bokih stopnice.\n\n9. Build Mesh\n10. Sample Points\n11. Razrez dense cloud-a (izkop/b.bet.)\n12. Izvoz podatkov")
+	Metashape.app.messageBox("Osnovni koraki postopka obdelave:\n\n1. Ustvari nov chunk - Menu: AtuoFTG -> Create Chunk\n*2. Nastavi kalibracijo kamere\n*3. Detekcija markerjev in uvoz tock\n\n4. Align Photos\n\n5. Preveri markerje\n6. Copy Region\n\n7. Build Dense Cloud\n\n8. Pocisti tocke na celu izkopa oz.\n   obrezi tocke na bokih stopnice.\n\n9. Build Mesh\n10. Sample Points\n11. Razrez dense cloud-a (izkop/b.bet.)\n12. Izvoz podatkov\n\nAvtor skripte: Boris Bilc")
 
 
 def prazno():
@@ -336,6 +353,6 @@ Metashape.app.addMenuItem(label5, run_samplepoints)
 labelsep3 = "< AutoFTG >/--------------------"
 Metashape.app.addMenuItem(labelsep3, prazno)
 
-labelhelp = "< AutoFTG >/( i ) Kratka navodila"
+labelhelp = "< AutoFTG >/( i ) Kratka navodila za FTG"
 Metashape.app.addMenuItem(labelhelp, navodila_proces)
 
