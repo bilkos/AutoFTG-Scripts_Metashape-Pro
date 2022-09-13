@@ -63,10 +63,10 @@ class CopyBoundingBoxDlg(QtWidgets.QDialog):
 		layout.addWidget(self.fromChunk, 0, 1)
 
 		layout.addWidget(self.labelTo, 1, 0)
-		layout.addWidget(self.toChunks, 1, 1)
+		layout.addWidget(self.toChunks, 1, 1, 6, 2)
 
-		layout.addWidget(self.btnQuit, 3, 0)
-		layout.addWidget(self.btnOk, 3, 1)
+		layout.addWidget(self.btnQuit, 8, 0)
+		layout.addWidget(self.btnOk, 8, 1)
 
 		self.setLayout(layout)
 
