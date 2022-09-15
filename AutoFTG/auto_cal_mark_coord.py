@@ -23,6 +23,8 @@ from os import path
 from PySide2 import QtGui, QtCore, QtWidgets
 from PySide2.QtGui import QIcon
 
+app_ver = "1.4"
+
 # Checking compatibility
 compatible_major_version = "1.8"
 found_major_version = ".".join(Metashape.app.version.split('.')[:2])
@@ -224,7 +226,7 @@ def run_samplepoints():
 	doc = Metashape.app.document
 	chunk = doc.chunk
 	sample_int = 0.10
-	sampling = Metashape.app.getBool("Start with default settings?\nTo change values choose 'No'.\n\nMode: Uniform sampling\nDefault spacing: 0.05m\n\n*Default Dense Cloud will be replaced!")
+	sampling = Metashape.app.getBool("Start process with default settings?\nTo change values choose 'No'.\n\nMode: Uniform sampling\nDefault spacing: 0.10m\n\n*Default Dense Cloud will be replaced!")
 	
 	if sampling == True:
 		# Sample points
@@ -259,7 +261,7 @@ def newchunk_kalota():
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
 	addcalib = Metashape.app.getBool("Import camera calibration?\n\nCamera: HH3_031 by dibit")
 	if addcalib == True:
-		cam_calibration1()
+		cam_calibration0()
 		marker_targets()
 
 
@@ -279,7 +281,7 @@ def newchunk_stizk():
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
 	addcalib = Metashape.app.getBool("Import camera calibration?\n\nCamera: HH3_031 by dibit")
 	if addcalib == True:
-		cam_calibration1()
+		cam_calibration0()
 	startmarkerdet =  Metashape.app.getBool("Continue with marker detection?")
 	if startmarkerdet == True:
 		marker_targets()
@@ -300,13 +302,13 @@ def newchunk_stbbet():
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
 	addcalib = Metashape.app.getBool("Import camera calibration?\n\nCamera: HH3_031 by dibit")
 	if addcalib == True:
-		cam_calibration1()
+		cam_calibration0()
 	startmarkerdet =  Metashape.app.getBool("Continue with marker detection?")
 	if startmarkerdet == True:
 		marker_targets()
 
 def navodila_proces():
-	Metashape.app.messageBox("Osnovni koraki postopka obdelave:\n\n1. Ustvari nov chunk - Menu: AtuoFTG -> Create Chunk\n*2. Nastavi kalibracijo kamere\n*3. Detekcija markerjev in uvoz tock\n\n4. Align Photos\n\n5. Preveri markerje\n6. Copy Region\n\n7. Build Dense Cloud\n\n8. Pocisti tocke na celu izkopa oz.\n   obrezi tocke na bokih stopnice.\n\n9. Build Mesh\n10. Sample Points\n11. Razrez dense cloud-a (izkop/b.bet.)\n12. Izvoz podatkov\n\nAvtor skripte: Boris Bilc")
+	Metashape.app.messageBox("Osnovni koraki postopka obdelave:\n\n1. Ustvari nov chunk - Menu: AtuoFTG -> Create Chunk\n*2. Nastavi kalibracijo kamere\n*3. Detekcija markerjev in uvoz tock\n\n4. Align Photos\n\n5. Preveri markerje\n6. Copy Region\n\n7. Build Dense Cloud\n\n8. Pocisti tocke na celu izkopa oz.\n   obrezi tocke na bokih stopnice.\n\n9. Build Mesh\n10. Sample Points\n11. Razrez dense cloud-a (izkop/b.bet.)\n12. Izvoz podatkov\n\nAvtor skripte: Boris Bilc / Verzija: " + app_ver)
 
 
 def prazno():
@@ -323,11 +325,11 @@ Metashape.app.addMenuItem(label1b, newchunk_stizk)
 label1c = "< AutoFTG >/Create Chunk/> STOPNICA - B.BET."
 Metashape.app.addMenuItem(label1c, newchunk_stbbet)
 
-label2a = "< AutoFTG >/- Camera Calibration/(Default) HH3_031 by dibit > T8-KP"
-Metashape.app.addMenuItem(label2a, cam_calibration1)
+label2a = "< AutoFTG >/- Camera Calibration/NULL Cal. - Fisheye"
+Metashape.app.addMenuItem(label2a, cam_calibration0)
 
-label2b = "< AutoFTG >/- Camera Calibration/NULL Cal. - Fisheye"
-Metashape.app.addMenuItem(label2b, cam_calibration0)
+label2b = "< AutoFTG >/- Camera Calibration/(Default) HH3_031 by dibit > T8-KP"
+Metashape.app.addMenuItem(label2b, cam_calibration1)
 
 label2c = "< AutoFTG >/- Camera Calibration/DJI Phantom 4 Pro 2.0 (CELU)"
 Metashape.app.addMenuItem(label2c, cam_calibration2)
