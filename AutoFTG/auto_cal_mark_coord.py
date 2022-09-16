@@ -240,8 +240,8 @@ def marker_targets():
 def run_samplepoints():
 	doc = Metashape.app.document
 	chunk = doc.chunk
-	sample_int = 0.10
-	sampling = Metashape.app.getBool("Start process with default settings?\nTo change values choose 'No'.\n\nMode: Uniform sampling\nDefault spacing: 0.10m\n\n*Default Dense Cloud will be replaced!")
+	sample_int = 0.15
+	sampling = Metashape.app.getBool("Start process with default settings?\nTo change values choose 'No'.\n\nMode: Uniform sampling\nDefault spacing: " + str(sample_int) + "m\n\n*Default Dense Cloud will be replaced!")
 	
 	if sampling == True:
 		# Sample points
@@ -255,6 +255,26 @@ def run_samplepoints():
 		Metashape.app.messageBox("Sample Points process complete!\n\nNew point spacing: " + sample_int + "m")
 		doc.save()
 		Metashape.app.update()	
+
+
+def run_filterpoints():
+	doc = Metashape.app.document
+	chunk = doc.chunk
+	filter_int = 0.15
+	filtering = Metashape.app.getBool("Start process with default settings? To change values choose 'No'.\n\nMode: Uniform sampling\nDefault spacing: " + str(filter_int) + "m\n\n*Default Dense Cloud will be replaced!")
+ 	
+	if filtering == True:
+		# Sample points
+		chunk.filterDenseCloud(point_spacing=filter_int)
+		Metashape.app.messageBox("Filtering process complete!\n\nNew point spacing: " + filter_int + "m")
+		doc.save()
+		Metashape.app.update()
+	else:
+		filter_int = Metashape.app.getFloat("Enter point spacing (m):", filter_int)
+		chunk.filterDenseCloud(point_spacing=filter_int)
+		Metashape.app.messageBox("Filtering process complete!\n\nNew point spacing: " + filter_int + "m")
+		doc.save()
+		Metashape.app.update()
 
 
 def find_files(folder, types):
@@ -367,8 +387,11 @@ Metashape.app.addMenuItem(label4, copy_bbox)
 labelsep1 = "< AutoFTG >/----------"
 Metashape.app.addMenuItem(labelsep1, prazno)
 
-label5 = "< AutoFTG >/Sample Points (Uniform)"
+label5 = "< AutoFTG >/Sample Points (Uniform sampling from Mesh)"
 Metashape.app.addMenuItem(label5, run_samplepoints)
+
+label6 = "< AutoFTG >/Filter Points (Uniform, Grid and Region oriented)"
+Metashape.app.addMenuItem(label6, run_filterpoints)
 
 labelsep3 = "< AutoFTG >/--------------------"
 Metashape.app.addMenuItem(labelsep3, prazno)
