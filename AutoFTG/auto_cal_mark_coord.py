@@ -162,7 +162,22 @@ def cam_calibration1():
 	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera_HH3_031_Fisheye.xml", format=Metashape.CalibrationFormatXML)
 	my_sensor.user_calib = my_calib
 	doc.save()
-	Metashape.app.messageBox("Camera Calibration imported.\n\nCamera: HH3_031 by dibit\nType: Fisheye\nFile: dibit-kamera_HH3_031_Fisheye.xml")
+	Metashape.app.messageBox("Camera Calibration imported.\n\nCamera: Kamera 1: HH3_031 by dibit\nType: Fisheye\nFile: dibit-kamera_HH3_031_Fisheye.xml")
+	Metashape.app.update()
+
+
+# Nalozi kalibracijo kamere / HH3_031 by dibit / Tip: Fisheye
+def cam_calibration1a():
+	doc = Metashape.app.document
+	chunk = doc.chunk	
+
+	my_sensor = chunk.sensors[0]
+	my_sensor.type = Metashape.Sensor.Type.Fisheye
+	my_calib = Metashape.Calibration()
+	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera-2_HH3_Fisheye.xml", format=Metashape.CalibrationFormatXML)
+	my_sensor.user_calib = my_calib
+	doc.save()
+	Metashape.app.messageBox("Camera Calibration imported.\n\nCamera: Kamera 2: HH3 by dibit\nType: Fisheye\nFile: dibit-kamera-2_HH3_Fisheye.xml")
 	Metashape.app.update()
 
 
@@ -259,7 +274,7 @@ def newchunk_kalota():
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
-	addcalib = Metashape.app.getBool("Import camera calibration?\n\nCamera: HH3_031 by dibit")
+	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
 	if addcalib == True:
 		cam_calibration0()
 		marker_targets()
@@ -279,7 +294,7 @@ def newchunk_stizk():
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
-	addcalib = Metashape.app.getBool("Import camera calibration?\n\nCamera: HH3_031 by dibit")
+	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
 	if addcalib == True:
 		cam_calibration0()
 	startmarkerdet =  Metashape.app.getBool("Continue with marker detection?")
@@ -300,7 +315,7 @@ def newchunk_stbbet():
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
-	addcalib = Metashape.app.getBool("Import camera calibration?\n\nCamera: HH3_031 by dibit")
+	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
 	if addcalib == True:
 		cam_calibration0()
 	startmarkerdet =  Metashape.app.getBool("Continue with marker detection?")
@@ -325,17 +340,20 @@ Metashape.app.addMenuItem(label1b, newchunk_stizk)
 label1c = "< AutoFTG >/Create Chunk/> STOPNICA - B.BET."
 Metashape.app.addMenuItem(label1c, newchunk_stbbet)
 
-label2a = "< AutoFTG >/- Camera Calibration/NULL Cal. - Fisheye"
+label2a = "< AutoFTG >/- Camera Calibration/*Default: NULL Cal. (Fisheye)"
 Metashape.app.addMenuItem(label2a, cam_calibration0)
 
-label2b = "< AutoFTG >/- Camera Calibration/(Default) HH3_031 by dibit > T8-KP"
+label2b = "< AutoFTG >/- Camera Calibration/Camera 1: HH3_031 by dibit (Fisheye)"
 Metashape.app.addMenuItem(label2b, cam_calibration1)
 
-label2c = "< AutoFTG >/- Camera Calibration/DJI Phantom 4 Pro 2.0 (CELU)"
-Metashape.app.addMenuItem(label2c, cam_calibration2)
+label2c = "< AutoFTG >/- Camera Calibration/Camera 2: HH3 by dibit (Fisheye)"
+Metashape.app.addMenuItem(label2c, cam_calibration1a)
 
-label2d = "< AutoFTG >/- Camera Calibration/DJI Phantom 4 Advanced (2B)"
-Metashape.app.addMenuItem(label2d, cam_calibration3)
+label2d = "< AutoFTG >/- Camera Calibration/DJI Phantom 4 Pro 2.0 (CELU)"
+Metashape.app.addMenuItem(label2d, cam_calibration2)
+
+label2e = "< AutoFTG >/- Camera Calibration/DJI Phantom 4 Advanced (2B)"
+Metashape.app.addMenuItem(label2e, cam_calibration3)
 
 label3a = "< AutoFTG >/- Detect Markers + Import Points"
 Metashape.app.addMenuItem(label3a, marker_targets)
