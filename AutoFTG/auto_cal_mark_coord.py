@@ -240,27 +240,27 @@ def marker_targets():
 def run_samplepoints():
 	doc = Metashape.app.document
 	chunk = doc.chunk
-	sample_int = 0.15
-	sampling = Metashape.app.getBool("Start process with default settings?\nTo change values choose 'No'.\n\nMode: Uniform sampling\nDefault spacing: " + str(sample_int) + "m\n\n*Default Dense Cloud will be replaced!")
+	sample_int = 0.05
+	sampling = Metashape.app.getBool("Start Point Sample?\n\n*Default Dense Cloud will be replaced!")
 	
 	if sampling == True:
 		# Sample points
-		chunk.samplePoints(source_data=Metashape.ModelData, uniform_sampling=True, points_spacing=sample_int)
-		Metashape.app.messageBox("Sample Points process complete!\n\nNew point spacing: " + sample_int + "m")
+		chunk.samplePoints(source_data=Metashape.ModelData, uniform_sampling=False)
+		Metashape.app.messageBox("Sample Points process complete!")
 		doc.save()
 		Metashape.app.update()
-	else:
-		sample_int = Metashape.app.getFloat("Enter point spacing (m):", sample_int)
-		chunk.samplePoints(source_data=Metashape.ModelData, uniform_sampling=True, points_spacing=sample_int)
-		Metashape.app.messageBox("Sample Points process complete!\n\nNew point spacing: " + sample_int + "m")
-		doc.save()
-		Metashape.app.update()	
+#	else:
+#		sample_int = Metashape.app.getFloat("Enter point spacing (m):", sample_int)
+#		chunk.samplePoints(source_data=Metashape.ModelData, uniform_sampling=True, points_spacing=sample_int)
+#		Metashape.app.messageBox("Sample Points process complete!")
+#		doc.save()
+#		Metashape.app.update()	
 
 
 def run_filterpoints():
 	doc = Metashape.app.document
 	chunk = doc.chunk
-	filter_int = 0.15
+	filter_int = 0.05
 	filtering = Metashape.app.getBool("Start process with default settings? To change values choose 'No'.\n\nMode: Uniform sampling\nDefault spacing: " + str(filter_int) + "m\n\n*Default Dense Cloud will be replaced!")
  	
 	if filtering == True:
@@ -317,8 +317,6 @@ def newchunk_stizk():
 	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
 	if addcalib == True:
 		cam_calibration0()
-	startmarkerdet =  Metashape.app.getBool("Continue with marker detection?")
-	if startmarkerdet == True:
 		marker_targets()
 
 def newchunk_stbbet():
@@ -338,8 +336,6 @@ def newchunk_stbbet():
 	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
 	if addcalib == True:
 		cam_calibration0()
-	startmarkerdet =  Metashape.app.getBool("Continue with marker detection?")
-	if startmarkerdet == True:
 		marker_targets()
 
 def navodila_proces():
