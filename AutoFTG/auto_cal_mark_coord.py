@@ -241,7 +241,7 @@ def run_samplepoints():
 	doc = Metashape.app.document
 	chunk = doc.chunk
 	sample_int = 0.05
-	sampling = Metashape.app.getBool("Start Point Sample?\n\n*Default Dense Cloud will be replaced!")
+	sampling = Metashape.app.getBool("Start Point Sampling?\n\n*Default Dense Cloud will be replaced!")
 	
 	if sampling == True:
 		# Sample points
@@ -249,12 +249,26 @@ def run_samplepoints():
 		Metashape.app.messageBox("Sample Points process complete!")
 		doc.save()
 		Metashape.app.update()
-#	else:
-#		sample_int = Metashape.app.getFloat("Enter point spacing (m):", sample_int)
-#		chunk.samplePoints(source_data=Metashape.ModelData, uniform_sampling=True, points_spacing=sample_int)
-#		Metashape.app.messageBox("Sample Points process complete!")
-#		doc.save()
-#		Metashape.app.update()	
+
+
+def run_samplepointsuni():
+	doc = Metashape.app.document.chunk.densecloud.copy()
+	chunk = doc.chunk
+	sample_int = 0.05
+	sampling = Metashape.app.getBool("Start Uniform Point Sampling?\nChoose (No) to change point spacing value.\n\n*Default Dense Cloud will be replaced!")
+	
+	if sampling == True:
+		# Sample points
+		chunk.samplePoints(source_data=Metashape.ModelData, uniform_sampling=True, points_spacing=sample_int)
+		Metashape.app.messageBox("Sample Points process complete!")
+		doc.save()
+		Metashape.app.update()
+	else:
+		sample_int = Metashape.app.getFloat("New spacing (m):", sample_int)
+		chunk.samplePoints(source_data=Metashape.ModelData, uniform_sampling=True, points_spacing=sample_int)
+		Metashape.app.messageBox("Sample Points process complete!")
+		doc.save()
+		Metashape.app.update()	
 
 
 def run_filterpoints():
@@ -383,15 +397,18 @@ Metashape.app.addMenuItem(label4, copy_bbox)
 labelsep1 = "< AutoFTG >/----------"
 Metashape.app.addMenuItem(labelsep1, prazno)
 
-label5 = "< AutoFTG >/Sample Points (Uniform sampling from Mesh)"
-Metashape.app.addMenuItem(label5, run_samplepoints)
+label5a = "< AutoFTG >/Sample Points (Surface Detail)"
+Metashape.app.addMenuItem(label5a, run_samplepoints)
 
-label6 = "< AutoFTG >/Filter Points (Uniform, Grid and Region oriented)"
+label5b = "< AutoFTG >/Sample Points (Uniform Spacing)"
+Metashape.app.addMenuItem(label5b, run_samplepointsuni)
+
+label6 = "< AutoFTG >/Filter Points (Uniform - Region oriented)"
 Metashape.app.addMenuItem(label6, run_filterpoints)
 
 labelsep3 = "< AutoFTG >/--------------------"
 Metashape.app.addMenuItem(labelsep3, prazno)
 
-labelhelp = "< AutoFTG >/( i ) Kratka navodila za FTG"
-Metashape.app.addMenuItem(labelhelp, navodila_proces)
+# labelhelp = "< AutoFTG >/( i ) Kratka navodila za FTG"
+# Metashape.app.addMenuItem(labelhelp, navodila_proces)
 
