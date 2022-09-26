@@ -241,9 +241,10 @@ def run_samplepoints():
 	doc = Metashape.app.document
 	chunk = doc.chunk
 	sample_int = 0.05
-	sampling = Metashape.app.getBool("Start Point Sampling?\n\n*Default Dense Cloud will be replaced!")
+	sampling = Metashape.app.getBool("Start Point Sampling?")
 	
 	if sampling == True:
+		chunk.dense_cloud.copy()
 		# Sample points
 		chunk.samplePoints(source_data=Metashape.ModelData, uniform_sampling=False)
 		Metashape.app.messageBox("Sample Points process complete!")
@@ -255,9 +256,10 @@ def run_samplepointsuni():
 	doc = Metashape.app.document.chunk.densecloud.copy()
 	chunk = doc.chunk
 	sample_int = 0.05
-	sampling = Metashape.app.getBool("Start Uniform Point Sampling?\nChoose (No) to change point spacing value.\n\n*Default Dense Cloud will be replaced!")
+	sampling = Metashape.app.getBool("Start Uniform Point Sampling?\nChoose (No) to change point spacing value.")
 	
 	if sampling == True:
+		chunk.dense_cloud.copy()
 		# Sample points
 		chunk.samplePoints(source_data=Metashape.ModelData, uniform_sampling=True, points_spacing=sample_int)
 		Metashape.app.messageBox("Sample Points process complete!")
@@ -265,6 +267,7 @@ def run_samplepointsuni():
 		Metashape.app.update()
 	else:
 		sample_int = Metashape.app.getFloat("New spacing (m):", sample_int)
+		chunk.dense_cloud.copy()
 		chunk.samplePoints(source_data=Metashape.ModelData, uniform_sampling=True, points_spacing=sample_int)
 		Metashape.app.messageBox("Sample Points process complete!")
 		doc.save()
@@ -275,9 +278,10 @@ def run_filterpoints():
 	doc = Metashape.app.document
 	chunk = doc.chunk
 	filter_int = 0.05
-	filtering = Metashape.app.getBool("Start process with default settings? To change values choose 'No'.\n\nMode: Uniform sampling\nDefault spacing: " + str(filter_int) + "m\n\n*Default Dense Cloud will be replaced!")
+	filtering = Metashape.app.getBool("Start process with default settings? To change values choose 'No'.\n\nMode: Uniform sampling\nDefault spacing: " + str(filter_int) + "m")
  	
 	if filtering == True:
+		chunk.dense_cloud.copy()
 		# Sample points
 		chunk.filterDenseCloud(point_spacing=filter_int)
 		Metashape.app.messageBox("Filtering process complete!\n\nNew point spacing: " + filter_int + "m")
@@ -285,6 +289,7 @@ def run_filterpoints():
 		Metashape.app.update()
 	else:
 		filter_int = Metashape.app.getFloat("Enter point spacing (m):", filter_int)
+		chunk.dense_cloud.copy()
 		chunk.filterDenseCloud(point_spacing=filter_int)
 		Metashape.app.messageBox("Filtering process complete!\n\nNew point spacing: " + filter_int + "m")
 		doc.save()
