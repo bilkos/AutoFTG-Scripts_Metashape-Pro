@@ -166,7 +166,7 @@ def cam_calibration1():
 	Metashape.app.update()
 
 
-# Nalozi kalibracijo kamere / HH3_031 by dibit / Tip: Fisheye
+# Nalozi kalibracijo kamere / HH3 KAMERA 2 by dibit / Tip: Fisheye
 def cam_calibration1a():
 	doc = Metashape.app.document
 	chunk = doc.chunk	
@@ -313,9 +313,9 @@ def newchunk_kalota():
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
-	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
+	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: HH3 KAMERA 2 by dibit - Fisheye")
 	if addcalib == True:
-		cam_calibration0()
+		cam_calibration1a()
 		marker_targets()
 
 
@@ -333,9 +333,9 @@ def newchunk_stizk():
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
-	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
+	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: HH3 KAMERA 2 by dibit - Fisheye")
 	if addcalib == True:
-		cam_calibration0()
+		cam_calibration1a()
 		marker_targets()
 
 def newchunk_stbbet():
@@ -352,9 +352,9 @@ def newchunk_stbbet():
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
-	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
+	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: HH3 KAMERA 2 by dibit - Fisheye")
 	if addcalib == True:
-		cam_calibration0()
+		cam_calibration1a()
 		marker_targets()
 
 def navodila_proces():
@@ -375,6 +375,9 @@ Metashape.app.addMenuItem(label1b, newchunk_stizk)
 label1c = "< AutoFTG >/Create Chunk/> STOPNICA - B.BET."
 Metashape.app.addMenuItem(label1c, newchunk_stbbet)
 
+labelsep4 = "< AutoFTG >/--------------------"
+Metashape.app.addMenuItem(labelsep4, prazno)
+
 label2a = "< AutoFTG >/- Camera Calibration/*Default: NULL Cal. (Fisheye)"
 Metashape.app.addMenuItem(label2a, cam_calibration0)
 
@@ -393,26 +396,26 @@ Metashape.app.addMenuItem(label2e, cam_calibration3)
 label3a = "< AutoFTG >/- Detect Markers + Import Points"
 Metashape.app.addMenuItem(label3a, marker_targets)
 
-labelsep2 = "< AutoFTG >/----------"
+labelsep2 = "< AutoFTG >/--------------------"
 Metashape.app.addMenuItem(labelsep2, prazno)
 
 label4 = "< AutoFTG >/Copy Region (Between Chunks)"
 Metashape.app.addMenuItem(label4, copy_bbox)
 
-labelsep1 = "< AutoFTG >/----------"
+labelsep1 = "< AutoFTG >/--------------------"
 Metashape.app.addMenuItem(labelsep1, prazno)
-
-label5a = "< AutoFTG >/Sample Points (Surface Detail)"
-Metashape.app.addMenuItem(label5a, run_samplepoints)
-
-label5b = "< AutoFTG >/Sample Points (Uniform Spacing)"
-Metashape.app.addMenuItem(label5b, run_samplepointsuni)
 
 label6 = "< AutoFTG >/Filter Points (Uniform - Region oriented)"
 Metashape.app.addMenuItem(label6, run_filterpoints)
 
 labelsep3 = "< AutoFTG >/--------------------"
 Metashape.app.addMenuItem(labelsep3, prazno)
+
+label5a = "< AutoFTG >/Sample Points (Surface Detail)"
+Metashape.app.addMenuItem(label5a, run_samplepoints)
+
+label5b = "< AutoFTG >/Sample Points (Uniform Spacing)"
+Metashape.app.addMenuItem(label5b, run_samplepointsuni)
 
 # labelhelp = "< AutoFTG >/( i ) Kratka navodila za FTG"
 # Metashape.app.addMenuItem(labelhelp, navodila_proces)
