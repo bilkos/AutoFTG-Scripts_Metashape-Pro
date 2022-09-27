@@ -23,7 +23,7 @@ from os import path
 from PySide2 import QtGui, QtCore, QtWidgets
 from PySide2.QtGui import QIcon
 
-app_ver = "1.4"
+app_ver = "1.5"
 
 # Checking compatibility
 compatible_major_version = "1.8"
