@@ -23,7 +23,7 @@ from os import path
 from PySide2 import QtGui, QtCore, QtWidgets
 from PySide2.QtGui import QIcon
 
-app_ver = "1.5"
+app_ver = "1.6"
 
 # Checking compatibility
 compatible_major_version = "1.8"
@@ -67,8 +67,8 @@ class CopyBoundingBoxDlg(QtWidgets.QDialog):
 		layout.addWidget(self.labelTo, 1, 0)
 		layout.addWidget(self.toChunks, 1, 1, 6, 2)
 
-		layout.addWidget(self.btnQuit, 8, 0)
-		layout.addWidget(self.btnOk, 8, 1)
+		layout.addWidget(self.btnQuit, 10, 0)
+		layout.addWidget(self.btnOk, 10, 1)
 
 		self.setLayout(layout)
 
@@ -137,6 +137,20 @@ def progress_print(p):
 
 
 # Nalozi kalibracijo kamere / Nulta / Tip: Fisheye
+def cam_calibrationdef():
+	doc = Metashape.app.document
+	chunk = doc.chunk
+	
+	my_sensor = chunk.sensors[0]
+	my_sensor.type = Metashape.Sensor.Type.Frame
+#	my_calib = Metashape.Calibration()
+#	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera_HH3_031_Fisheye.xml", format=Metashape.CalibrationFormatXML)
+#	my_sensor.user_calib = my_calib
+	doc.save()
+	Metashape.app.messageBox("Camera Calibration settings changed.\n\nCamera: none\nType: Frame\nFile: ---")
+	Metashape.app.update()
+
+
 def cam_calibration0():
 	doc = Metashape.app.document
 	chunk = doc.chunk
@@ -147,7 +161,7 @@ def cam_calibration0():
 #	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera_HH3_031_Fisheye.xml", format=Metashape.CalibrationFormatXML)
 #	my_sensor.user_calib = my_calib
 	doc.save()
-	Metashape.app.messageBox("Camera Calibration settings changed.\n\nCamera: none\nType: Fisheye\nFile: ---")
+	Metashape.app.messageBox("Camera Calibration configured.\n\nCamera: none\nType: Fisheye\nFile: ---")
 	Metashape.app.update()
 
 
@@ -240,7 +254,7 @@ def marker_targets():
 def run_samplepoints():
 	doc = Metashape.app.document
 	chunk = doc.chunk
-	sample_int = 0.05
+	# sample_int = 0.025
 	sampling = Metashape.app.getBool("Start Point Sampling?")
 	
 	if sampling == True:
@@ -253,9 +267,9 @@ def run_samplepoints():
 
 
 def run_samplepointsuni():
-	doc = Metashape.app.document.chunk.densecloud.copy()
+	doc = Metashape.app.document
 	chunk = doc.chunk
-	sample_int = 0.05
+	sample_int = 0.025
 	sampling = Metashape.app.getBool("Start Uniform Point Sampling?\nChoose (No) to change point spacing value.")
 	
 	if sampling == True:
@@ -277,7 +291,7 @@ def run_samplepointsuni():
 def run_filterpoints():
 	doc = Metashape.app.document
 	chunk = doc.chunk
-	filter_int = 0.05
+	filter_int = 0.025
 	filtering = Metashape.app.getBool("Start process with default settings? To change values choose 'No'.\n\nMode: Uniform sampling\nDefault spacing: " + str(filter_int) + "m")
  	
 	if filtering == True:
@@ -313,9 +327,9 @@ def newchunk_kalota():
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
-	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: HH3 KAMERA 2 by dibit - Fisheye")
+	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
 	if addcalib == True:
-		cam_calibration1a()
+		cam_calibration0()
 		marker_targets()
 
 
@@ -333,9 +347,9 @@ def newchunk_stizk():
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
-	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: HH3 KAMERA 2 by dibit - Fisheye")
+	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
 	if addcalib == True:
-		cam_calibration1a()
+		cam_calibration0()
 		marker_targets()
 
 def newchunk_stbbet():
@@ -352,9 +366,9 @@ def newchunk_stbbet():
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
-	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: HH3 KAMERA 2 by dibit - Fisheye")
+	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
 	if addcalib == True:
-		cam_calibration1a()
+		cam_calibration0()
 		marker_targets()
 
 def navodila_proces():
@@ -366,19 +380,22 @@ def prazno():
 
 
 # Menu items
-label1a = "< AutoFTG >/Create Chunk/> KALOTA | Drugo"
+label1a = "< AutoFTG >/Add Chunk: KALOTA | Drugo"
 Metashape.app.addMenuItem(label1a, newchunk_kalota)
 
-label1b = "< AutoFTG >/Create Chunk/> STOPNICA - IZKOP"
+label1b = "< AutoFTG >/Add Chunk: STOPNICA - IZKOP"
 Metashape.app.addMenuItem(label1b, newchunk_stizk)
 
-label1c = "< AutoFTG >/Create Chunk/> STOPNICA - B.BET."
+label1c = "< AutoFTG >/Add Chunk: STOPNICA - B.BET."
 Metashape.app.addMenuItem(label1c, newchunk_stbbet)
 
 labelsep4 = "< AutoFTG >/--------------------"
 Metashape.app.addMenuItem(labelsep4, prazno)
 
-label2a = "< AutoFTG >/- Camera Calibration/*Default: NULL Cal. (Fisheye)"
+label2 = "< AutoFTG >/- Camera Calibration/Initial: NULL Cal. (Frame)"
+Metashape.app.addMenuItem(label2, cam_calibrationdef)
+
+label2a = "< AutoFTG >/- Camera Calibration/Initial: NULL Cal. (Fisheye)"
 Metashape.app.addMenuItem(label2a, cam_calibration0)
 
 label2b = "< AutoFTG >/- Camera Calibration/Camera 1: HH3_031 by dibit (Fisheye)"
