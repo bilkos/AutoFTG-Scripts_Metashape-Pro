@@ -22,14 +22,83 @@ import os, sys, time
 from os import path
 from PySide2 import QtGui, QtCore, QtWidgets
 from PySide2.QtGui import QIcon
+import easygui
+from easygui import EgStore
 
-app_ver = "1.6"
+app_ver = "1.7"
 
 # Checking compatibility
 compatible_major_version = "1.8"
 found_major_version = ".".join(Metashape.app.version.split('.')[:2])
 if found_major_version != compatible_major_version:
 	raise Exception("Incompatible Metashape version: {} != {}".format(found_major_version, compatible_major_version))
+
+
+
+# NALAGANJE NASTAVITEV
+class Settings(EgStore):
+
+	def __init__(self, filename):  # filename is required
+		# Privzete vrednosti nastavitev - inicializacija nastavitev pri prvem zagonu
+		self.defaultCalibration = "0"
+		self.defaulfPointSample = "0.02"
+		self.defaultPointFilter = "0.02"
+		# Inicializacija
+		self.filename = filename  # this is required
+		self.restore()
+
+settingsFilename = "AutoFTGconfig.txt"		# Dattoteka z nastavitvami
+settingsFilenameExists = os.path.isfile(settingsFilename)	# Preveri, če datoteka z nastavitvami obstaja
+settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
+
+if settingsFilenameExists == False:
+	settings.store()    # persist the settings
+	print("Initializing default settings for AutoFTG...")
+else:
+	print("Initializing settings for AutoFTG...")
+
+# Izbira privzete kalibracije
+def cam_calibrationSettings():
+	current_cal = settings.defaultCalibration
+	new_cal = Metashape.app.getString("Enter calibration number:", current_cal)
+	
+	if new_cal == current_cal:
+		print("No changes...")
+	elif (int(new_cal) >= 0 and int(new_cal) <= 6):
+		settings.defaultCalibration = new_cal
+		settings.store()
+		print("Settings changed..." + str(settings.defaultCalibration))
+	else:
+		print("Entered calibration number does not exist. Noting changed.")
+
+# Izbira privzete kalibracije
+def def_pointsample():
+	current_ps = settings.defaulfPointSample
+	new_ps = Metashape.app.getString("Default point sample spacing (m):", current_ps)
+	
+	if new_ps == current_ps:
+		print("No changes... Old point sampling value kept (" + str(current_ps) + "m)")
+	elif (float(new_ps) > 0):
+		settings.defaulfPointSample = new_ps
+		settings.store()
+		print("Settings changed..." + str(settings.defaulfPointSample))
+	else:
+		print("Wrong value. Noting changed.")
+
+# Izbira privzete kalibracije
+def def_pointfilter():
+	current_pf = settings.defaultPointFilter
+	new_pf = Metashape.app.getString("Default point sample spacing (m):", current_pf)
+	
+	if new_pf == current_pf:
+		print("No changes... Old point filtering value kept (" + str(current_pf) + "m)")
+	elif (float(new_pf) > 0):
+		settings.defaultPointFilter = new_pf
+		settings.store()
+		print("Settings changed..." + str(settings.defaultPointFilter))
+	else:
+		print("Wrong value. Noting changed.")
+
 
 
 class CopyBoundingBoxDlg(QtWidgets.QDialog):
@@ -52,7 +121,7 @@ class CopyBoundingBoxDlg(QtWidgets.QDialog):
 			self.toChunks.addItem(chunk.label)
 
 		self.btnOk = QtWidgets.QPushButton("Ok")
-		self.btnOk.setFixedSize(200, 36)
+		self.btnOk.setFixedSize(120, 36)
 		self.btnOk.setToolTip("Copy bounding box to all selected chunks")
 
 		self.btnQuit = QtWidgets.QPushButton("Close")
@@ -60,15 +129,15 @@ class CopyBoundingBoxDlg(QtWidgets.QDialog):
 
 		layout = QtWidgets.QGridLayout()  # creating layout
 		layout.setColumnMinimumWidth(0, 80) # minimum column width
-		layout.setColumnMinimumWidth(1, 200) # minimum column width
+		layout.setColumnMinimumWidth(1, 180) # minimum column width
 		layout.addWidget(self.labelFrom, 0, 0)
 		layout.addWidget(self.fromChunk, 0, 1)
 
 		layout.addWidget(self.labelTo, 1, 0)
-		layout.addWidget(self.toChunks, 1, 1, 6, 2)
+		layout.addWidget(self.toChunks, 1, 1, 20, 2)
 
-		layout.addWidget(self.btnQuit, 10, 0)
-		layout.addWidget(self.btnOk, 10, 1)
+		layout.addWidget(self.btnQuit, 30, 0)
+		layout.addWidget(self.btnOk, 30, 1)
 
 		self.setLayout(layout)
 
@@ -135,9 +204,30 @@ def copy_bbox():
 def progress_print(p):
 		print('Task progress: {:.2f}%'.format(p))
 
+image_folder = ""
+
+def cam_calibration():
+	calsetting = int(settings.defaultCalibration)
+	if calsetting == 0:
+		cam_calibrationDefault()
+	elif calsetting == 1:
+		cam_calibration0()
+	elif calsetting == 2:
+		cam_calibration1a()
+	elif calsetting == 3:
+		cam_calibration1b()
+	elif calsetting == 4:
+		cam_calibration1c()
+	elif calsetting == 5:
+		cam_calibration2()
+	elif calsetting == 6:
+		cam_calibration3()
+	else:
+		cam_calibrationDefault()
+
 
 # Nalozi kalibracijo kamere / Nulta / Tip: Fisheye
-def cam_calibrationdef():
+def cam_calibrationDefault():
 	doc = Metashape.app.document
 	chunk = doc.chunk
 	
@@ -147,7 +237,7 @@ def cam_calibrationdef():
 #	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera_HH3_031_Fisheye.xml", format=Metashape.CalibrationFormatXML)
 #	my_sensor.user_calib = my_calib
 	doc.save()
-	Metashape.app.messageBox("Camera Calibration settings changed.\n\nCamera: none\nType: Frame\nFile: ---")
+	Metashape.app.messageBox("Camera Calibration configured.\n\nCamera: null\nType: Frame\nFile: ---")
 	Metashape.app.update()
 
 
@@ -161,12 +251,12 @@ def cam_calibration0():
 #	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera_HH3_031_Fisheye.xml", format=Metashape.CalibrationFormatXML)
 #	my_sensor.user_calib = my_calib
 	doc.save()
-	Metashape.app.messageBox("Camera Calibration configured.\n\nCamera: none\nType: Fisheye\nFile: ---")
+	Metashape.app.messageBox("Camera Calibration configured.\n\nCamera: null\nType: Fisheye\nFile: ---")
 	Metashape.app.update()
 
 
 # Nalozi kalibracijo kamere / HH3_031 by dibit / Tip: Fisheye
-def cam_calibration1():
+def cam_calibration1a():
 	doc = Metashape.app.document
 	chunk = doc.chunk	
 
@@ -181,7 +271,7 @@ def cam_calibration1():
 
 
 # Nalozi kalibracijo kamere / HH3 KAMERA 2 by dibit / Tip: Fisheye
-def cam_calibration1a():
+def cam_calibration1b():
 	doc = Metashape.app.document
 	chunk = doc.chunk	
 
@@ -192,6 +282,21 @@ def cam_calibration1a():
 	my_sensor.user_calib = my_calib
 	doc.save()
 	Metashape.app.messageBox("Camera Calibration imported.\n\nCamera: Kamera 2: HH3 by dibit\nType: Fisheye\nFile: dibit-kamera-2_HH3_Fisheye.xml")
+	Metashape.app.update()
+
+
+# Nalozi kalibracijo kamere / HH3 KAMERA 2 by dibit / Tip: Fisheye
+def cam_calibration1c():
+	doc = Metashape.app.document
+	chunk = doc.chunk	
+
+	my_sensor = chunk.sensors[0]
+	my_sensor.type = Metashape.Sensor.Type.Fisheye
+	my_calib = Metashape.Calibration()
+	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera-3_HH3_Fisheye.xml", format=Metashape.CalibrationFormatXML)
+	my_sensor.user_calib = my_calib
+	doc.save()
+	Metashape.app.messageBox("Camera Calibration imported.\n\nCamera: Kamera 3: HH3 by dibit\nType: Fisheye\nFile: dibit-kamera-3_HH3_Fisheye.xml")
 	Metashape.app.update()
 
 
@@ -269,7 +374,7 @@ def run_samplepoints():
 def run_samplepointsuni():
 	doc = Metashape.app.document
 	chunk = doc.chunk
-	sample_int = 0.025
+	sample_int = float(settings.defaulfPointSample)
 	sampling = Metashape.app.getBool("Start Uniform Point Sampling?\nChoose (No) to change point spacing value.")
 	
 	if sampling == True:
@@ -291,7 +396,7 @@ def run_samplepointsuni():
 def run_filterpoints():
 	doc = Metashape.app.document
 	chunk = doc.chunk
-	filter_int = 0.025
+	filter_int = float(settings.defaultPointFilter)
 	filtering = Metashape.app.getBool("Start process with default settings? To change values choose 'No'.\n\nMode: Uniform sampling\nDefault spacing: " + str(filter_int) + "m")
  	
 	if filtering == True:
@@ -314,6 +419,80 @@ def find_files(folder, types):
     return [entry.path for entry in os.scandir(folder) if (entry.is_file() and os.path.splitext(entry.name)[1].lower() in types)]
 
 
+def newchunk_kalota_auto():
+	doc = Metashape.app.document
+	netpath = Metashape.app.document.path
+	netroot = path.dirname(netpath)
+	image_folder = Metashape.app.getExistingDirectory("Select photos folder (KALOTA)", netroot)
+	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
+	chunk = doc.addChunk()
+	chunk.addPhotos(photos)
+	chunk_name = os.path.basename(image_folder)
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+	doc.chunk = chunk
+	time.sleep(3)
+	doc.save()
+	Metashape.app.update()
+	cam_calibration()
+	time.sleep(3)
+	chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+	path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
+	chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+	chunk.updateTransform()
+	Metashape.app.update()
+	doc.save()
+
+
+def newchunk_stizk_auto():
+	doc = Metashape.app.document
+	netpath = Metashape.app.document.path
+	netroot = path.dirname(netpath)
+	image_folder = Metashape.app.getExistingDirectory("Select photos folder (STOPNICA - IZKOP)", netroot)
+	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
+	chunk = doc.addChunk()
+	chunk.addPhotos(photos)
+	chunk_name = os.path.basename(image_folder)
+	chunk_name = "ST_IZ_" + chunk_name
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+	doc.chunk = chunk
+	time.sleep(3)
+	doc.save()
+	Metashape.app.update()
+	cam_calibration()
+	time.sleep(3)
+	chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+	path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
+	chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+	chunk.updateTransform()
+	Metashape.app.update()
+	doc.save()
+
+
+def newchunk_stbbet_auto():
+	doc = Metashape.app.document
+	netpath = Metashape.app.document.path
+	netroot = path.dirname(netpath)
+	image_folder = Metashape.app.getExistingDirectory("Select photos folder (STOPNICA - B.BET.)", netroot)
+	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
+	chunk = doc.addChunk()
+	chunk.addPhotos(photos)
+	chunk_name = os.path.basename(image_folder)
+	chunk_name = "ST_BB_" + chunk_name
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+	doc.chunk = chunk
+	time.sleep(3)
+	doc.save()
+	Metashape.app.update()
+	cam_calibration()
+	time.sleep(3)
+	chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+	path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
+	chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+	chunk.updateTransform()
+	Metashape.app.update()
+	doc.save()
+
+
 def newchunk_kalota():
 	doc = Metashape.app.document
 	netpath = Metashape.app.document.path
@@ -329,8 +508,18 @@ def newchunk_kalota():
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
 	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
 	if addcalib == True:
-		cam_calibration0()
-		marker_targets()
+		cam_calibration()
+		doc.save()
+	nadaljujem = Metashape.app.getBool("Continue with marker detection and coordinates import?")
+	if nadaljujem == True:
+		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+		Metashape.app.messageBox("Marker Detection complete!\n\nNext step: Choose file with target coordinates.\nPoint file must have header.\nImport starts at line 7.")
+		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
+		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+		chunk.updateTransform()
+		Metashape.app.messageBox("Target coordinates imported.\n\nNext step: Workflow > Align Photos")
+		Metashape.app.update()
+		doc.save()
 
 
 def newchunk_stizk():
@@ -349,8 +538,19 @@ def newchunk_stizk():
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
 	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
 	if addcalib == True:
-		cam_calibration0()
-		marker_targets()
+		cam_calibration()
+		doc.save()
+	nadaljujem = Metashape.app.getBool("Continue with marker detection and coordinates import?")
+	if nadaljujem == True:
+		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+		Metashape.app.messageBox("Marker Detection complete!\n\nNext step: Choose file with target coordinates.\nPoint file must have header.\nImport starts at line 7.")
+		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
+		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+		chunk.updateTransform()
+		Metashape.app.messageBox("Target coordinates imported.\n\nNext step: Workflow > Align Photos")
+		Metashape.app.update()
+		doc.save()
+
 
 def newchunk_stbbet():
 	doc = Metashape.app.document
@@ -368,8 +568,19 @@ def newchunk_stbbet():
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
 	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
 	if addcalib == True:
-		cam_calibration0()
-		marker_targets()
+		cam_calibration()
+		doc.save()
+	nadaljujem = Metashape.app.getBool("Continue with marker detection and coordinates import?")
+	if nadaljujem == True:
+		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+		Metashape.app.messageBox("Marker Detection complete!\n\nNext step: Choose file with target coordinates.\nPoint file must have header.\nImport starts at line 7.")
+		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
+		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+		chunk.updateTransform()
+		Metashape.app.messageBox("Target coordinates imported.\n\nNext step: Workflow > Align Photos")
+		Metashape.app.update()
+		doc.save()
+
 
 def navodila_proces():
 	Metashape.app.messageBox("Osnovni koraki postopka obdelave:\n\n1. Ustvari nov chunk - Menu: AtuoFTG -> Create Chunk\n*2. Nastavi kalibracijo kamere\n*3. Detekcija markerjev in uvoz tock\n\n4. Align Photos\n\n5. Preveri markerje\n6. Copy Region\n\n7. Build Dense Cloud\n\n8. Pocisti tocke na celu izkopa oz.\n   obrezi tocke na bokih stopnice.\n\n9. Build Mesh\n10. Sample Points\n11. Razrez dense cloud-a (izkop/b.bet.)\n12. Izvoz podatkov\n\nAvtor skripte: Boris Bilc / Verzija: " + app_ver)
@@ -380,35 +591,50 @@ def prazno():
 
 
 # Menu items
-label1a = "< AutoFTG >/Add Chunk: KALOTA | Drugo"
+label0a = "< AutoFTG >/New Chunk (Auto) ->/Add Chunk: KALOTA | Drugo"
+Metashape.app.addMenuItem(label0a, newchunk_kalota_auto)
+
+label0b = "< AutoFTG >/New Chunk (Auto) ->/Add Chunk: STOPNICA - IZKOP"
+Metashape.app.addMenuItem(label0b, newchunk_stizk_auto)
+
+label0c = "< AutoFTG >/New Chunk (Auto) ->/Add Chunk: STOPNICA - B.BET."
+Metashape.app.addMenuItem(label0c, newchunk_stbbet_auto)
+
+label1a = "< AutoFTG >/New Chunk ->/Add Chunk: KALOTA | Drugo"
 Metashape.app.addMenuItem(label1a, newchunk_kalota)
 
-label1b = "< AutoFTG >/Add Chunk: STOPNICA - IZKOP"
+label1b = "< AutoFTG >/New Chunk ->/Add Chunk: STOPNICA - IZKOP"
 Metashape.app.addMenuItem(label1b, newchunk_stizk)
 
-label1c = "< AutoFTG >/Add Chunk: STOPNICA - B.BET."
+label1c = "< AutoFTG >/New Chunk ->/Add Chunk: STOPNICA - B.BET."
 Metashape.app.addMenuItem(label1c, newchunk_stbbet)
 
 labelsep4 = "< AutoFTG >/--------------------"
 Metashape.app.addMenuItem(labelsep4, prazno)
 
-label2 = "< AutoFTG >/- Camera Calibration/Initial: NULL Cal. (Frame)"
-Metashape.app.addMenuItem(label2, cam_calibrationdef)
+label2 = "< AutoFTG >/- Camera Calibration/(0) Initial: NULL (Frame)"
+Metashape.app.addMenuItem(label2, cam_calibrationDefault)
 
-label2a = "< AutoFTG >/- Camera Calibration/Initial: NULL Cal. (Fisheye)"
+label2a = "< AutoFTG >/- Camera Calibration/(1) Initial: NULL (Fisheye)"
 Metashape.app.addMenuItem(label2a, cam_calibration0)
 
-label2b = "< AutoFTG >/- Camera Calibration/Camera 1: HH3_031 by dibit (Fisheye)"
-Metashape.app.addMenuItem(label2b, cam_calibration1)
+label2b = "< AutoFTG >/- Camera Calibration/(2) Camera 1: HH3 by dibit (Fisheye)"
+Metashape.app.addMenuItem(label2b, cam_calibration1a)
 
-label2c = "< AutoFTG >/- Camera Calibration/Camera 2: HH3 by dibit (Fisheye)"
-Metashape.app.addMenuItem(label2c, cam_calibration1a)
+label2c = "< AutoFTG >/- Camera Calibration/(3) Camera 2: HH3 by dibit (Fisheye)"
+Metashape.app.addMenuItem(label2c, cam_calibration1b)
 
-label2d = "< AutoFTG >/- Camera Calibration/DJI Phantom 4 Pro 2.0 (CELU)"
+label2cc = "< AutoFTG >/- Camera Calibration/(4) Camera 3: HH3 by dibit (Fisheye)"
+Metashape.app.addMenuItem(label2cc, cam_calibration1c)
+
+label2d = "< AutoFTG >/- Camera Calibration/(5) DJI Phantom 4 Pro 2.0 (CELU)"
 Metashape.app.addMenuItem(label2d, cam_calibration2)
 
-label2e = "< AutoFTG >/- Camera Calibration/DJI Phantom 4 Advanced (2B)"
+label2e = "< AutoFTG >/- Camera Calibration/(6) DJI Phantom 4 Advanced (2B)"
 Metashape.app.addMenuItem(label2e, cam_calibration3)
+
+label2set = "< AutoFTG >/- Camera Calibration/Change default calibration..."
+Metashape.app.addMenuItem(label2set, cam_calibrationSettings)
 
 label3a = "< AutoFTG >/- Detect Markers + Import Points"
 Metashape.app.addMenuItem(label3a, marker_targets)
@@ -425,6 +651,9 @@ Metashape.app.addMenuItem(labelsep1, prazno)
 label6 = "< AutoFTG >/Filter Points (Uniform - Region oriented)"
 Metashape.app.addMenuItem(label6, run_filterpoints)
 
+label6z = "< AutoFTG >/Change default filter spacing..."
+Metashape.app.addMenuItem(label6z, def_pointfilter)
+
 labelsep3 = "< AutoFTG >/--------------------"
 Metashape.app.addMenuItem(labelsep3, prazno)
 
@@ -433,6 +662,9 @@ Metashape.app.addMenuItem(label5a, run_samplepoints)
 
 label5b = "< AutoFTG >/Sample Points (Uniform Spacing)"
 Metashape.app.addMenuItem(label5b, run_samplepointsuni)
+
+label5z = "< AutoFTG >/Change default sampling spacing..."
+Metashape.app.addMenuItem(label5z, def_pointsample)
 
 # labelhelp = "< AutoFTG >/( i ) Kratka navodila za FTG"
 # Metashape.app.addMenuItem(labelhelp, navodila_proces)
