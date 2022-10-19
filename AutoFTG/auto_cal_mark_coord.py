@@ -5,6 +5,10 @@
 # 
 # Author: Boriws Bilc
 # 
+# Script repository (GitHub):
+# ---------------------------
+# URL: https://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro
+# 
 # References:
 # -----------
 # Agisoft GitHub repository - https://github.com/agisoft-llc/metashape-scripts
@@ -25,10 +29,10 @@ from PySide2.QtGui import QIcon
 import easygui
 from easygui import EgStore
 
-app_ver = "1.7"
+app_ver = "1.7.3"
 
 # Checking compatibility
-compatible_major_version = "1.8"
+compatible_major_version = "2.0"
 found_major_version = ".".join(Metashape.app.version.split('.')[:2])
 if found_major_version != compatible_major_version:
 	raise Exception("Incompatible Metashape version: {} != {}".format(found_major_version, compatible_major_version))
@@ -47,7 +51,7 @@ class Settings(EgStore):
 		self.filename = filename  # this is required
 		self.restore()
 
-settingsFilename = "AutoFTGconfig.txt"		# Dattoteka z nastavitvami
+settingsFilename = "C:/Program Files/Agisoft/Metashape Pro/AutoFTGconfig.txt"		# Dattoteka z nastavitvami
 settingsFilenameExists = os.path.isfile(settingsFilename)	# Preveri, če datoteka z nastavitvami obstaja
 settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
 
@@ -55,7 +59,11 @@ if settingsFilenameExists == False:
 	settings.store()    # persist the settings
 	print("Initializing default settings for AutoFTG...")
 else:
-	print("Initializing settings for AutoFTG...")
+	print("Initializing settings for AutoFTG...\nLoaded settings:")
+	print("Calibration: " + str(settings.defaultCalibration))
+	print("Point sample spacing: " + str(settings.defaulfPointSample) + "m")
+	print("Point filter spacing: " + str(settings.defaultPointFilter) + "m")
+	print("To change settings use <AutoFTG> menu.")
 
 # Izbira privzete kalibracije
 def cam_calibrationSettings():
