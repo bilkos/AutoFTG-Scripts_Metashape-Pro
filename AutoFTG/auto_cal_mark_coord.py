@@ -29,7 +29,7 @@ from PySide2.QtGui import QIcon
 import easygui
 from easygui import EgStore
 
-app_ver = "1.7.3"
+app_ver = "1.7.4"
 
 # Checking compatibility
 compatible_major_version = "2.0"
@@ -47,6 +47,7 @@ class Settings(EgStore):
 		self.defaultCalibration = "0"
 		self.defaulfPointSample = "0.02"
 		self.defaultPointFilter = "0.02"
+		self.projectsFolder = ""
 		# Inicializacija
 		self.filename = filename  # this is required
 		self.restore()
@@ -56,6 +57,7 @@ settingsFilenameExists = os.path.isfile(settingsFilename)	# Preveri, če datotek
 settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
 
 if settingsFilenameExists == False:
+	settings.projectsFolder = Metashape.app.getExistingDirectory("Select projects folder...")
 	settings.store()    # persist the settings
 	print("Initializing default settings for AutoFTG...")
 else:
@@ -66,20 +68,28 @@ else:
 	print("To change settings use <AutoFTG> menu.")
 
 # Izbira privzete kalibracije
-def cam_calibrationSettings():
-	current_cal = settings.defaultCalibration
-	new_cal = Metashape.app.getString("Enter calibration number:", current_cal)
-	
-	if new_cal == current_cal:
-		print("No changes...")
-	elif (int(new_cal) >= 0 and int(new_cal) <= 6):
-		settings.defaultCalibration = new_cal
-		settings.store()
-		print("Settings changed..." + str(settings.defaultCalibration))
-	else:
-		print("Entered calibration number does not exist. Noting changed.")
+def cam_calibrationSettings(msg="Choose default calibration that will be\nused when creating new chunk.", title="Default Calibration", 
+				choices=["0 - NULL: Frame", "1 - NULL: Fisheye", "2 - HH3_031-1 by dibit: Fisheye", "3 - HH3_031-2 by dibit: Fisheye", "4 - HH3_031-3 by dibit: Fisheye", "5 - DJI Phantom 4 Pro 2.0 (CELU)", "6 - DJI Phantom 4 Advanced (2B)"], 
+				preselect=int(settings.defaultCalibration), callback=None, run=True):
 
-# Izbira privzete kalibracije
+	mb = easygui.choicebox(msg, title, choices=choices, preselect=preselect, callback=callback)
+
+	if run:
+		# reply = mb.run()
+		if mb == None:
+			print("Noting changed.")
+		else:
+			replyindex = choices.index(mb)
+			settings.defaultCalibration = replyindex
+			settings.store()
+			print("New settings applied...\nDefault cal.: " + mb)
+		# return reply
+	else:
+		print("Noting changed.")
+		return mb
+
+
+# Izbira ps
 def def_pointsample():
 	current_ps = settings.defaulfPointSample
 	new_ps = Metashape.app.getString("Default point sample spacing (m):", current_ps)
@@ -93,7 +103,7 @@ def def_pointsample():
 	else:
 		print("Wrong value. Noting changed.")
 
-# Izbira privzete kalibracije
+# Izbira filter
 def def_pointfilter():
 	current_pf = settings.defaultPointFilter
 	new_pf = Metashape.app.getString("Default point sample spacing (m):", current_pf)
@@ -212,7 +222,7 @@ def copy_bbox():
 def progress_print(p):
 		print('Task progress: {:.2f}%'.format(p))
 
-image_folder = ""
+image_folder = settings.projectsFolder
 
 def cam_calibration():
 	calsetting = int(settings.defaultCalibration)
@@ -438,9 +448,9 @@ def newchunk_kalota_auto():
 	chunk_name = os.path.basename(image_folder)
 	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
 	doc.chunk = chunk
-	time.sleep(3)
 	doc.save()
 	Metashape.app.update()
+	Metashape.app.messageBox("Loading images... press OK to continue.")
 	cam_calibration()
 	time.sleep(3)
 	chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
@@ -454,7 +464,8 @@ def newchunk_kalota_auto():
 def newchunk_stizk_auto():
 	doc = Metashape.app.document
 	netpath = Metashape.app.document.path
-	netroot = path.dirname(netpath)
+	# netroot = path.dirname(netpath)
+	netroot = settings.projectsFolder
 	image_folder = Metashape.app.getExistingDirectory("Select photos folder (STOPNICA - IZKOP)", netroot)
 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 	chunk = doc.addChunk()
@@ -463,9 +474,9 @@ def newchunk_stizk_auto():
 	chunk_name = "ST_IZ_" + chunk_name
 	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
 	doc.chunk = chunk
-	time.sleep(3)
 	doc.save()
 	Metashape.app.update()
+	Metashape.app.messageBox("Loading images... press OK to continue.")
 	cam_calibration()
 	time.sleep(3)
 	chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
@@ -479,7 +490,8 @@ def newchunk_stizk_auto():
 def newchunk_stbbet_auto():
 	doc = Metashape.app.document
 	netpath = Metashape.app.document.path
-	netroot = path.dirname(netpath)
+	# netroot = path.dirname(netpath)
+	netroot = settings.projectsFolder
 	image_folder = Metashape.app.getExistingDirectory("Select photos folder (STOPNICA - B.BET.)", netroot)
 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 	chunk = doc.addChunk()
@@ -488,9 +500,9 @@ def newchunk_stbbet_auto():
 	chunk_name = "ST_BB_" + chunk_name
 	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
 	doc.chunk = chunk
-	time.sleep(3)
 	doc.save()
 	Metashape.app.update()
+	Metashape.app.messageBox("Loading images... press OK to continue.")
 	cam_calibration()
 	time.sleep(3)
 	chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
@@ -504,7 +516,8 @@ def newchunk_stbbet_auto():
 def newchunk_kalota():
 	doc = Metashape.app.document
 	netpath = Metashape.app.document.path
-	netroot = path.dirname(netpath)
+	# netroot = path.dirname(netpath)
+	netroot = settings.projectsFolder
 	image_folder = Metashape.app.getExistingDirectory("Select photos folder (KALOTA)", netroot)
 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 	chunk = doc.addChunk()
@@ -533,7 +546,8 @@ def newchunk_kalota():
 def newchunk_stizk():
 	doc = Metashape.app.document
 	netpath = Metashape.app.document.path
-	netroot = path.dirname(netpath)
+	# netroot = path.dirname(netpath)
+	netroot = settings.projectsFolder
 	image_folder = Metashape.app.getExistingDirectory("Select photos folder (STOPNICA - IZKOP)", netroot)
 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 	chunk = doc.addChunk()
@@ -563,7 +577,8 @@ def newchunk_stizk():
 def newchunk_stbbet():
 	doc = Metashape.app.document
 	netpath = Metashape.app.document.path
-	netroot = path.dirname(netpath)
+	# netroot = path.dirname(netpath)
+	netroot = settings.projectsFolder
 	image_folder = Metashape.app.getExistingDirectory("Select photos folder (STOPNICA - B.BET.)", netroot)
 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 	chunk = doc.addChunk()
