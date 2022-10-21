@@ -21,15 +21,18 @@
 # 
 
    
-import Metashape
-import os, sys, time
+import os
+import sys
+import time
 from os import path
-from PySide2 import QtGui, QtCore, QtWidgets
-from PySide2.QtGui import QIcon
-import easygui
-from easygui import EgStore
 
-app_ver = "1.7.4"
+import easygui
+import Metashape
+from easygui import EgStore
+from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2.QtGui import QIcon
+
+app_ver = "1.7.5"
 
 # Checking compatibility
 compatible_major_version = "2.0"
@@ -445,14 +448,13 @@ def newchunk_kalota_auto():
 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 	chunk = doc.addChunk()
 	chunk.addPhotos(photos)
-	chunk_name = os.path.basename(image_folder)
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+	chunk_nameraw = os.path.basename(image_folder)
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.update()
 	Metashape.app.messageBox("Loading images... press OK to continue.")
 	cam_calibration()
-	time.sleep(3)
 	chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
 	path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
 	chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
@@ -470,15 +472,14 @@ def newchunk_stizk_auto():
 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 	chunk = doc.addChunk()
 	chunk.addPhotos(photos)
-	chunk_name = os.path.basename(image_folder)
+	chunk_nameraw = os.path.basename(image_folder)
 	chunk_name = "ST_IZ_" + chunk_name
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.update()
 	Metashape.app.messageBox("Loading images... press OK to continue.")
 	cam_calibration()
-	time.sleep(3)
 	chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
 	path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
 	chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
@@ -496,15 +497,14 @@ def newchunk_stbbet_auto():
 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 	chunk = doc.addChunk()
 	chunk.addPhotos(photos)
-	chunk_name = os.path.basename(image_folder)
+	chunk_nameraw = os.path.basename(image_folder)
 	chunk_name = "ST_BB_" + chunk_name
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.update()
 	Metashape.app.messageBox("Loading images... press OK to continue.")
 	cam_calibration()
-	time.sleep(3)
 	chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
 	path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
 	chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
@@ -522,8 +522,8 @@ def newchunk_kalota():
 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 	chunk = doc.addChunk()
 	chunk.addPhotos(photos)
-	chunk_name = os.path.basename(image_folder)
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+	chunk_nameraw = os.path.basename(image_folder)
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
@@ -552,9 +552,9 @@ def newchunk_stizk():
 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 	chunk = doc.addChunk()
 	chunk.addPhotos(photos)
-	chunk_name = os.path.basename(image_folder)
+	chunk_nameraw = os.path.basename(image_folder)
 	chunk_name = "ST_IZ_" + chunk_name
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
@@ -583,9 +583,9 @@ def newchunk_stbbet():
 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 	chunk = doc.addChunk()
 	chunk.addPhotos(photos)
-	chunk_name = os.path.basename(image_folder)
+	chunk_nameraw = os.path.basename(image_folder)
 	chunk_name = "ST_BB_" + chunk_name
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
