@@ -70,6 +70,12 @@ else:
 	print("Point filter spacing: " + str(settings.defaultPointFilter) + "m")
 	print("To change settings use <AutoFTG> menu.")
 
+def project_folder_change():
+	settings.projectsFolder = Metashape.app.getExistingDirectory("Select projects folder...")
+	settings.store()
+	print("Default project folder st to: " + str(settings.projectsFolder))
+
+
 # Izbira privzete kalibracije
 def cam_calibrationSettings(msg="Choose default calibration that will be\nused when creating new chunk.", title="Default Calibration", 
 				choices=["0 - NULL: Frame", "1 - NULL: Fisheye", "2 - HH3_031-1 by dibit: Fisheye", "3 - HH3_031-2 by dibit: Fisheye", "4 - HH3_031-3 by dibit: Fisheye", "5 - DJI Phantom 4 Pro 2.0 (CELU)", "6 - DJI Phantom 4 Advanced (2B)"], 
@@ -443,7 +449,8 @@ def find_files(folder, types):
 def newchunk_kalota_auto():
 	doc = Metashape.app.document
 	netpath = Metashape.app.document.path
-	netroot = path.dirname(netpath)
+	# netroot = path.dirname(netpath)
+	netroot = settings.projectsFolder
 	image_folder = Metashape.app.getExistingDirectory("Select photos folder (KALOTA)", netroot)
 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 	chunk = doc.addChunk()
@@ -473,8 +480,8 @@ def newchunk_stizk_auto():
 	chunk = doc.addChunk()
 	chunk.addPhotos(photos)
 	chunk_nameraw = os.path.basename(image_folder)
-	chunk_name = "ST_IZ_" + chunk_name
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
+	chunk_name = "ST_IZ_" + chunk_nameraw
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.update()
@@ -498,8 +505,8 @@ def newchunk_stbbet_auto():
 	chunk = doc.addChunk()
 	chunk.addPhotos(photos)
 	chunk_nameraw = os.path.basename(image_folder)
-	chunk_name = "ST_BB_" + chunk_name
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
+	chunk_name = "ST_BB_" + chunk_nameraw
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.update()
@@ -553,8 +560,8 @@ def newchunk_stizk():
 	chunk = doc.addChunk()
 	chunk.addPhotos(photos)
 	chunk_nameraw = os.path.basename(image_folder)
-	chunk_name = "ST_IZ_" + chunk_name
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
+	chunk_name = "ST_IZ_" + chunk_nameraw
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
@@ -584,8 +591,8 @@ def newchunk_stbbet():
 	chunk = doc.addChunk()
 	chunk.addPhotos(photos)
 	chunk_nameraw = os.path.basename(image_folder)
-	chunk_name = "ST_BB_" + chunk_name
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
+	chunk_name = "ST_BB_" + chunk_nameraw
+	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
 	doc.chunk = chunk
 	doc.save()
 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
@@ -656,9 +663,6 @@ Metashape.app.addMenuItem(label2d, cam_calibration2)
 label2e = "< AutoFTG >/- Camera Calibration/(6) DJI Phantom 4 Advanced (2B)"
 Metashape.app.addMenuItem(label2e, cam_calibration3)
 
-label2set = "< AutoFTG >/- Camera Calibration/Change default calibration..."
-Metashape.app.addMenuItem(label2set, cam_calibrationSettings)
-
 label3a = "< AutoFTG >/- Detect Markers + Import Points"
 Metashape.app.addMenuItem(label3a, marker_targets)
 
@@ -674,9 +678,6 @@ Metashape.app.addMenuItem(labelsep1, prazno)
 label6 = "< AutoFTG >/Filter Points (Uniform - Region oriented)"
 Metashape.app.addMenuItem(label6, run_filterpoints)
 
-label6z = "< AutoFTG >/Change default filter spacing..."
-Metashape.app.addMenuItem(label6z, def_pointfilter)
-
 labelsep3 = "< AutoFTG >/--------------------"
 Metashape.app.addMenuItem(labelsep3, prazno)
 
@@ -686,8 +687,20 @@ Metashape.app.addMenuItem(label5a, run_samplepoints)
 label5b = "< AutoFTG >/Sample Points (Uniform Spacing)"
 Metashape.app.addMenuItem(label5b, run_samplepointsuni)
 
-label5z = "< AutoFTG >/Change default sampling spacing..."
-Metashape.app.addMenuItem(label5z, def_pointsample)
+labelsep4 = "< AutoFTG >/--------------------"
+Metashape.app.addMenuItem(labelsep4, prazno)
+
+labelset0 = "< AutoFTG >/Change default project folder..."
+Metashape.app.addMenuItem(labelset0, project_folder_change)
+
+labelset1 = "< AutoFTG >/Change default calibration..."
+Metashape.app.addMenuItem(labelset1, cam_calibrationSettings)
+
+labelset2 = "< AutoFTG >/Change default filter spacing..."
+Metashape.app.addMenuItem(labelset2, def_pointfilter)
+
+labelset3 = "< AutoFTG >/Change default sampling spacing..."
+Metashape.app.addMenuItem(labelset3, def_pointsample)
 
 # labelhelp = "< AutoFTG >/( i ) Kratka navodila za FTG"
 # Metashape.app.addMenuItem(labelhelp, navodila_proces)
