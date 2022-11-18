@@ -20,7 +20,7 @@
 #  Copies bounding boxes from chunk to other chunks.
 # 
 
-   
+
 import os
 import sys
 import time
@@ -32,7 +32,9 @@ from easygui import EgStore
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtGui import QIcon
 
-app_ver = "1.7.5"
+app_ver = "1.7.6"
+
+
 
 # Checking compatibility
 compatible_major_version = "2.0"
