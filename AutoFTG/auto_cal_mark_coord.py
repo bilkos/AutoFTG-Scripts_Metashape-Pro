@@ -533,7 +533,7 @@ def newchunk_kalota():
 	chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
 	doc.chunk = chunk
 	doc.save()
-	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
+	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_nameraw)
 	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
 	if addcalib == True:
 		cam_calibration()
