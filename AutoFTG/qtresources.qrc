@@ -1,0 +1,16 @@
+<RCC>
+  <qresource prefix="/AutoFTG">
+    <file>AutoFTG-appicon.png</file>
+    <file>openfolder.png</file>
+    <file>pic_lib.png</file>
+    <file>picfileicon.png</file>
+    <file>picture-folder.png</file>
+    <file>target_icon_129425.png</file>
+    <file>target_icon_224983.png</file>
+    <file>target_icon_224995.png</file>
+    <file>kalota_m.png</file>
+    <file>kalota.png</file>
+    <file>stopnca_o.png</file>
+    <file>stopnca_s.png</file>
+  </qresource>
+</RCC>
