@@ -163,7 +163,8 @@ def novProjekt():
 		settings.store()    # persist the settings
 		print("Projekt = " + str(settings.projectsFile))
 		print("Podatki = " + str(settings.dataFolder))
-		print("Privzeta kalibracija (ID) = " + str(settings.privzetaKalibracija) + str(s))
+		print("Privzeta kalibracija (ID) = " + str(settings.privzetaKalibracija))
+
 
 initAutoFtg()
 
