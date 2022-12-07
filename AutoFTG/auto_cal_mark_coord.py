@@ -34,7 +34,7 @@ from PySide2.QtGui import QIcon
 from AutoFTG import resource
 
 # VERZIJA APLIKACIJE
-app_ver = "2.0.0-alpha"
+app_ver = "2.0.0-beta"
 
 # Checking compatibility
 compatible_major_version = "2.0"
@@ -42,13 +42,7 @@ found_major_version = ".".join(Metashape.app.version.split('.')[:2])
 if found_major_version != compatible_major_version:
 	raise Exception("Incompatible Metashape version: {} != {}".format(found_major_version, compatible_major_version))
 
-# 
-global uporabiProjekt
-uporabiProjekt = False
-
-# Seznam kamer, ki so prednastavljene
-global seznamKamer
-seznamKamer = [
+seznamKamer = [								# Seznam kamer, ki so prednastavljene [Variable LIST]
 	"NULL: Frame",							# ID: 0
 	"NULL: Fisheye",						# ID: 1
 	"HH3_031-1 by dibit: Fisheye",			# ID: 2
@@ -58,88 +52,122 @@ seznamKamer = [
 	"DJI Phantom 4 Advanced (2B)"			# ID: 6
 	]
 
-
-# NALAGANJE NASTAVITEV
+# Class for settings initialization
 class Settings(EgStore):
-
 	# Privzete vrednosti nastavitev - inicializacija nastavitev pri prvem zagonu
 	def __init__(self, filename):  # filename is required
 		self.datotekaProjekt = ''
 		self.mapaProjekt = ''
 		self.mapaPodatki = ''
-		self.privzetaKalibracija = 0
-#		self.defaulfPointSample = "0.02"
-#		self.defaultPointFilter = "0.02"
-		# Inicializacija
-		self.filename = filename  # this is required
+		self.privzetaKalibracija = '0'
+		self.filename = filename  # this is required - init settings
 		self.restore()
 
-
-datotekaProjekt = str(Metashape.app.document)
-datotekaProjektExists = os.path.isfile(datotekaProjekt)	# Preveri, če datoteka z projektom obstaja
-
-if datotekaProjektExists == True:
-	uporabiProjekt = True
-	settingsFilename = datotekaProjekt.replace(".psx", "_nastavitve.txt")    # Datoteka z nastavitvami projekta
-else:
-	uporabiProjekt = False
-	settingsFilename = os.getcwd().replace('\\', '/') + "/AutoFTG_nastavitve.txt"    # Datoteka z osnovnimi nastavitvami (Uporabi se pri zagonu programa z prazno vsebino)
-	
+# Main settings initialization
+settingsFilename = "C:/AutoFTG_settings.txt"    # Datoteka z osnovnimi nastavitvami (Uporabi se pri zagonu programa z prazno vsebino)
 settingsFilenameExists = os.path.isfile(settingsFilename)	# Preveri, če datoteka z nastavitvami obstaja
 settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
 
-def initAutoFtg():
+if settingsFilenameExists == False:
+	print("\n\nInicializacija osnovnih nastavitev.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
+	settings.store()    # persist the settings
+else:
+	print("\n\nNalozene so osnovne nastavitve.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
+	print("Projekt: " + str(settings.datotekaProjekt))
+	print("Mapa projekta: " + str(settings.mapaProjekt))
+	print("Mapa podatki: " + str(settings.mapaPodatki))
+	print("Privzeta kalibracija (ID): " + str(seznamKamer[int(settings.privzetaKalibracija)]))
+	print("\nUrejanje nastavitev je dostopno preko menija <AutoFTG>.")
+
+
+def initAutoFtgProjekt():
+	global settingsFilename
+	global settingsFilenameExists
+	global settings
+
+	datotekaProjekt = str(Metashape.app.document).replace("<Document '", "").replace("'>", "")
+	settingsFilename = datotekaProjekt.replace(".psx", "_settings.txt")    # Datoteka z nastavitvami projekta
+	settingsFilenameExists = os.path.isfile(settingsFilename)	# Preveri, če datoteka z projektom obstaja
+	settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
+	
 	if settingsFilenameExists == False:
-		if uporabiProjekt == False:
-			print("Inicializacija osnovnih nastavitev.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
-			settings.store()    # persist the settings
-		else:
-			print("Inicializacija nastavitev projekta za AutoFTG.")
-			Metashape.app.messageBox("Pokazi mapo kjer se nahajajo podatki za procesiranje.")
-			settings.mapaProjekt = os.getcwd().replace('\\', '/')
-			settings.mapaPodatki = Metashape.app.getExistingDirectory("Lokacija mape z podatki")
-			cam_calibrationSettings()
-			settings.store()
-			print("Izbrana delovna mapa: " + str(settings.mapaPodatki))
+		print("\n\nInicializacija nastavitev za projekt...")
+		settings.datotekaProjekt = datotekaProjekt
+		settings.mapaProjekt = os.getcwd().replace('\\', '/')
+		Metashape.app.messageBox("Pokazi mapo z delovnimi podatki...")
+		settings.mapaPodatki = Metashape.app.getExistingDirectory("Mapa z podatki")
+		cam_calibrationSettings()
+		settings.store()
+		print("Izbrana delovna mapa: " + str(settings.mapaPodatki))
 		print("Inicializacija nastavitev za AutoFTG končana.")
+		Metashape.app.messageBox("Inicializacija nastavitev za projekt koncana.\n\n"
+			+ "Datoteka z nastavitvami: " + str(settingsFilename) + "\n"
+			+ "Projekt: " + str(settings.datotekaProjekt) + "\n"
+			+ "Mapa projekta: " + str(settings.mapaProjekt) + "\n"
+			+ "Mapa podatki: " + str(settings.mapaPodatki) + "\n"
+			+ "Privzeta kalibracija (ID): " + str(seznamKamer[int(settings.privzetaKalibracija)])
+			)
 	else:
-		if uporabiProjekt == True:
-			print("Nalozene so nastavitve projekta.")
-			print("Projekt: " + str(settings.datotekaProjekt))
-			print("Mapa projekta: " + str(settings.mapaProjekt))
-			print("Mapa podatki: " + str(settings.mapaPodatki))
-			print("Privzeta kalibracija (ID): " + seznamKamer[int(settings.privzetaKalibracija)])
-		else:
-			print("Nalozene so osnovne nastavitve.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
-		print("\nUrejanje nastavitev je dostopno preko menija <AutoFTG>.")
+		print("\n\nNastavitve projekta nalozene...")
+		print("Projekt: " + str(settings.datotekaProjekt))
+		print("Mapa projekta: " + str(settings.mapaProjekt))
+		print("Mapa podatki: " + str(settings.mapaPodatki))
+		print("Privzeta kalibracija (ID): " + str(seznamKamer[int(settings.privzetaKalibracija)]))
+		Metashape.app.messageBox("Nastavitve nalozene.\n\n"
+			+ "Datoteka z nastavitvami: " + str(settingsFilename) + "\n"
+			+ "Projekt: " + str(settings.datotekaProjekt) + "\n"
+			+ "Mapa projekta: " + str(settings.mapaProjekt) + "\n"
+			+ "Mapa podatki: " + str(settings.mapaPodatki) + "\n"
+			+ "Privzeta kalibracija (ID): " + str(seznamKamer[int(settings.privzetaKalibracija)])
+			)
+		
+
+def checkProject():
+	fileProject = str(Metashape.app.document).replace("<Document '", "").replace("'>", "")
+	if fileProject == '':
+		Metashape.app.messageBox("Prazen projekt!\n\nNajprej odpri ali ustvari nov projekt (datoteka *.psx).")
+	else:
+		initAutoFtgProjekt()
+
+
+# def initMain():
+# 	if uporabiProjekt == True:
+# 		initAutoFtgProjekt()
+# 	else:
+# 		initAutoFtg()
+
 
 camcalMsg = "Izberi privzeto kalibracijo za uporabo pri dodajanju novih chunkov"
 camcalTitle = "Privzeta Kalibracija"
 camcalPreselect = int(settings.privzetaKalibracija)
 
+
 # Funkcija za izbiro privzete kalibracije
 def cam_calibrationSettings(msg=camcalMsg, title=camcalTitle, choices=seznamKamer, preselect=camcalPreselect, callback=None, run=True):
+
 	mb = easygui.choicebox(msg, title, choices=choices, preselect=preselect, callback=callback)
 
 	if run:
 		# reply = mb.run()
 		if mb == None:
-			print("Ni sprememb...")
+			print("Nastavitev za kamero nespremenjena.")
+			settings.store()
 		else:
 			replyindex = choices.index(mb)
-			settings.privzetaKalibracija = replyindex
+			settings.privzetaKalibracija = str(replyindex)
 			settings.store()
 			print("Nastavitve shranjene...\nPrivzeta kalibracija: " + mb)
 		# return reply
 	else:
-		print("\nNi sprememb...\n")
+		print("\nNastavitev za kamero nalozena....\n")
+		settings.store()
 		return mb
 
 
 def project_folder_change():
-	settings.mapaProjekt = Metashape.app.getExistingDirectory("Mapa z podatki")
+	settings.mapaPodatki = Metashape.app.getExistingDirectory("Mapa z podatki")
 	settings.store()
-	print("Izbrana delovna mapa: " + str(settings.mapaProjekt))
+	print("Izbrana delovna mapa: " + str(settings.mapaPodatki))
 
 
 def novProjekt():
@@ -151,22 +179,20 @@ def novProjekt():
 		Metashape.app.messageBox("Napaka! Projerkt ni shranjen.")
 	
 	Metashape.app.update()
-	settingsFilename = docPath.replace(".psx", "_AutoFTG_projekt.txt")		# Dattoteka z nastavitvami
-	settingsFilenameExists = os.path.isfile(settingsFilename)	# Preveri, če datoteka z nastavitvami obstaja
+	settingsProjekt = docPath.replace(".psx", "_settings.txt")		# Dattoteka z nastavitvami
+	settingsProjektExists = os.path.isfile(settingsProjekt)	# Preveri, če datoteka z nastavitvami obstaja
 	settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
 	
-	if settingsFilenameExists == False:
+	if settingsProjektExists == False:
 		print("\n\nInicializacija nastavitev AutoFTG za projekt...")
-		settings.projectsFile = docPath
-		settings.dataFolder = Metashape.app.getExistingDirectory("Izberi mapo z podatki...")
+		settings.datotekaProjekt = docPath
+		settings.mapaPodatki = Metashape.app.getExistingDirectory("Izberi mapo z podatki...")
 		cam_calibrationSettings()
 		settings.store()    # persist the settings
 		print("Projekt = " + str(settings.projectsFile))
 		print("Podatki = " + str(settings.dataFolder))
 		print("Privzeta kalibracija (ID) = " + str(settings.privzetaKalibracija))
 
-
-initAutoFtg()
 
 # # Izbira ps
 # def def_pointsample():
@@ -517,27 +543,30 @@ def find_files(folder, types):
 
 def newchunk_kalota_auto():
 	doc = Metashape.app.document
-	netpath = Metashape.app.document.path
+	docPath = Metashape.app.document.path
 	# netroot = path.dirname(netpath)
 	netroot = settings.mapaPodatki
 	image_folder = Metashape.app.getExistingDirectory("Mapa z podatki za (KALOTA)", netroot)
-	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
-	chunk = doc.addChunk()
-	chunk.addPhotos(photos)
-	chunk_nameraw = os.path.basename(image_folder)
-	chunk.label = Metashape.app.getString("Naziv chunka", chunk_nameraw)
-	doc.chunk = chunk
-	doc.save()
-	Metashape.app.update()
-	Metashape.app.messageBox("Nalaganje slik...")
-	cam_calibration()
-	chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
-	path_ref = Metashape.app.getOpenFileName("Uvoz koordinat markerjev", image_folder, "Text file (*.txt)")
-	chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
-	chunk.updateTransform()
-	Metashape.app.update()
-	doc.save()
-
+	try:
+		photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
+		chunk = doc.addChunk()
+		chunk.addPhotos(photos)
+		chunk_nameraw = os.path.basename(image_folder)
+		chunk.label = Metashape.app.getString("Naziv chunka", chunk_nameraw)
+		doc.chunk = chunk
+		doc.save(docPath)
+		Metashape.app.update()
+		Metashape.app.messageBox("Nalaganje slik...")
+		cam_calibration()
+		doc.save(docPath)
+		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+		path_ref = Metashape.app.getOpenFileName("Uvoz koordinat markerjev", image_folder, "Text file (*.txt)")
+		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+		chunk.updateTransform()
+		Metashape.app.update()
+		doc.save(docPath)
+	except RuntimeError:
+		Metashape.app.messageBox("Prekinjen postopek.")
 
 def newchunk_stizk_auto():
 	doc = Metashape.app.document
@@ -792,9 +821,9 @@ Metashape.app.addMenuItem(labelsep1, prazno)
 labelset0 = "<Auto FTG>/Nastavi privzeto delovno mapo..."
 Metashape.app.addMenuItem(labelset0, project_folder_change)
 
-# labelset2 = "<Auto FTG>/Change default filter spacing..."
-# Metashape.app.addMenuItem(labelset2, def_pointfilter)
-# 
+labelset2 = "<Auto FTG>/Inicializacija nastavitev za projekt..."
+Metashape.app.addMenuItem(labelset2, checkProject)
+
 # labelset3 = "<Auto FTG>/Change default sampling spacing..."
 # Metashape.app.addMenuItem(labelset3, def_pointsample)
 
