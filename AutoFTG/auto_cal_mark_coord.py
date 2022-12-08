@@ -35,15 +35,15 @@ from AutoFTG import resource
 
 # VERZIJA APLIKACIJE
 app_name = "AutoFTG"
-app_ver = "2.0.1-beta"
-app_author = "Boris Bilc, Slovenia"
-app_repo = "URL: https://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
-ref_repo = "Agisoft GitHub repository - https://github.com/agisoft-llc/metashape-scripts"
-ref_scripts = "Copy Bounding Box Script - https://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py"
-app_about = "AutoFTG - Scripts for process automation in Agisoft Metashape Pro\n This is an assembly of existing scripts from other users, and some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia."
+app_ver = "2.0.2-beta"
+app_author = "Author: Boris Bilc (Slovenia)"
+app_repo = "Repository URL: https://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
+ref_repo = "Agisoft GitHub repository:https://github.com/agisoft-llc/metashape-scripts"
+ref_scripts = "Copy Bounding Box Script: https://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py"
+app_about = "Scripts for process automation in Agisoft Metashape Pro\n\nThis is an assembly of existing scripts from other users, and some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia."
 
 def appAbout():
-	app_aboutmsg = app_name + "\n" + app_ver + "\n" + app_author + app_about + "\n\n" + app_repo + "\n\n" + ref_repo + "\n" + ref_scripts + "\n"
+	app_aboutmsg = app_name + " (" + app_ver + ")\n\n" + app_author + "\n\n" + app_about + "\n\n" + app_repo + "\n\nReferences:\n" + ref_repo + "\n\n" + ref_scripts + "\n"
 	Metashape.app.messageBox(app_aboutmsg)
 
 # Checking compatibility
@@ -106,7 +106,8 @@ def initAutoFtgProjekt():
 	if settingsFilenameExists == False:
 		print("\n\nInicializacija nastavitev za projekt...")
 		settings.fileProject = fileProject
-		settings.folderProject = os.getcwd().replace('\\', '/')
+		Metashape.app.messageBox("Pokazi mapo za izvoz podatkov...")
+		settings.folderProject = Metashape.app.getExistingDirectory("Mapa za izvoz")
 		Metashape.app.messageBox("Pokazi mapo z delovnimi podatki...")
 		settings.foldeData = Metashape.app.getExistingDirectory("Mapa z podatki")
 		cam_calibrationSettings()
@@ -765,6 +766,11 @@ iconimg9 = ":/AutoFTG/kalota_m.png"
 iconimg10 = ":/AutoFTG/kalota.png"
 iconimg11 = ":/AutoFTG/stopnca_o.png"
 iconimg12 = ":/AutoFTG/stopnca_s.png"
+iconimg13 = ":/AutoFTG/ABOUTmESSAGE.png"
+iconimg14 = ":/AutoFTG/CAMScreenCap.png"
+iconimg15 = ":/AutoFTG/CAMVideoStudio.png"
+iconimg16 = ":/AutoFTG/DeviceManager.png"
+iconimg17 = ":/AutoFTG/Screenshot.png"
 
 # Menu items
 #labelMain = "<Auto FTG>"
@@ -834,7 +840,7 @@ labelsep2 = "<Auto FTG>/--------------------"
 Metashape.app.addMenuSeparator(labelsep2)
 
 label4 = "<Auto FTG>/Kopiranje regije za procesiranje (Med chunki)"
-Metashape.app.addMenuItem(label4, copy_bbox)
+Metashape.app.addMenuItem(label4, copy_bbox, icon=iconimg17)
 
 labelsep1 = "<Auto FTG>/--------------------"
 Metashape.app.addMenuItem(labelsep1, prazno)
@@ -855,14 +861,14 @@ Metashape.app.addMenuItem(labelsep1, prazno)
 #Metashape.app.addMenuItem(labelsep4, prazno)
 
 labelset0 = "<Auto FTG>/Nastavi privzeto delovno mapo..."
-Metashape.app.addMenuItem(labelset0, project_folder_change)
+Metashape.app.addMenuItem(labelset0, project_folder_change, icon=iconimg5)
 
 labelset2 = "<Auto FTG>/Nalozi nastavitve za projekt..."
-Metashape.app.addMenuItem(labelset2, checkProject)
+Metashape.app.addMenuItem(labelset2, checkProject, icon=iconimg16)
 
 # labelset3 = "<Auto FTG>/Change default sampling spacing..."
 # Metashape.app.addMenuItem(labelset3, def_pointsample)
 
 labelabout = "<Auto FTG>/About AutoFTG..."
-Metashape.app.addMenuItem(labelabout, appAbout)
+Metashape.app.addMenuItem(labelabout, appAbout, icon=iconimg13)
 

@@ -12,5 +12,10 @@
     <file>kalota.png</file>
     <file>stopnca_o.png</file>
     <file>stopnca_s.png</file>
+    <file>ABOUTmESSAGE.png</file>
+    <file>CAMScreenCap.png</file>
+    <file>CAMVideoStudio.png</file>
+    <file>DeviceManager.png</file>
+    <file>Screenshot.png</file>
   </qresource>
 </RCC>
