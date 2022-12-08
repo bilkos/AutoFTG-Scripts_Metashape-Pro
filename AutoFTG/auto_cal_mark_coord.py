@@ -34,7 +34,17 @@ from PySide2.QtGui import QIcon
 from AutoFTG import resource
 
 # VERZIJA APLIKACIJE
+app_name = "AutoFTG"
 app_ver = "2.0.1-beta"
+app_author = "Boris Bilc, Slovenia"
+app_repo = "URL: https://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
+ref_repo = "Agisoft GitHub repository - https://github.com/agisoft-llc/metashape-scripts"
+ref_scripts = "Copy Bounding Box Script - https://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py"
+app_about = "AutoFTG - Scripts for process automation in Agisoft Metashape Pro\n This is an assembly of existing scripts from other users, and some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia."
+
+def appAbout():
+	app_aboutmsg = app_name + "\n" + app_ver + "\n" + app_author + app_about + "\n\n" + app_repo + "\n\n" + ref_repo + "\n" + ref_scripts + "\n"
+	Metashape.app.messageBox(app_aboutmsg)
 
 # Checking compatibility
 compatible_major_version = "2.0"
@@ -853,6 +863,6 @@ Metashape.app.addMenuItem(labelset2, checkProject)
 # labelset3 = "<Auto FTG>/Change default sampling spacing..."
 # Metashape.app.addMenuItem(labelset3, def_pointsample)
 
-# labelhelp = "<Auto FTG>/( i ) Kratka navodila za FTG"
-# Metashape.app.addMenuItem(labelhelp, navodila_proces)
+labelabout = "<Auto FTG>/About AutoFTG..."
+Metashape.app.addMenuItem(labelabout, appAbout)
 
