@@ -1,20 +1,20 @@
 # Release Notes
 
-Release notes for AutoFTG python scripts
+Release notes for AutoFTG python script
 
-## v1.0
+
+## 1.0
 
 - Initial version of AutoFTG
 - Create chunk script
 
----
 
-## v1.1
+## 1.1
+
+- Working version. First usable script.
 
 
----
-
-## v1.7.5
+## 1.7.5
 
 - Added options to change default settings for:
   - Change default project folder
@@ -22,10 +22,23 @@ Release notes for AutoFTG python scripts
   - Change default point filtering spacing
   - Change default point sampling
 
----
 
-## v 1.7.6
+## 1.7.6
 
 - Reorder manus for default settings
 
 
+## 2.0.x-beta
+
+- Added basic settings menus
+- New icons for menu items
+- Completley rewritten routines for settings initialization and loading
+
+
+## 2.1.0-beta
+
+- New settings menu
+- Settings loading process redesigned to be more consistent (still needs some polishing)
+- Added new icons
+- Added 'About AutoFTG' in menu
+- Changed main 'New Chunk' method to give more options when creating chunk

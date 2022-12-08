@@ -7,148 +7,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>245</height>
+    <width>390</width>
+    <height>210</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string notr="true">AutoFTG Settings</string>
   </property>
-  <widget class="QGroupBox" name="groupBox">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>30</y>
-     <width>381</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string notr="true">Project Folder</string>
-   </property>
-   <widget class="QLineEdit" name="lineProjFolder">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>331</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string notr="true">settings.folderProject</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnProjFolder">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>20</y>
-      <width>41</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string notr="true"/>
-    </property>
-    <property name="icon">
-     <iconset resource="../qtresources.qrc">
-      <normaloff>:/AutoFTG/openfolder.png</normaloff>:/AutoFTG/openfolder.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>24</width>
-      <height>24</height>
-     </size>
-    </property>
-    <property name="flat">
-     <bool>true</bool>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="groupBox_2">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>90</y>
-     <width>381</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string notr="true">Data Folder</string>
-   </property>
-   <widget class="QLineEdit" name="lineDataFolder">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>331</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string notr="true">settings.folderData</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnDataFolder">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>20</y>
-      <width>41</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string notr="true"/>
-    </property>
-    <property name="icon">
-     <iconset resource="../qtresources.qrc">
-      <normaloff>:/AutoFTG/picture-folder.png</normaloff>:/AutoFTG/picture-folder.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>21</width>
-      <height>21</height>
-     </size>
-    </property>
-    <property name="flat">
-     <bool>true</bool>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="groupBox_3">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>150</y>
-     <width>381</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string notr="true">Default Camera</string>
-   </property>
-   <widget class="QComboBox" name="comboBoxCamera">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>331</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>-1</number>
-    </property>
-   </widget>
-  </widget>
   <widget class="QPushButton" name="btnClose">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>210</y>
+     <x>220</x>
+     <y>180</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -160,8 +30,8 @@
   <widget class="QPushButton" name="btnSave">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>210</y>
+     <x>300</x>
+     <y>180</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -170,9 +40,172 @@
     <string notr="true">Save</string>
    </property>
   </widget>
+  <widget class="QComboBox" name="comboBoxCamera">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>140</y>
+     <width>281</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="currentText">
+    <string notr="true"/>
+   </property>
+   <property name="currentIndex">
+    <number>-1</number>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineDataFolder">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>80</y>
+     <width>281</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="inputMask">
+    <string notr="true"/>
+   </property>
+   <property name="text">
+    <string notr="true">settings.folderData</string>
+   </property>
+   <property name="clearButtonEnabled">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnDataFolder">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>80</y>
+     <width>81</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string notr="true">Browse</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../qtresources.qrc">
+     <normaloff>:/AutoFTG/openfolder.png</normaloff>:/AutoFTG/openfolder.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>21</width>
+     <height>21</height>
+    </size>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineProjFolder">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>281</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="inputMask">
+    <string notr="true"/>
+   </property>
+   <property name="text">
+    <string notr="true">settings.folderProject</string>
+   </property>
+   <property name="clearButtonEnabled">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnProjFolder">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>30</y>
+     <width>81</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string notr="true">Browse</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../qtresources.qrc">
+     <normaloff>:/AutoFTG/openfolder.png</normaloff>:/AutoFTG/openfolder.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>21</width>
+     <height>21</height>
+    </size>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Project Folder:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Data Folder:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>120</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Default Camera:</string>
+   </property>
+  </widget>
  </widget>
+ <layoutdefault spacing="5" margin="10"/>
  <resources>
   <include location="../qtresources.qrc"/>
  </resources>
  <connections/>
+ <designerdata>
+  <property name="gridDeltaX">
+   <number>10</number>
+  </property>
+  <property name="gridDeltaY">
+   <number>10</number>
+  </property>
+  <property name="gridSnapX">
+   <bool>true</bool>
+  </property>
+  <property name="gridSnapY">
+   <bool>true</bool>
+  </property>
+  <property name="gridVisible">
+   <bool>true</bool>
+  </property>
+ </designerdata>
 </ui>
