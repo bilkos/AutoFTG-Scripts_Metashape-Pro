@@ -28,14 +28,17 @@ from os import path
 
 import easygui
 import Metashape
+from AutoFTG import resource
 from easygui import EgStore
 from PySide2 import QtCore, QtGui, QtWidgets
-from PySide2.QtGui import QIcon
-from AutoFTG import resource
+from PySide2.QtCore import *  # type: ignore
+from PySide2.QtGui import *  # type: ignore
+from PySide2.QtWidgets import *  # type: ignore
+
 
 # VERZIJA APLIKACIJE
 app_name = "AutoFTG"
-app_ver = "2.0.2-beta"
+app_ver = "2.0.3-beta"
 app_author = "Author: Boris Bilc (Slovenia)"
 app_repo = "Repository URL: https://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
 ref_repo = "Agisoft GitHub repository:https://github.com/agisoft-llc/metashape-scripts"
@@ -66,6 +69,7 @@ cameraList = [								# Seznam kamer, ki so prednastavljene [Variable LIST]
 class Settings(EgStore):
 	# Privzete vrednosti nastavitev - inicializacija nastavitev pri prvem zagonu
 	def __init__(self, filename):  # filename is required
+		self.settingsVersion = app_ver
 		self.fileProject = ''
 		self.folderProject = ''
 		self.foldeData = ''
@@ -73,23 +77,47 @@ class Settings(EgStore):
 		self.filename = filename  # this is required - init settings
 		self.restore()
 
+
 # Main settings initialization
 settingsFilename = "C:/AutoFTG_settings.txt"    # Main settings file (used when no project is loaded)
 settingsFilenameExists = os.path.isfile(settingsFilename)	# Check if settings file exists
 settings = Settings(settingsFilename)	# Init settings
 projectOpened = False
+resetSettings = False
 
-if settingsFilenameExists == False:
-	print("\n\nInicializacija osnovnih nastavitev.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
-	settings.store()    # persist the settings
-else:
-	print("\n\nNalozene so osnovne nastavitve.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
-	print("Projekt: " + str(settings.fileProject))
-	print("Mapa projekta: " + str(settings.folderProject))
-	print("Mapa podatki: " + str(settings.foldeData))
-	print("Privzeta kalibracija (ID): " + str(cameraList[int(settings.defaultCamera)]))
-	print("\nUrejanje nastavitev je dostopno preko menija <AutoFTG>.")
 
+def initAutoFtg():
+	if settingsFilenameExists == False:
+		print("\n\nInicializacija osnovnih nastavitev.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
+		settings.store()    # persist the settings
+	else:
+		checkSettingsVer() 
+		print("\n\nNalozene so osnovne nastavitve.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
+		print("Projekt: " + str(settings.fileProject))
+		print("Mapa projekta: " + str(settings.folderProject))
+		print("Mapa podatki: " + str(settings.foldeData))
+		print("Privzeta kalibracija (ID): " + str(cameraList[int(settings.defaultCamera)]))
+		print("\nUrejanje nastavitev je dostopno preko menija <AutoFTG>.")
+
+
+def checkSettingsVer():
+	global resetSettings
+	if settings.settingsVersion == app_ver:
+		resetSettings = False
+	else:
+		resetSettings = True
+		settingsReset(resetSettings)
+		
+
+def settingsReset(reset):
+	if reset == True:
+		settings.settingsVersion = app_ver
+		settings.fileProject = ''
+		settings.folderProject = ''
+		settings.foldeData = ''
+		settings.defaultCamera = '0'
+		settings.store()
+		
 
 def initAutoFtgProjekt():
 	global settingsFilename
@@ -125,6 +153,7 @@ def initAutoFtgProjekt():
 		projectOpened = True
 
 	else:
+		checkSettingsVer()
 		print("\n\nNastavitve projekta nalozene...")
 		print("Projekt: " + str(settings.fileProject))
 		print("Mapa projekta: " + str(settings.folderProject))
@@ -180,6 +209,7 @@ def novProjekt():
 	
 	Metashape.app.update()
 
+
 #	settingsProjekt = docPath.replace(".psx", "_settings.txt")		# Dattoteka z nastavitvami
 #	settingsProjektExists = os.path.isfile(settingsProjekt)	# Preveri, če datoteka z nastavitvami obstaja
 #	settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
@@ -206,7 +236,6 @@ def cam_calibrationSettings(msg=camcalMsg, title=camcalTitle, choices=cameraList
 	mb = easygui.choicebox(msg, title, choices=choices, preselect=preselect, callback=callback)
 
 	if run:
-		# reply = mb.run()
 		if mb == None:
 			print("Nastavitev za kamero nespremenjena.")
 			settings.store()
@@ -215,40 +244,102 @@ def cam_calibrationSettings(msg=camcalMsg, title=camcalTitle, choices=cameraList
 			settings.defaultCamera = str(replyindex)
 			settings.store()
 			print("Nastavitve shranjene...\nPrivzeta kalibracija: " + mb)
-		# return reply
 	else:
 		print("\nNastavitev za kamero nalozena....\n")
 		settings.store()
 		return mb
 
 
-# # Izbira ps
-# def def_pointsample():
-# 	current_ps = settings.defaulfPointSample
-# 	new_ps = Metashape.app.getString("Default point sample spacing (m):", current_ps)
-# 	
-# 	if new_ps == current_ps:
-# 		print("No changes... Old point sampling value kept (" + str(current_ps) + "m)")
-# 	elif (float(new_ps) > 0):
-# 		settings.defaulfPointSample = new_ps
-# 		settings.store()
-# 		print("Settings changed..." + str(settings.defaulfPointSample))
-# 	else:
-# 		print("Wrong value. Noting changed.")
-# 
-# # Izbira filter
-# def def_pointfilter():
-# 	current_pf = settings.defaultPointFilter
-# 	new_pf = Metashape.app.getString("Default point sample spacing (m):", current_pf)
-# 	
-# 	if new_pf == current_pf:
-# 		print("No changes... Old point filtering value kept (" + str(current_pf) + "m)")
-# 	elif (float(new_pf) > 0):
-# 		settings.defaultPointFilter = new_pf
-# 		settings.store()
-# 		print("Settings changed..." + str(settings.defaultPointFilter))
-# 	else:
-# 		print("Wrong value. Noting changed.")
+def showSettings():
+	Metashape.app.messageBox("Settings currently in use:\n\n"
+							+ "Settings file: " + str(settingsFilename) + "\n"
+							+ "Settings version: " + str(settings.settingsVersion) + "\n\n"
+							+ "Project file: " + str(settings.fileProject) + "\n"
+							+ "Project folder: " + str(settings.folderProject) + "\n"
+							+ "Data folder: " + str(settings.foldeData) + "\n\n"
+							+ "Default camera: " + str(cameraList[int(settings.defaultCamera)]) + "\n"
+							 )
+
+
+class Ui_settingsDialog(QtWidgets.QDialog):
+	def __init__(self, parent):
+		QtWidgets.QDialog.__init__(self, parent)
+		# if not parent.objectName():
+		self.setObjectName(u"settingsDialog")
+		self.resize(400, 245)
+		self.setWindowTitle(u"AutoFTG Settings")
+		self.buttonBox = QDialogButtonBox(parent)
+		self.buttonBox.setObjectName(u"buttonBox")
+		self.buttonBox.setGeometry(QRect(230, 210, 161, 32))
+		self.buttonBox.setOrientation(Qt.Horizontal)
+		self.buttonBox.setStandardButtons(QDialogButtonBox.Close|QDialogButtonBox.Save)
+		self.groupBox = QGroupBox(parent)
+		self.groupBox.setObjectName(u"groupBox")
+		self.groupBox.setGeometry(QRect(10, 30, 381, 51))
+		self.groupBox.setTitle(u"Project Folder")
+		self.lineProjFolder = QLineEdit(self.groupBox)
+		self.lineProjFolder.setObjectName(u"lineProjFolder")
+		self.lineProjFolder.setGeometry(QRect(10, 20, 331, 20))
+		self.lineProjFolder.setText(str(settings.folderProject))
+		self.btnProjFolder = QPushButton(self.groupBox)
+		self.btnProjFolder.setObjectName(u"btnProjFolder")
+		self.btnProjFolder.setGeometry(QRect(340, 20, 41, 23))
+		self.btnProjFolder.setText(u"")
+		icon = QIcon()
+		icon.addFile(u":/AutoFTG/openfolder.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.btnProjFolder.setIcon(icon)
+		self.btnProjFolder.setIconSize(QSize(24, 24))
+		self.btnProjFolder.setFlat(True)
+		self.groupBox_2 = QGroupBox(parent)
+		self.groupBox_2.setObjectName(u"groupBox_2")
+		self.groupBox_2.setGeometry(QRect(10, 90, 381, 51))
+		self.groupBox_2.setTitle(u"Data Folder")
+		self.lineDataFolder = QLineEdit(self.groupBox_2)
+		self.lineDataFolder.setObjectName(u"lineDataFolder")
+		self.lineDataFolder.setGeometry(QRect(10, 20, 331, 20))
+		self.lineDataFolder.setText(str(settings.foldeData))
+		self.btnDataFolder = QPushButton(self.groupBox_2)
+		self.btnDataFolder.setObjectName(u"btnDataFolder")
+		self.btnDataFolder.setGeometry(QRect(340, 20, 41, 23))
+		self.btnDataFolder.setText(u"")
+		icon1 = QIcon()
+		icon1.addFile(u":/AutoFTG/picture-folder.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.btnDataFolder.setIcon(icon1)
+		self.btnDataFolder.setIconSize(QSize(21, 21))
+		self.btnDataFolder.setFlat(True)
+		self.groupBox_3 = QGroupBox(parent)
+		self.groupBox_3.setObjectName(u"groupBox_3")
+		self.groupBox_3.setGeometry(QRect(10, 150, 381, 51))
+		self.groupBox_3.setTitle(u"Default Camera")
+		self.comboBoxCamera = QComboBox(self.groupBox_3)
+		self.comboBoxCamera.addItems(cameraList)
+		self.comboBoxCamera.setObjectName(u"comboBoxCamera")
+		self.comboBoxCamera.setGeometry(QRect(10, 20, 331, 22))
+		self.comboBoxCamera.setCurrentIndex(int(settings.defaultCamera))
+
+		self.retranslateUi(parent)
+		self.buttonBox.accepted.connect(self.buttonBox.Save, QtCore.SIGNAL("clicked()"), self.saveSettingsDialog)
+		self.buttonBox.rejected.connect(self.buttonBox.Close, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("reject()"))
+
+		QMetaObject.connectSlotsByName(parent)
+		# setupUi
+
+	def retranslateUi(self, parent):
+		
+		pass
+    	# retranslateUi
+
+	def saveSettingsDialog(self):
+		settings.folderProject = self.lineProjFolder.text()
+		settings.foldeData = self.lineDataFolder.text()
+		settings.defaultCamera = self.comboBoxCamera.currentIndex()
+		settings.store()
+
+
+def editSettings():
+	app = QtWidgets.QApplication.instance()
+	parent = app.activeWindow()
+	editDialog = Ui_settingsDialog(parent)
 
 
 class CopyBoundingBoxDlg(QtWidgets.QDialog):
@@ -571,10 +662,9 @@ def find_files(folder, types):
 
 def newchunk_kalota_auto():
 	global projectOpened
-	doc = Metashape.app.document
-	docPath = Metashape.app.document.path
-	# netroot = path.dirname(netpath)
 	if projectOpened == True:
+		doc = Metashape.app.document
+		docPath = Metashape.app.document.path
 		netroot = settings.foldeData
 		image_folder = Metashape.app.getExistingDirectory("Mapa z podatki za (KALOTA)", netroot)
 		photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
@@ -596,8 +686,10 @@ def newchunk_kalota_auto():
 		doc.save(docPath)
 	else:
 		checkProject()
+		newchunk_kalota_auto()
 
 def newchunk_stizk_auto():
+	global projectOpened
 	if projectOpened == True:
 		doc = Metashape.app.document
 		netpath = Metashape.app.document.path
@@ -623,9 +715,11 @@ def newchunk_stizk_auto():
 		doc.save(netpath)
 	else:
 		checkProject()
+		newchunk_stizk_auto()
 
 
 def newchunk_stbbet_auto():
+	global projectOpened
 	if projectOpened == True:
 		doc = Metashape.app.document
 		netpath = Metashape.app.document.path
@@ -651,9 +745,11 @@ def newchunk_stbbet_auto():
 		doc.save()
 	else:
 		checkProject()
+		newchunk_stbbet_auto()
 
 
 def newchunk_aero():
+	global projectOpened
 	if projectOpened == True:
 		doc = Metashape.app.document
 		netpath = Metashape.app.document.path
@@ -684,6 +780,7 @@ def newchunk_aero():
 			doc.save()
 	else:
 		checkProject()
+		newchunk_aero()
 
 # def newchunk_stizk():
 # 	doc = Metashape.app.document
@@ -803,43 +900,43 @@ Metashape.app.addMenuItem(label0c, newchunk_stbbet_auto, icon=iconimg12)
 labelsep2 = "<Auto FTG>/--------------------"
 Metashape.app.addMenuSeparator(labelsep2)
 
-labelNewChunk = "<Auto FTG>/Kalibracija Kamere/"
-Metashape.app.addMenuSeparator(labelNewChunk)
+# labelNewChunk = "<Auto FTG>/"
+# Metashape.app.addMenuSeparator(labelNewChunk)
 
-labelset1 = "<Auto FTG>/Kalibracija Kamere/Privzeta kalibracija..."
+labelset1 = "<Auto FTG>/Default Camera..."
 Metashape.app.addMenuItem(labelset1, cam_calibrationSettings, icon=iconimg3)
 
-label2 = "<Auto FTG>/Kalibracija Kamere/Druge Kalibracije/(0) Initial: NULL (Frame)"
+label2 = "<Auto FTG>/Change camera/(0) Initial: NULL (Frame)"
 Metashape.app.addMenuItem(label2, cam_calibrationDefault)
 
-label2a = "<Auto FTG>/Kalibracija Kamere/Druge Kalibracije/(1) Initial: NULL (Fisheye)"
+label2a = "<Auto FTG>/Change camera/(1) Initial: NULL (Fisheye)"
 Metashape.app.addMenuItem(label2a, cam_calibration0)
 
-label2b = "<Auto FTG>/Kalibracija Kamere/Druge Kalibracije/(2) Camera 1: HH3 by dibit (Fisheye)"
+label2b = "<Auto FTG>/Change camera/(2) Camera 1: HH3 by dibit (Fisheye)"
 Metashape.app.addMenuItem(label2b, cam_calibration1a)
 
-label2c = "<Auto FTG>/Kalibracija Kamere/Druge Kalibracije/(3) Camera 2: HH3 by dibit (Fisheye)"
+label2c = "<Auto FTG>/Change camera/(3) Camera 2: HH3 by dibit (Fisheye)"
 Metashape.app.addMenuItem(label2c, cam_calibration1b)
 
-label2cc = "<Auto FTG>/Kalibracija Kamere/Druge Kalibracije/(4) Camera 3: HH3 by dibit (Fisheye)"
+label2cc = "<Auto FTG>/Druge Kalibracije/(4) Camera 3: HH3 by dibit (Fisheye)"
 Metashape.app.addMenuItem(label2cc, cam_calibration1c)
 
-label2d = "<Auto FTG>/Kalibracija Kamere/Druge Kalibracije/(5) DJI Phantom 4 Pro 2.0 (CELU)"
+label2d = "<Auto FTG>/Druge Kalibracije/(5) DJI Phantom 4 Pro 2.0 (CELU)"
 Metashape.app.addMenuItem(label2d, cam_calibration2)
 
-label2e = "<Auto FTG>/Kalibracija Kamere/Druge Kalibracije/(6) DJI Phantom 4 Advanced (2B)"
+label2e = "<Auto FTG>/Druge Kalibracije/(6) DJI Phantom 4 Advanced (2B)"
 Metashape.app.addMenuItem(label2e, cam_calibration3)
 
 labelsep3 = "<Auto FTG>/--------------------"
 Metashape.app.addMenuItem(labelsep3, prazno)
 
-label3a = "<Auto FTG>/Detekcija matkertjev + Uvoz koordinat"
+label3a = "<Auto FTG>/Detect markers & Import coordinates"
 Metashape.app.addMenuItem(label3a, marker_targets, icon=iconimg6)
 
-labelsep2 = "<Auto FTG>/--------------------"
-Metashape.app.addMenuSeparator(labelsep2)
+labelsep4 = "<Auto FTG>/--------------------"
+Metashape.app.addMenuSeparator(labelsep4)
 
-label4 = "<Auto FTG>/Kopiranje regije za procesiranje (Med chunki)"
+label4 = "<Auto FTG>/Copy Region"
 Metashape.app.addMenuItem(label4, copy_bbox, icon=iconimg17)
 
 labelsep1 = "<Auto FTG>/--------------------"
@@ -860,15 +957,23 @@ Metashape.app.addMenuItem(labelsep1, prazno)
 #labelsep4 = "<Auto FTG>/--------------------"
 #Metashape.app.addMenuItem(labelsep4, prazno)
 
-labelset0 = "<Auto FTG>/Nastavi privzeto delovno mapo..."
+labelset0 = "<Auto FTG>/Change data folder location"
 Metashape.app.addMenuItem(labelset0, project_folder_change, icon=iconimg5)
 
-labelset2 = "<Auto FTG>/Nalozi nastavitve za projekt..."
+labelset2 = "<Auto FTG>/Load project settings"
 Metashape.app.addMenuItem(labelset2, checkProject, icon=iconimg16)
 
-# labelset3 = "<Auto FTG>/Change default sampling spacing..."
-# Metashape.app.addMenuItem(labelset3, def_pointsample)
+labelset3 = "<Auto FTG>/Show current settings."
+Metashape.app.addMenuItem(labelset3, showSettings, icon=iconimg15)
+
+# labelset4 = "<Auto FTG>/Edit current settings."
+# Metashape.app.addMenuItem(labelset4, editSettings, icon=iconimg14)
+
+labelsep5 = "<Auto FTG>/--------------------"
+Metashape.app.addMenuSeparator(labelsep5)
 
 labelabout = "<Auto FTG>/About AutoFTG..."
 Metashape.app.addMenuItem(labelabout, appAbout, icon=iconimg13)
 
+# Initialize setting for AutoFTG
+initAutoFtg()
