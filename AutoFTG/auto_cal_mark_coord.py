@@ -34,7 +34,7 @@ from PySide2.QtGui import QIcon
 from AutoFTG import resource
 
 # VERZIJA APLIKACIJE
-app_ver = "2.0.0-beta"
+app_ver = "2.0.1-beta"
 
 # Checking compatibility
 compatible_major_version = "2.0"
@@ -67,6 +67,7 @@ class Settings(EgStore):
 settingsFilename = "C:/AutoFTG_settings.txt"    # Datoteka z osnovnimi nastavitvami (Uporabi se pri zagonu programa z prazno vsebino)
 settingsFilenameExists = os.path.isfile(settingsFilename)	# Preveri, če datoteka z nastavitvami obstaja
 settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
+odprtProjekt = False
 
 if settingsFilenameExists == False:
 	print("\n\nInicializacija osnovnih nastavitev.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
@@ -84,8 +85,10 @@ def initAutoFtgProjekt():
 	global settingsFilename
 	global settingsFilenameExists
 	global settings
+	global odprtProjekt
 
-	datotekaProjekt = str(Metashape.app.document).replace("<Document '", "").replace("'>", "")
+	datotekaDoc = Metashape.app.document
+	datotekaProjekt = str(datotekaDoc).replace("<Document '", "").replace("'>", "")
 	settingsFilename = datotekaProjekt.replace(".psx", "_settings.txt")    # Datoteka z nastavitvami projekta
 	settingsFilenameExists = os.path.isfile(settingsFilename)	# Preveri, če datoteka z projektom obstaja
 	settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
@@ -107,12 +110,16 @@ def initAutoFtgProjekt():
 			+ "Mapa podatki: " + str(settings.mapaPodatki) + "\n"
 			+ "Privzeta kalibracija (ID): " + str(seznamKamer[int(settings.privzetaKalibracija)])
 			)
+		datotekaDoc.save(datotekaProjekt)
+		odprtProjekt = True
+
 	else:
 		print("\n\nNastavitve projekta nalozene...")
 		print("Projekt: " + str(settings.datotekaProjekt))
 		print("Mapa projekta: " + str(settings.mapaProjekt))
 		print("Mapa podatki: " + str(settings.mapaPodatki))
 		print("Privzeta kalibracija (ID): " + str(seznamKamer[int(settings.privzetaKalibracija)]))
+		settings.store()
 		Metashape.app.messageBox("Nastavitve nalozene.\n\n"
 			+ "Datoteka z nastavitvami: " + str(settingsFilename) + "\n"
 			+ "Projekt: " + str(settings.datotekaProjekt) + "\n"
@@ -120,14 +127,18 @@ def initAutoFtgProjekt():
 			+ "Mapa podatki: " + str(settings.mapaPodatki) + "\n"
 			+ "Privzeta kalibracija (ID): " + str(seznamKamer[int(settings.privzetaKalibracija)])
 			)
-		
+		odprtProjekt = True
+
 
 def checkProject():
+	global odprtProjekt
 	fileProject = str(Metashape.app.document).replace("<Document '", "").replace("'>", "")
 	if fileProject == '':
-		Metashape.app.messageBox("Prazen projekt!\n\nNajprej odpri ali ustvari nov projekt (datoteka *.psx).")
+		Metashape.app.messageBox("Prazen projekt!\n\nNajprej shrani ali odpri obstojec projekt (datoteka *.psx).")
+		novProjekt()
 	else:
 		initAutoFtgProjekt()
+		odprtProjekt = True
 
 
 # def initMain():
@@ -135,6 +146,42 @@ def checkProject():
 # 		initAutoFtgProjekt()
 # 	else:
 # 		initAutoFtg()
+
+
+def project_folder_change():
+	settings.mapaPodatki = Metashape.app.getExistingDirectory("Mapa z podatki")
+	settings.store()
+	print("Izbrana delovna mapa: " + str(settings.mapaPodatki))
+
+
+def novProjekt():
+	global odprtProjekt
+	doc = Metashape.app.document
+	docPath = Metashape.app.getSaveFileName("Ustvari nov projekt", "",  "Metashape Project (*.psx)")
+	try:
+		doc.save(docPath)
+		Metashape.app.messageBox("Projerkt shranjen.\n")
+		initAutoFtgProjekt()
+		odprtProjekt = True
+	except RuntimeError:
+		Metashape.app.messageBox("Napaka! Projerkt ni shranjen.")
+		odprtProjekt = False
+	
+	Metashape.app.update()
+
+#	settingsProjekt = docPath.replace(".psx", "_settings.txt")		# Dattoteka z nastavitvami
+#	settingsProjektExists = os.path.isfile(settingsProjekt)	# Preveri, če datoteka z nastavitvami obstaja
+#	settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
+#	
+#	if settingsProjektExists == False:
+#		print("\n\nInicializacija nastavitev AutoFTG za projekt...")
+#		settings.datotekaProjekt = docPath
+#		settings.mapaPodatki = Metashape.app.getExistingDirectory("Izberi mapo z podatki...")
+#		cam_calibrationSettings()
+#		settings.store()    # persist the settings
+#		print("Projekt = " + str(settings.projectsFile))
+#		print("Podatki = " + str(settings.dataFolder))
+#		print("Privzeta kalibracija (ID) = " + str(settings.privzetaKalibracija))
 
 
 camcalMsg = "Izberi privzeto kalibracijo za uporabo pri dodajanju novih chunkov"
@@ -162,36 +209,6 @@ def cam_calibrationSettings(msg=camcalMsg, title=camcalTitle, choices=seznamKame
 		print("\nNastavitev za kamero nalozena....\n")
 		settings.store()
 		return mb
-
-
-def project_folder_change():
-	settings.mapaPodatki = Metashape.app.getExistingDirectory("Mapa z podatki")
-	settings.store()
-	print("Izbrana delovna mapa: " + str(settings.mapaPodatki))
-
-
-def novProjekt():
-	doc = Metashape.app.document
-	docPath = Metashape.app.getSaveFileName("Ustvari nov projekt", "",  "Metashape Project (*.psx)")
-	try:
-		doc.save(docPath)
-	except RuntimeError:
-		Metashape.app.messageBox("Napaka! Projerkt ni shranjen.")
-	
-	Metashape.app.update()
-	settingsProjekt = docPath.replace(".psx", "_settings.txt")		# Dattoteka z nastavitvami
-	settingsProjektExists = os.path.isfile(settingsProjekt)	# Preveri, če datoteka z nastavitvami obstaja
-	settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
-	
-	if settingsProjektExists == False:
-		print("\n\nInicializacija nastavitev AutoFTG za projekt...")
-		settings.datotekaProjekt = docPath
-		settings.mapaPodatki = Metashape.app.getExistingDirectory("Izberi mapo z podatki...")
-		cam_calibrationSettings()
-		settings.store()    # persist the settings
-		print("Projekt = " + str(settings.projectsFile))
-		print("Podatki = " + str(settings.dataFolder))
-		print("Privzeta kalibracija (ID) = " + str(settings.privzetaKalibracija))
 
 
 # # Izbira ps
@@ -542,12 +559,13 @@ def find_files(folder, types):
 
 
 def newchunk_kalota_auto():
+	global odprtProjekt
 	doc = Metashape.app.document
 	docPath = Metashape.app.document.path
 	# netroot = path.dirname(netpath)
-	netroot = settings.mapaPodatki
-	image_folder = Metashape.app.getExistingDirectory("Mapa z podatki za (KALOTA)", netroot)
-	try:
+	if odprtProjekt == True:
+		netroot = settings.mapaPodatki
+		image_folder = Metashape.app.getExistingDirectory("Mapa z podatki za (KALOTA)", netroot)
 		photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
 		chunk = doc.addChunk()
 		chunk.addPhotos(photos)
@@ -565,149 +583,157 @@ def newchunk_kalota_auto():
 		chunk.updateTransform()
 		Metashape.app.update()
 		doc.save(docPath)
-	except RuntimeError:
-		Metashape.app.messageBox("Prekinjen postopek.")
+	else:
+		checkProject()
 
 def newchunk_stizk_auto():
-	doc = Metashape.app.document
-	netpath = Metashape.app.document.path
-	# netroot = path.dirname(netpath)
-	netroot = settings.mapaPodatki
-	image_folder = Metashape.app.getExistingDirectory("Mapa z podatki za (STOPNICA - IZKOP)", netroot)
-	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
-	chunk = doc.addChunk()
-	chunk.addPhotos(photos)
-	chunk_nameraw = os.path.basename(image_folder)
-	chunk_name = "ST_IZ_" + chunk_nameraw
-	chunk.label = Metashape.app.getString("Naziv chunka", chunk_name)
-	doc.chunk = chunk
-	doc.save()
-	Metashape.app.update()
-	Metashape.app.messageBox("Nalaganje slik...")
-	cam_calibration()
-	chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
-	path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
-	chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
-	chunk.updateTransform()
-	Metashape.app.update()
-	doc.save()
+	if odprtProjekt == True:
+		doc = Metashape.app.document
+		netpath = Metashape.app.document.path
+		# netroot = path.dirname(netpath)
+		netroot = settings.mapaPodatki
+		image_folder = Metashape.app.getExistingDirectory("Mapa z podatki za (STOPNICA - IZKOP)", netroot)
+		photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
+		chunk = doc.addChunk()
+		chunk.addPhotos(photos)
+		chunk_nameraw = os.path.basename(image_folder)
+		chunk_name = "ST_IZ_" + chunk_nameraw
+		chunk.label = Metashape.app.getString("Naziv chunka", chunk_name)
+		doc.chunk = chunk
+		doc.save(netpath)
+		Metashape.app.update()
+		Metashape.app.messageBox("Nalaganje slik...")
+		cam_calibration()
+		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
+		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+		chunk.updateTransform()
+		Metashape.app.update()
+		doc.save(netpath)
+	else:
+		checkProject()
 
 
 def newchunk_stbbet_auto():
-	doc = Metashape.app.document
-	netpath = Metashape.app.document.path
-	# netroot = path.dirname(netpath)
-	netroot = settings.mapaPodatki
-	image_folder = Metashape.app.getExistingDirectory("Mapa z podatki za (STOPNICA - B.BET)", netroot)
-	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
-	chunk = doc.addChunk()
-	chunk.addPhotos(photos)
-	chunk_nameraw = os.path.basename(image_folder)
-	chunk_name = "ST_BB_" + chunk_nameraw
-	chunk.label = Metashape.app.getString("Naziv chunkae", chunk_name)
-	doc.chunk = chunk
-	doc.save()
-	Metashape.app.update()
-	Metashape.app.messageBox("Nalaganje slik...")
-	cam_calibration()
-	chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
-	path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
-	chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
-	chunk.updateTransform()
-	Metashape.app.update()
-	doc.save()
+	if odprtProjekt == True:
+		doc = Metashape.app.document
+		netpath = Metashape.app.document.path
+		# netroot = path.dirname(netpath)
+		netroot = settings.mapaPodatki
+		image_folder = Metashape.app.getExistingDirectory("Mapa z podatki za (STOPNICA - B.BET)", netroot)
+		photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
+		chunk = doc.addChunk()
+		chunk.addPhotos(photos)
+		chunk_nameraw = os.path.basename(image_folder)
+		chunk_name = "ST_BB_" + chunk_nameraw
+		chunk.label = Metashape.app.getString("Naziv chunkae", chunk_name)
+		doc.chunk = chunk
+		doc.save()
+		Metashape.app.update()
+		Metashape.app.messageBox("Nalaganje slik...")
+		cam_calibration()
+		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
+		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+		chunk.updateTransform()
+		Metashape.app.update()
+		doc.save()
+	else:
+		checkProject()
 
 
 def newchunk_aero():
-	doc = Metashape.app.document
-	netpath = Metashape.app.document.path
-	# netroot = path.dirname(netpath)
-	netroot = settings.mapaPodatki
-	image_folder = Metashape.app.getExistingDirectory("Select photos folder (KALOTA)", netroot)
-	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
-	chunk = doc.addChunk()
-	chunk.addPhotos(photos)
-	chunk_nameraw = os.path.basename(image_folder)
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
-	doc.chunk = chunk
-	doc.save()
-	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_nameraw)
-	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
-	if addcalib == True:
-		cam_calibration()
+	if odprtProjekt == True:
+		doc = Metashape.app.document
+		netpath = Metashape.app.document.path
+		# netroot = path.dirname(netpath)
+		netroot = settings.mapaPodatki
+		image_folder = Metashape.app.getExistingDirectory("Select photos folder (KALOTA)", netroot)
+		photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
+		chunk = doc.addChunk()
+		chunk.addPhotos(photos)
+		chunk_nameraw = os.path.basename(image_folder)
+		chunk.label = Metashape.app.getString("Chunk Name", chunk_nameraw)
+		doc.chunk = chunk
 		doc.save()
-	nadaljujem = Metashape.app.getBool("Continue with marker detection and coordinates import?")
-	if nadaljujem == True:
-		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
-		Metashape.app.messageBox("Marker Detection complete!\n\nNext step: Choose file with target coordinates.\nPoint file must have header.\nImport starts at line 7.")
-		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
-		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
-		chunk.updateTransform()
-		Metashape.app.messageBox("Target coordinates imported.\n\nNext step: Workflow > Align Photos")
-		Metashape.app.update()
-		doc.save()
+		Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_nameraw)
+		addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
+		if addcalib == True:
+			cam_calibration()
+			doc.save()
+		nadaljujem = Metashape.app.getBool("Continue with marker detection and coordinates import?")
+		if nadaljujem == True:
+			chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+			Metashape.app.messageBox("Marker Detection complete!\n\nNext step: Choose file with target coordinates.\nPoint file must have header.\nImport starts at line 7.")
+			path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
+			chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+			chunk.updateTransform()
+			Metashape.app.messageBox("Target coordinates imported.\n\nNext step: Workflow > Align Photos")
+			Metashape.app.update()
+			doc.save()
+	else:
+		checkProject()
+
+# def newchunk_stizk():
+# 	doc = Metashape.app.document
+# 	netpath = Metashape.app.document.path
+# 	# netroot = path.dirname(netpath)
+# 	netroot = settings.mapaPodatki
+# 	image_folder = Metashape.app.getExistingDirectory("Select photos folder (STOPNICA - IZKOP)", netroot)
+# 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
+# 	chunk = doc.addChunk()
+# 	chunk.addPhotos(photos)
+# 	chunk_nameraw = os.path.basename(image_folder)
+# 	chunk_name = "ST_IZ_" + chunk_nameraw
+# 	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+# 	doc.chunk = chunk
+# 	doc.save()
+# 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
+# 	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
+# 	if addcalib == True:
+# 		cam_calibration()
+# 		doc.save()
+# 	nadaljujem = Metashape.app.getBool("Continue with marker detection and coordinates import?")
+# 	if nadaljujem == True:
+# 		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+# 		Metashape.app.messageBox("Marker Detection complete!\n\nNext step: Choose file with target coordinates.\nPoint file must have header.\nImport starts at line 7.")
+# 		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
+# 		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+# 		chunk.updateTransform()
+# 		Metashape.app.messageBox("Target coordinates imported.\n\nNext step: Workflow > Align Photos")
+# 		Metashape.app.update()
+# 		doc.save()
 
 
-def newchunk_stizk():
-	doc = Metashape.app.document
-	netpath = Metashape.app.document.path
-	# netroot = path.dirname(netpath)
-	netroot = settings.mapaPodatki
-	image_folder = Metashape.app.getExistingDirectory("Select photos folder (STOPNICA - IZKOP)", netroot)
-	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
-	chunk = doc.addChunk()
-	chunk.addPhotos(photos)
-	chunk_nameraw = os.path.basename(image_folder)
-	chunk_name = "ST_IZ_" + chunk_nameraw
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
-	doc.chunk = chunk
-	doc.save()
-	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
-	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
-	if addcalib == True:
-		cam_calibration()
-		doc.save()
-	nadaljujem = Metashape.app.getBool("Continue with marker detection and coordinates import?")
-	if nadaljujem == True:
-		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
-		Metashape.app.messageBox("Marker Detection complete!\n\nNext step: Choose file with target coordinates.\nPoint file must have header.\nImport starts at line 7.")
-		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
-		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
-		chunk.updateTransform()
-		Metashape.app.messageBox("Target coordinates imported.\n\nNext step: Workflow > Align Photos")
-		Metashape.app.update()
-		doc.save()
-
-
-def newchunk_stbbet():
-	doc = Metashape.app.document
-	netpath = Metashape.app.document.path
-	# netroot = path.dirname(netpath)
-	netroot = settings.mapaPodatki
-	image_folder = Metashape.app.getExistingDirectory("Select photos folder (STOPNICA - B.BET.)", netroot)
-	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
-	chunk = doc.addChunk()
-	chunk.addPhotos(photos)
-	chunk_nameraw = os.path.basename(image_folder)
-	chunk_name = "ST_BB_" + chunk_nameraw
-	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
-	doc.chunk = chunk
-	doc.save()
-	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
-	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
-	if addcalib == True:
-		cam_calibration()
-		doc.save()
-	nadaljujem = Metashape.app.getBool("Continue with marker detection and coordinates import?")
-	if nadaljujem == True:
-		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
-		Metashape.app.messageBox("Marker Detection complete!\n\nNext step: Choose file with target coordinates.\nPoint file must have header.\nImport starts at line 7.")
-		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
-		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
-		chunk.updateTransform()
-		Metashape.app.messageBox("Target coordinates imported.\n\nNext step: Workflow > Align Photos")
-		Metashape.app.update()
-		doc.save()
+# def newchunk_stbbet():
+# 	doc = Metashape.app.document
+# 	netpath = Metashape.app.document.path
+# 	# netroot = path.dirname(netpath)
+# 	netroot = settings.mapaPodatki
+# 	image_folder = Metashape.app.getExistingDirectory("Select photos folder (STOPNICA - B.BET.)", netroot)
+# 	photos = find_files(image_folder, [".jpg", ".jpeg", ".JPG", ".JPEG"])
+# 	chunk = doc.addChunk()
+# 	chunk.addPhotos(photos)
+# 	chunk_nameraw = os.path.basename(image_folder)
+# 	chunk_name = "ST_BB_" + chunk_nameraw
+# 	chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+# 	doc.chunk = chunk
+# 	doc.save()
+# 	Metashape.app.messageBox("New chunk created!\n\nChunk Name = " + chunk_name)
+# 	addcalib = Metashape.app.getBool("Import default camera calibration?\n\nCamera: NULL - Fisheye")
+# 	if addcalib == True:
+# 		cam_calibration()
+# 		doc.save()
+# 	nadaljujem = Metashape.app.getBool("Continue with marker detection and coordinates import?")
+# 	if nadaljujem == True:
+# 		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+# 		Metashape.app.messageBox("Marker Detection complete!\n\nNext step: Choose file with target coordinates.\nPoint file must have header.\nImport starts at line 7.")
+# 		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
+# 		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+# 		chunk.updateTransform()
+# 		Metashape.app.messageBox("Target coordinates imported.\n\nNext step: Workflow > Align Photos")
+# 		Metashape.app.update()
+# 		doc.save()
 
 
 def navodila_proces():
@@ -821,7 +847,7 @@ Metashape.app.addMenuItem(labelsep1, prazno)
 labelset0 = "<Auto FTG>/Nastavi privzeto delovno mapo..."
 Metashape.app.addMenuItem(labelset0, project_folder_change)
 
-labelset2 = "<Auto FTG>/Inicializacija nastavitev za projekt..."
+labelset2 = "<Auto FTG>/Nalozi nastavitve za projekt..."
 Metashape.app.addMenuItem(labelset2, checkProject)
 
 # labelset3 = "<Auto FTG>/Change default sampling spacing..."
