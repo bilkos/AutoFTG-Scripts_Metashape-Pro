@@ -50,7 +50,7 @@ def appAbout():
 	Metashape.app.messageBox(app_aboutmsg)
 
 # Checking compatibility
-compatible_major_version = "2.0"
+compatible_major_version = "1.8"
 found_major_version = ".".join(Metashape.app.version.split('.')[:2])
 if found_major_version != compatible_major_version:
 	raise Exception("Incompatible Metashape version: {} != {}".format(found_major_version, compatible_major_version))
