@@ -36,25 +36,23 @@ from PySide2.QtGui import *  # type: ignore
 from PySide2.QtWidgets import *  # type: ignore
 
 
-# VERZIJA APLIKACIJE
+# App info
 app_name = "AutoFTG"
 app_ver = "2.1.0-beta"
+
 app_author = "Author: Boris Bilc (Slovenia)"
 app_repo = "Repository URL: https://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
 ref_repo = "Agisoft GitHub repository:https://github.com/agisoft-llc/metashape-scripts"
 ref_scripts = "Copy Bounding Box Script: https://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py"
 app_about = "Scripts for process automation in Agisoft Metashape Pro\n\nThis is an assembly of existing scripts from other users, and some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia."
 
+
+# Create About message dialog
 def appAbout():
 	app_aboutmsg = app_name + " (" + app_ver + ")\n\n" + app_author + "\n\n" + app_about + "\n\n" + app_repo + "\n\nReferences:\n" + ref_repo + "\n\n" + ref_scripts + "\n"
 	Metashape.app.messageBox(app_aboutmsg)
 
-# Checking compatibility
-compatible_major_version = "2.0"
-found_major_version = ".".join(Metashape.app.version.split('.')[:2])
-if found_major_version != compatible_major_version:
-	raise Exception("Incompatible Metashape version: {} != {}".format(found_major_version, compatible_major_version))
-
+# List of hard-coded camera settiongs
 cameraList = [								# Seznam kamer, ki so prednastavljene [Variable LIST]
 	"NULL: Frame",							# ID: 0
 	"NULL: Fisheye",						# ID: 1
@@ -65,9 +63,16 @@ cameraList = [								# Seznam kamer, ki so prednastavljene [Variable LIST]
 	"DJI Phantom 4 Advanced (2B)"			# ID: 6
 	]
 
+
+# Checking compatibility with Metashape
+compatible_major_version = "2.0"
+found_major_version = ".".join(Metashape.app.version.split('.')[:2])
+if found_major_version != compatible_major_version:
+	raise Exception("Incompatible Metashape version: {} != {}".format(found_major_version, compatible_major_version))
+
+
 # Class for settings initialization
 class Settings(EgStore):
-	# Privzete vrednosti nastavitev - inicializacija nastavitev pri prvem zagonu
 	def __init__(self, filename):  # filename is required
 		self.settingsVersion = app_ver
 		self.fileProject = ''
@@ -85,7 +90,7 @@ settings = Settings(settingsFilename)	# Init settings
 projectOpened = False
 resetSettings = False
 
-
+# Main init process
 def initAutoFtg():
 	if settingsFilenameExists == False:
 		print("\n\nInicializacija osnovnih nastavitev.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
@@ -99,7 +104,7 @@ def initAutoFtg():
 		print("Default Camera: " + str(cameraList[int(settings.defaultCamera)]))
 		print("\nUrejanje nastavitev je dostopno preko menija <AutoFTG>.")
 
-
+# Check settings version
 def checkSettingsVer():
 	global resetSettings
 	if settings.settingsVersion == app_ver:
@@ -108,7 +113,7 @@ def checkSettingsVer():
 		resetSettings = True
 		settingsReset(resetSettings)
 		
-
+# Reset settings
 def settingsReset(reset):
 	if reset == True:
 		settings.settingsVersion = app_ver
@@ -118,7 +123,7 @@ def settingsReset(reset):
 		settings.defaultCamera = '0'
 		settings.store()
 		
-
+# Project settings initialization process
 def initAutoFtgProjekt():
 	global settingsFilename
 	global settingsFilenameExists
@@ -175,7 +180,7 @@ def initAutoFtgProjekt():
 			)
 		projectOpened = True
 
-
+# Routine to check if project exists before initializing settings
 def checkProject():
 	global projectOpened
 	fileProject = str(Metashape.app.document).replace("<Document '", "").replace("'>", "")
@@ -186,26 +191,19 @@ def checkProject():
 		initAutoFtgProjekt()
 		projectOpened = True
 
-
-# def initMain():
-# 	if uporabiProjekt == True:
-# 		initAutoFtgProjekt()
-# 	else:
-# 		initAutoFtg()
-
-
+# Change project export folder
 def projFolderChange():
 	settings.foldeData = Metashape.app.getExistingDirectory("Data export folder")
 	settings.store()
 	print("Export Folder: " + str(settings.folderProject))
 
-
+# Change project data folder
 def dataFolderChange():
 	settings.foldeData = Metashape.app.getExistingDirectory("Working data folder")
 	settings.store()
 	print("Working Folder: " + str(settings.foldeData))
 
-
+# Create new project routine - used when no project is present when user tries to add new chunk
 def novProjekt():
 	global projectOpened
 	doc = Metashape.app.document
@@ -221,13 +219,12 @@ def novProjekt():
 	
 	Metashape.app.update()
 
-
+# Camera choicebox variables
 camcalMsg = "Choose default camera to be used when adding new chunks"
 camcalTitle = "Default Camera"
 camcalPreselect = int(settings.defaultCamera)
 
-
-# Funkcija za izbiro privzete kalibracije
+# Choose default camera routine
 def cam_calibrationSettings(msg=camcalMsg, title=camcalTitle, choices=cameraList, preselect=camcalPreselect, callback=None, run=True):
 
 	mb = easygui.choicebox(msg, title, choices=choices, preselect=preselect, callback=callback)
@@ -244,7 +241,7 @@ def cam_calibrationSettings(msg=camcalMsg, title=camcalTitle, choices=cameraList
 		print("\nCamera settings loaded....\n")
 		return mb
 
-
+# Show current settings
 def showSettings():
 	Metashape.app.messageBox("Settings currently in use:\n\n"
 							+ "Settings file: " + str(settingsFilename) + "\n"
@@ -255,7 +252,7 @@ def showSettings():
 							+ "Default camera: " + str(cameraList[int(settings.defaultCamera)]) + "\n"
 							 )
 
-
+# Class for settings editing UI
 class Ui_settingsDialog(QtWidgets.QDialog):
 	def __init__(self, parent):
 		QtWidgets.QDialog.__init__(self, parent)
@@ -365,13 +362,13 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		settings.store()
 		print("New settings stored.")
 
-
+# Routine for calling Edit Settings UI - called when user want's to edit settings
 def editSettings():
 	app = QtWidgets.QApplication.instance()
 	parent = app.activeWindow()
 	editDialog = Ui_settingsDialog(parent)
 
-
+# Class for Copy Region UI
 class CopyBoundingBoxDlg(QtWidgets.QDialog):
 
 	def __init__(self, parent):
@@ -465,17 +462,18 @@ class CopyBoundingBoxDlg(QtWidgets.QDialog):
 		self.reject()
 		
 
+# Routine for calling Copy Regions UI
 def copy_bbox():
 	app = QtWidgets.QApplication.instance()
 	parent = app.activeWindow()
 
 	dlg = CopyBoundingBoxDlg(parent)
 
-
+# Show progress of processing
 def progress_print(p):
 		print('Completed: {:.2f}%'.format(p))
 
-
+# Routine for calling camera import routine
 def cam_calibration(calsetting):
 	if calsetting == 0:
 		cam_calibrationDefault()
@@ -494,8 +492,10 @@ def cam_calibration(calsetting):
 	else:
 		cam_calibrationDefault()
 
+#
+# Camera calibrations hard-coded import routines
+#
 
-# Nalozi kalibracijo kamere / Nulta / Type: Fisheye
 def cam_calibrationDefault():
 	doc = Metashape.app.document
 	chunk = doc.chunk
@@ -524,7 +524,6 @@ def cam_calibration0():
 	Metashape.app.update()
 
 
-# Nalozi kalibracijo kamere / HH3_031 by dibit / Type: Fisheye
 def cam_calibration1a():
 	doc = Metashape.app.document
 	chunk = doc.chunk	
@@ -539,7 +538,6 @@ def cam_calibration1a():
 	Metashape.app.update()
 
 
-# Nalozi kalibracijo kamere / HH3 KAMERA 2 by dibit / Type: Fisheye
 def cam_calibration1b():
 	doc = Metashape.app.document
 	chunk = doc.chunk	
@@ -554,7 +552,6 @@ def cam_calibration1b():
 	Metashape.app.update()
 
 
-# Nalozi kalibracijo kamere / HH3 KAMERA 2 by dibit / Type: Fisheye
 def cam_calibration1c():
 	doc = Metashape.app.document
 	chunk = doc.chunk	
@@ -569,7 +566,6 @@ def cam_calibration1c():
 	Metashape.app.update()
 
 
-# Nalozi kalibracijo kamere / DJI Phantom 4 Pro 2 (CELU) / Type: Frame
 def cam_calibration2():
 	doc = Metashape.app.document
 	chunk = doc.chunk	
@@ -584,7 +580,6 @@ def cam_calibration2():
 	Metashape.app.update()
 
 
-# Nalozi kalibracijo kamere / DJI Phantom 4 Advanced (2B) / Type: Frame
 def cam_calibration3():
 	doc = Metashape.app.document
 	chunk = doc.chunk	
@@ -598,7 +593,7 @@ def cam_calibration3():
 	Metashape.app.messageBox("Camera settings applied.\n\nCamera: DJI Phantom 4 Advanced (2B)\nType: Frame\nFilename: DJI-Phantom-4-Advanced_20MP_2022-01_2B.xml")
 	Metashape.app.update()
 
-
+# Detect markers and import coords
 def marker_targets():
 	doc = Metashape.app.document
 	chunk = doc.chunk
@@ -607,27 +602,18 @@ def marker_targets():
 	nadaljujem = Metashape.app.getBool("Start marker detection?")
 
 	if nadaljujem == True:
-		# Poisci markerje
 		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
 		Metashape.app.messageBox("Marker detection finished.\n\nIn next step choose file containing marker coordinates.\n\nFile must contain header, coordinates are expected starting at line 7.")
-		
-		# Uvoz koordinat za markerje
 		path_ref = Metashape.app.getOpenFileName("Import coordinates " + chunk.label, netroot, "Text file (*.txt)")
 		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
-
-		# Posodobi pogled
-		chunk.updateTransform()
-		
+		chunk.updateTransform()	
 		Metashape.app.messageBox("Target coordinates imported.\n\nNext step: Workflow > Align Photos")
 		Metashape.app.update()
-		
-		# Shrani projekt
 		doc.save()
 
-
+# Routine for finding files - used when creating new chunk
 def find_files(folder, types):
     return [entry.path for entry in os.scandir(folder) if (entry.is_file() and os.path.splitext(entry.name)[1].lower() in types)]
-
 
 # Create new chunk - Options are chosen manually
 def newchunk_aero():
@@ -672,7 +658,9 @@ def newchunk_aero():
 		checkProject()
 		newchunk_aero()
 
-
+#
+# Create chunk - custom auto routines
+#
 def newchunk_kalota_auto():
 	global projectOpened
 	if projectOpened == True:
@@ -700,6 +688,7 @@ def newchunk_kalota_auto():
 	else:
 		checkProject()
 		newchunk_kalota_auto()
+
 
 def newchunk_stizk_auto():
 	global projectOpened
@@ -760,9 +749,6 @@ def newchunk_stbbet_auto():
 		checkProject()
 		newchunk_stbbet_auto()
 
-
-def navodila_proces():
-	Metashape.app.messageBox("Osnovni koraki postopka obdelave:\n\n1. Ustvari nov chunk - Menu: AtuoFTG -> Create Chunk\n*2. Nastavi kalibracijo kamere\n*3. Detekcija markerjev in uvoz tock\n\n4. Align Photos\n\n5. Preveri markerje\n6. Copy Region\n\n7. Build Dense Cloud\n\n8. Pocisti tocke na celu izkopa oz.\n   obrezi tocke na bokih stopnice.\n\n9. Build Mesh\n10. Sample Points\n11. Razrez dense cloud-a (izkop/b.bet.)\n12. Izvoz podatkov\n\nAvtor skripte: Boris Bilc / Verzija: " + app_ver)
 
 
 def prazno():
@@ -868,8 +854,8 @@ Metashape.app.addMenuItem(labelsep1, prazno)
 labelset2 = "AutoFTG/Load project settings"
 Metashape.app.addMenuItem(labelset2, checkProject, icon=iconimg16)
 
-# labelset3 = "AutoFTG/Show current settings."
-# Metashape.app.addMenuItem(labelset3, showSettings, icon=iconimg15)
+labelset3 = "AutoFTG/Show current settings."
+Metashape.app.addMenuItem(labelset3, showSettings, icon=iconimg20)
 
 labelset4 = "AutoFTG/Edit current settings"
 Metashape.app.addMenuItem(labelset4, editSettings, icon=iconimg19)
