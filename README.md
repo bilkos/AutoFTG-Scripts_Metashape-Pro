@@ -37,8 +37,8 @@ You must have Python and OpenSSL installed on your system, and system enviroment
 Following are things to install for properly running AutoFTG script.<br>
 Provided are links to setup files for proper versions that need to be installed.
 
-- [Python 3.9.13](https://www.python.org/ftp/python/3.9.13/python-3.9.13-amd64.exe) (current python version provided in Metashape)
 - [OpenSSL 1.1.x](https://slproweb.com/products/Win32OpenSSL.html) (install only one version x86/x64, and DO NOT install Lite versions)
+- [Python 3.9.13](https://www.python.org/ftp/python/3.9.13/python-3.9.13-amd64.exe) (current python version provided in Metashape)
 - Set enviroment PATH for Python and OpenSSL
 - Python modules: **easygui**
 
