@@ -40,17 +40,22 @@ from PySide2.QtWidgets import *  # type: ignore
 app_name = "AutoFTG"
 app_ver = "2.1.1-beta"
 
-app_author = "Author: Boris Bilc (Slovenia)"
-app_repo = "Repository URL: https://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
-ref_repo = "Agisoft GitHub repository:https://github.com/agisoft-llc/metashape-scripts"
-ref_scripts = "Copy Bounding Box Script: https://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py"
+app_author = "Author: Boris Bilc"
+app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
+ref_repo = "Agisoft GitHub repository:\nhttps://github.com/agisoft-llc/metashape-scripts"
+ref_scripts = "Copy Bounding Box Script:\nhttps://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py"
 app_about = "Scripts for process automation in Agisoft Metashape Pro\n\nThis is an assembly of existing scripts from other users, and some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia."
 
 
 # Create About message dialog
 def appAbout():
-	app_aboutmsg = app_name + " (" + app_ver + ")\n\n" + app_author + "\n\n" + app_about + "\n\n" + app_repo + "\n\nReferences:\n" + ref_repo + "\n\n" + ref_scripts + "\n"
-	Metashape.app.messageBox(app_aboutmsg)
+	app_aboutmsg = app_author + "\n\n" + app_about + "\n\n" + app_repo + "\n\nReferences:\n" + ref_repo + "\n\n" + ref_scripts + "\n"
+	# Metashape.app.messageBox(app_aboutmsg)
+	# filename = os.path.normcase("c:/autoexec.bat")
+	# f = open(filename, "r")
+	# text = f.readlines()
+	# f.close()
+	easygui.msgbox("About AutoFTG (" + app_ver + ")\n\n" + app_aboutmsg, title="About AutoFTG (" + app_ver + ")")
 
 # List of hard-coded camera settiongs
 cameraList = [								# Seznam kamer, ki so prednastavljene [Variable LIST]
@@ -243,14 +248,14 @@ def cam_calibrationSettings(msg=camcalMsg, title=camcalTitle, choices=cameraList
 
 # Show current settings
 def showSettings():
-	Metashape.app.messageBox("Settings currently in use:\n\n"
-							+ "Settings file: " + str(settingsFilename) + "\n"
+	easygui.msgbox("Settings currently in use...\n\nSettings file: " + str(settingsFilename) + "\n"
 							+ "Settings version: " + str(settings.settingsVersion) + "\n\n"
 							+ "Project file: " + str(settings.fileProject) + "\n"
 							+ "Project folder: " + str(settings.folderProject) + "\n"
 							+ "Data folder: " + str(settings.foldeData) + "\n\n"
 							+ "Default camera: " + str(cameraList[int(settings.defaultCamera)]) + "\n"
-							 )
+							 , title="Current settings")
+
 
 # Class for settings editing UI
 class Ui_settingsDialog(QtWidgets.QDialog):
@@ -611,9 +616,11 @@ def marker_targets():
 		Metashape.app.update()
 		doc.save()
 
+
 # Routine for finding files - used when creating new chunk
 def find_files(folder, types):
     return [entry.path for entry in os.scandir(folder) if (entry.is_file() and os.path.splitext(entry.name)[1].lower() in types)]
+
 
 # Create new chunk - Options are chosen manually
 def newchunk_aero():
@@ -776,7 +783,7 @@ iconimg19 = ":/AutoFTG/pencil-writing_107734.png"
 iconimg20 = ":/AutoFTG/picture_file_image_icon_219497.png"
 
 # Menu items
-labelmenu= "Auto FTG"
+labelmenu= "Auto FTG/"
 Metashape.app.addMenuItem(labelmenu, appAbout, icon=iconimg1)
 
 label1a = "AutoFTG/New Chunk"
