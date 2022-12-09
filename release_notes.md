@@ -42,3 +42,10 @@ Release notes for AutoFTG python script
 - Added new icons
 - Added 'About AutoFTG' in menu
 - Changed main 'New Chunk' method to give more options when creating chunk
+
+## 2.1.1-beta
+
+- Minor bug fixes in new chunk creation routines
+- Updated README.md to include installation instructions
+- Some file reorganization
+

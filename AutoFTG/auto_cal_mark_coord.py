@@ -38,7 +38,7 @@ from PySide2.QtWidgets import *  # type: ignore
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.1.0-beta"
+app_ver = "2.1.1-beta"
 
 app_author = "Author: Boris Bilc (Slovenia)"
 app_repo = "Repository URL: https://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
@@ -677,7 +677,7 @@ def newchunk_kalota_auto():
 		doc.save(docPath)
 		Metashape.app.update()
 		Metashape.app.messageBox("Nalaganje slik...")
-		cam_calibration()
+		cam_calibration(int(settings.defaultCamera))
 		doc.save(docPath)
 		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
 		path_ref = Metashape.app.getOpenFileName("Uvoz koordinat markerjev", image_folder, "Text file (*.txt)")
@@ -708,7 +708,7 @@ def newchunk_stizk_auto():
 		doc.save(netpath)
 		Metashape.app.update()
 		Metashape.app.messageBox("Nalaganje slik...")
-		cam_calibration()
+		cam_calibration(int(settings.defaultCamera))
 		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
 		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
 		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
@@ -738,7 +738,7 @@ def newchunk_stbbet_auto():
 		doc.save()
 		Metashape.app.update()
 		Metashape.app.messageBox("Nalaganje slik...")
-		cam_calibration()
+		cam_calibration(int(settings.defaultCamera))
 		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
 		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
 		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
