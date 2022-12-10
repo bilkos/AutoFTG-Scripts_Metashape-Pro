@@ -2,7 +2,7 @@
 
 *Python scripts for AgiSoft Metashape Pro.* 
 
-Version: '2.1.1-beta'
+Version: '2.2.0-beta'
 
 ###### Compatible with Metashape Pro version: 1.8.x and 2.0.x
 
@@ -69,7 +69,7 @@ Done! Module **easygui** is installed, now you can continue to AutoFTG scripts d
 
 Folder location: `C:\Users\<username>\AppData\Local\Agisoft\Metashape Pro\scripts`
 
-**5.** Run Metashape, and enjoy!
+**5.** Run Metashape (**as Administrator**), and enjoy!
 <br><br>
 
 > Thank you for using AutoFTG Scripts for Agisoft Metashape Pro.

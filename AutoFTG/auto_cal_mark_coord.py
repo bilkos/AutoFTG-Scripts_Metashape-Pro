@@ -34,18 +34,25 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtCore import *  # type: ignore
 from PySide2.QtGui import *  # type: ignore
 from PySide2.QtWidgets import *  # type: ignore
+from configparser import ConfigParser
+
+
+# Check compatibility with Metashape
+compatible_major_version = "2.0"
+found_major_version = ".".join(Metashape.app.version.split('.')[:2])
+if found_major_version != compatible_major_version:
+	raise Exception("Incompatible Metashape version: {} != {}".format(found_major_version, compatible_major_version))
 
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.1.1-beta"
-
+app_ver = "2.2.0-beta"
+appsettings_ver = "2.0"
 app_author = "Author: Boris Bilc"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
 ref_repo = "Agisoft GitHub repository:\nhttps://github.com/agisoft-llc/metashape-scripts"
 ref_scripts = "Copy Bounding Box Script:\nhttps://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py"
 app_about = "Scripts for process automation in Agisoft Metashape Pro\n\nThis is an assembly of existing scripts from other users, and some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia."
-
 
 # Create About message dialog
 def appAbout():
@@ -68,18 +75,27 @@ cameraList = [								# Seznam kamer, ki so prednastavljene [Variable LIST]
 	"DJI Phantom 4 Advanced (2B)"			# ID: 6
 	]
 
+# Init configparser for camera settings
+cam_config = ConfigParser()
+# Set path to camera settings INI file. Use the same location as scripts for Metashape.
+script_path = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\cameras\\').replace("\\", "/")
+script_ini_file = "cam_settings.ini"
+script_ini_path =  script_path + script_ini_file
+# Read INI settings file
+cam_config.read(script_ini_path)
+# Create list with cameras read from INI file. Each section is one camera.
+cam_list = cam_config.sections()
+print("Loaded camera settings from...\n" + script_ini_path)
+# Set empty camera variables for global use
+cam_name = ''
+cam_type = ''
+cam_file = ''
 
-# Checking compatibility with Metashape
-compatible_major_version = "2.0"
-found_major_version = ".".join(Metashape.app.version.split('.')[:2])
-if found_major_version != compatible_major_version:
-	raise Exception("Incompatible Metashape version: {} != {}".format(found_major_version, compatible_major_version))
 
-
-# Class for settings initialization
+# Class for program and project settings initialization
 class Settings(EgStore):
 	def __init__(self, filename):  # filename is required
-		self.settingsVersion = app_ver
+		self.settingsVersion = appsettings_ver
 		self.fileProject = ''
 		self.folderProject = ''
 		self.foldeData = ''
@@ -99,6 +115,12 @@ resetSettings = False
 def initAutoFtg():
 	if settingsFilenameExists == False:
 		print("\n\nInicializacija osnovnih nastavitev.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
+		Metashape.app.messageBox("Show folder for data export")
+		projFolderChange()
+		Metashape.app.messageBox("Show folder with working data")
+		dataFolderChange()
+		Metashape.app.messageBox("Choose default camera")
+		cam_calibrationSettings()
 		settings.store()    # persist the settings
 	else:
 		checkSettingsVer() 
@@ -106,27 +128,23 @@ def initAutoFtg():
 		print("Project File: " + str(settings.fileProject))
 		print("Export Folder: " + str(settings.folderProject))
 		print("Data Folder: " + str(settings.foldeData))
-		print("Default Camera: " + str(cameraList[int(settings.defaultCamera)]))
+		print("Default Camera: " + str(cam_name))
 		print("\nUrejanje nastavitev je dostopno preko menija <AutoFTG>.")
 
 # Check settings version
 def checkSettingsVer():
 	global resetSettings
-	if settings.settingsVersion == app_ver:
-		resetSettings = False
-	else:
-		resetSettings = True
-		settingsReset(resetSettings)
+	if settings.settingsVersion != appsettings_ver:
+		settingsReset()
 		
 # Reset settings
-def settingsReset(reset):
-	if reset == True:
-		settings.settingsVersion = app_ver
-		settings.fileProject = ''
-		settings.folderProject = ''
-		settings.foldeData = ''
-		settings.defaultCamera = '0'
-		settings.store()
+def settingsReset():
+	settings.settingsVersion = appsettings_ver
+	settings.fileProject = ''
+	settings.folderProject = ''
+	settings.foldeData = ''
+	settings.defaultCamera = '0'
+	settings.store()
 		
 # Project settings initialization process
 def initAutoFtgProjekt():
@@ -149,20 +167,21 @@ def initAutoFtgProjekt():
 		Metashape.app.messageBox("Show folder with working data")
 		settings.foldeData = Metashape.app.getExistingDirectory("Choose Data Folder")
 		cam_calibrationSettings()
+		readCameraSettings(int(settings.defaultCamera))
 		settings.store()
 		print("\n\nProject settings saved.")
 		print("Settings File: " + str(settingsFilename))
 		print("Project File: " + str(settings.fileProject))
 		print("Export Folder: " + str(settings.folderProject))
 		print("Data Folder: " + str(settings.foldeData))
-		print("Default Camera: " + str(cameraList[int(settings.defaultCamera)]))
+		print("Default Camera: " + str(cam_name))
 		print("\nInitialization complete!")
 		Metashape.app.messageBox("Initialization complete.\nProject settings saved...\n\n"
 			+ "Settings File: " + str(settingsFilename) + "\n"
 			+ "Project File: " + str(settings.fileProject) + "\n"
 			+ "Export Folder: " + str(settings.folderProject) + "\n"
 			+ "Data Folder: " + str(settings.foldeData) + "\n"
-			+ "Default Camera: " + str(cameraList[int(settings.defaultCamera)])
+			+ "Default Camera: " + str(cam_name)
 			)
 		fileDoc.save(fileProject)
 		projectOpened = True
@@ -174,14 +193,15 @@ def initAutoFtgProjekt():
 		print("Project File: " + str(settings.fileProject))
 		print("Export Folder: " + str(settings.folderProject))
 		print("Data Folder: " + str(settings.foldeData))
-		print("Default Camera: " + str(cameraList[int(settings.defaultCamera)]))
+		print("Default Camera: " + str(cam_name))
+		readCameraSettings(int(settings.defaultCamera))
 		settings.store()
 		Metashape.app.messageBox("Project settings loaded.\n\n"
 			+ "Settings File: " + str(settingsFilename) + "\n"
 			+ "Project File: " + str(settings.fileProject) + "\n"
 			+ "Export Folder: " + str(settings.folderProject) + "\n"
 			+ "Data Folder: " + str(settings.foldeData) + "\n"
-			+ "Default Camera: " + str(cameraList[int(settings.defaultCamera)])
+			+ "Default Camera: " + str(cam_name)
 			)
 		projectOpened = True
 
@@ -198,7 +218,7 @@ def checkProject():
 
 # Change project export folder
 def projFolderChange():
-	settings.foldeData = Metashape.app.getExistingDirectory("Data export folder")
+	settings.folderProject = Metashape.app.getExistingDirectory("Data export folder")
 	settings.store()
 	print("Export Folder: " + str(settings.folderProject))
 
@@ -224,27 +244,91 @@ def novProjekt():
 	
 	Metashape.app.update()
 
+
+# Read camera settings from INI config file
+def readCameraSettings(cam_number):
+	global cam_name
+	global cam_type
+	global cam_file
+
+	# Check if camera is selected. Use defaultCamera if cam_number is not defined.
+	if cam_number == None:
+		cam_number = int(settings.defaultCamera)
+
+	# Prepare camera INI name to reflect the name in INI config file
+	cam_selected = cam_list[cam_number]
+
+	# Read settings for requested camera
+	cam_name = cam_config.get(cam_selected, "Name")
+	cam_type = cam_config.get(cam_selected, "Type")
+	cam_file = cam_config.get(cam_selected, "File")
+	print("Using camera\n" + "Name: " + cam_name + "\nType: " + cam_type + "\nFile: " + cam_file)
+	
+
+# Called to apply camera settings when creating new chunk
+def useCameraSettings():
+	# Init document
+	doc = Metashape.app.document
+	chunk = doc.chunk
+	# readCameraSettings(int(settings.defaultCamera))
+	camera_path = script_path + cam_file
+	
+	# Sensor to which we will apply settings
+	chunk_sensor = chunk.sensors[0]
+	
+	# Set sensor type from camera
+	if cam_type == "Fisheye":
+		chunk_sensor.type = Metashape.Sensor.Type.Fisheye
+	elif cam_type == "Frame":
+		chunk_sensor.type = Metashape.Sensor.Type.Frame
+
+	# Init calibration and import settings from camera calibration file (Metashape XML)
+	chunk_calib = Metashape.Calibration()
+	if cam_file != "None":
+		chunk_calib.load(path=camera_path, format=Metashape.CalibrationFormatXML)
+	chunk_sensor.user_calib = chunk_calib
+	
+	# Save document and show message with applied settings
+	doc.save()
+	Metashape.app.messageBox("Camera settings applied.\n\nCamera: " + cam_name + "\nType: " + cam_type + "\nFilename: " + cam_file)
+	Metashape.app.update()
+
+
 # Camera choicebox variables
 camcalMsg = "Choose default camera to be used when adding new chunks"
 camcalTitle = "Default Camera"
-camcalPreselect = int(settings.defaultCamera)
 
 # Choose default camera routine
-def cam_calibrationSettings(msg=camcalMsg, title=camcalTitle, choices=cameraList, preselect=camcalPreselect, callback=None, run=True):
-
-	mb = easygui.choicebox(msg, title, choices=choices, preselect=preselect, callback=callback)
-
+def cam_calibrationSettings(msg=camcalMsg, title=camcalTitle, choices=cam_list, callback=None, run=True):
+	mb = easygui.choicebox(msg, title, choices=choices, preselect=settings.defaultCamera, callback=callback)
 	if run:
 		if mb == None:
 			print("No camera chosen. Nothing has changed...")
 		else:
 			replyindex = choices.index(mb)
+			readCameraSettings(replyindex)
 			settings.defaultCamera = str(replyindex)
 			settings.store()
 			print("Default camera settings saved.\nDefault Camera: " + mb)
 	else:
 		print("\nCamera settings loaded....\n")
 		return mb
+
+
+def cam_calibrationChunk(msg=camcalMsg, title=camcalTitle, choices=cam_list, callback=None, run=True):
+	cambox = easygui.choicebox(msg, title, choices=choices, preselect=settings.defaultCamera, callback=callback)
+	if run:
+		if cambox == None:
+			print("No camera chosen. Using default camera.")
+		else:
+			camboxindex = choices.index(cambox)
+			readCameraSettings(camboxindex)
+			useCameraSettings()
+			print("Applied custom camera: " + cambox)
+	else:
+		print("\nCamera settings loaded....\n")
+		return cambox
+
 
 # Show current settings
 def showSettings():
@@ -253,7 +337,7 @@ def showSettings():
 							+ "Project file: " + str(settings.fileProject) + "\n"
 							+ "Project folder: " + str(settings.folderProject) + "\n"
 							+ "Data folder: " + str(settings.foldeData) + "\n\n"
-							+ "Default camera: " + str(cameraList[int(settings.defaultCamera)]) + "\n"
+							+ "Default camera: " + str(cam_name) + "\n"
 							 , title="Current settings")
 
 
@@ -306,7 +390,7 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		self.comboBoxCamera = QtWidgets.QComboBox()
 		self.comboBoxCamera.setObjectName(u"comboBoxCamera")
 		self.comboBoxCamera.setGeometry(QRect(10, 70, 280, 24))
-		for camera in cameraList:
+		for camera in cam_list:
 			self.comboBoxCamera.addItem(camera)
 		self.comboBoxCamera.setCurrentIndex(int(settings.defaultCamera))
 		
@@ -372,6 +456,7 @@ def editSettings():
 	app = QtWidgets.QApplication.instance()
 	parent = app.activeWindow()
 	editDialog = Ui_settingsDialog(parent)
+
 
 # Class for Copy Region UI
 class CopyBoundingBoxDlg(QtWidgets.QDialog):
@@ -478,125 +563,127 @@ def copy_bbox():
 def progress_print(p):
 		print('Completed: {:.2f}%'.format(p))
 
-# Routine for calling camera import routine
-def cam_calibration(calsetting):
-	if calsetting == 0:
-		cam_calibrationDefault()
-	elif calsetting == 1:
-		cam_calibration0()
-	elif calsetting == 2:
-		cam_calibration1a()
-	elif calsetting == 3:
-		cam_calibration1b()
-	elif calsetting == 4:
-		cam_calibration1c()
-	elif calsetting == 5:
-		cam_calibration2()
-	elif calsetting == 6:
-		cam_calibration3()
-	else:
-		cam_calibrationDefault()
+# # Routine for calling camera import routine
+# def cam_calibration(calsetting):
+# 	if calsetting == 0:
+# 		cam_calibrationDefault()
+# 	elif calsetting == 1:
+# 		cam_calibration0()
+# 	elif calsetting == 2:
+# 		cam_calibration1a()
+# 	elif calsetting == 3:
+# 		cam_calibration1b()
+# 	elif calsetting == 4:
+# 		cam_calibration1c()
+# 	elif calsetting == 5:
+# 		cam_calibration2()
+# 	elif calsetting == 6:
+# 		cam_calibration3()
+# 	else:
+# 		cam_calibrationDefault()
+# 
+# 
+# #
+# # Camera calibrations hard-coded import routines
+# #
+# 
+# def cam_calibrationDefault():
+# 	doc = Metashape.app.document
+# 	chunk = doc.chunk
+# 	
+# 	my_sensor = chunk.sensors[0]
+# 	my_sensor.type = Metashape.Sensor.Type.Frame
+# #	my_calib = Metashape.Calibration()
+# #	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera_HH3_031_Fisheye.xml", format=Metashape.CalibrationFormatXML)
+# #	my_sensor.user_calib = my_calib
+# 	doc.save()
+# 	Metashape.app.messageBox("Camera settings applied.\n\nCamera: null\nType: Frame\nFilename: ---")
+# 	Metashape.app.update()
+# 
+# 
+# def cam_calibration0():
+# 	doc = Metashape.app.document
+# 	chunk = doc.chunk
+# 	
+# 	my_sensor = chunk.sensors[0]
+# 	my_sensor.type = Metashape.Sensor.Type.Fisheye
+# #	my_calib = Metashape.Calibration()
+# #	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera_HH3_031_Fisheye.xml", format=Metashape.CalibrationFormatXML)
+# #	my_sensor.user_calib = my_calib
+# 	doc.save()
+# 	Metashape.app.messageBox("Camera settings applied.\n\nCamera: null\nType: Fisheye\nFilename: ---")
+# 	Metashape.app.update()
+# 
+# 
+# def cam_calibration1a():
+# 	doc = Metashape.app.document
+# 	chunk = doc.chunk	
+# 
+# 	my_sensor = chunk.sensors[0]
+# 	my_sensor.type = Metashape.Sensor.Type.Fisheye
+# 	my_calib = Metashape.Calibration()
+# 	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera_HH3_031_Fisheye.xml", format=Metashape.CalibrationFormatXML)
+# 	my_sensor.user_calib = my_calib
+# 	doc.save()
+# 	Metashape.app.messageBox("Camera settings applied.\n\nCamera: #1 HH3 by dibit\nType: Fisheye\nFilename: dibit-kamera_HH3_031_Fisheye.xml")
+# 	Metashape.app.update()
+# 
+# 
+# def cam_calibration1b():
+# 	doc = Metashape.app.document
+# 	chunk = doc.chunk	
+# 
+# 	my_sensor = chunk.sensors[0]
+# 	my_sensor.type = Metashape.Sensor.Type.Fisheye
+# 	my_calib = Metashape.Calibration()
+# 	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera-2_HH3_Fisheye.xml", format=Metashape.CalibrationFormatXML)
+# 	my_sensor.user_calib = my_calib
+# 	doc.save()
+# 	Metashape.app.messageBox("Camera settings applied.\n\nCamera: #2 HH3 by dibit\nType: Fisheye\nFilename: dibit-kamera-2_HH3_Fisheye.xml")
+# 	Metashape.app.update()
+# 
+# 
+# def cam_calibration1c():
+# 	doc = Metashape.app.document
+# 	chunk = doc.chunk	
+# 
+# 	my_sensor = chunk.sensors[0]
+# 	my_sensor.type = Metashape.Sensor.Type.Fisheye
+# 	my_calib = Metashape.Calibration()
+# 	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera-3_HH3_Fisheye.xml", format=Metashape.CalibrationFormatXML)
+# 	my_sensor.user_calib = my_calib
+# 	doc.save()
+# 	Metashape.app.messageBox("Camera settings applied.\n\nCamera: HH3 by dibit\nType: Fisheye\nFilename: dibit-kamera-3_HH3_Fisheye.xml")
+# 	Metashape.app.update()
+# 
+# 
+# def cam_calibration2():
+# 	doc = Metashape.app.document
+# 	chunk = doc.chunk	
+# 
+# 	my_sensor = chunk.sensors[0]
+# 	my_sensor.type = Metashape.Sensor.Type.Frame
+# 	my_calib = Metashape.Calibration()
+# 	my_calib.load(path="\\\\STROJ\\AeroProjekti-Arhiv\\_KalibracijeKamer\\DJI-Phantom-4-Pro2_20MP_2022-01_CELU.xml", format=Metashape.CalibrationFormatXML)
+# 	my_sensor.user_calib = my_calib
+# 	doc.save()
+# 	Metashape.app.messageBox("Camera settings applied.\n\nCamera: DJI Phantom 4 Pro 2.0 (CELU)\nType: Frame\nFilename: DJI-Phantom-4-Pro2_20MP_2022-01_CELU.xml")
+# 	Metashape.app.update()
+# 
+# 
+# def cam_calibration3():
+# 	doc = Metashape.app.document
+# 	chunk = doc.chunk	
+# 
+# 	my_sensor = chunk.sensors[0]
+# 	my_sensor.type = Metashape.Sensor.Type.Frame
+# 	my_calib = Metashape.Calibration()
+# 	my_calib.load(path="\\\\STROJ\\AeroProjekti-Arhiv\\_KalibracijeKamer\\DJI-Phantom-4-Advanced_20MP_2022-01_2B.xml", format=Metashape.CalibrationFormatXML)
+# 	my_sensor.user_calib = my_calib
+# 	doc.save()
+# 	Metashape.app.messageBox("Camera settings applied.\n\nCamera: DJI Phantom 4 Advanced (2B)\nType: Frame\nFilename: DJI-Phantom-4-Advanced_20MP_2022-01_2B.xml")
+# 	Metashape.app.update()
 
-#
-# Camera calibrations hard-coded import routines
-#
-
-def cam_calibrationDefault():
-	doc = Metashape.app.document
-	chunk = doc.chunk
-	
-	my_sensor = chunk.sensors[0]
-	my_sensor.type = Metashape.Sensor.Type.Frame
-#	my_calib = Metashape.Calibration()
-#	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera_HH3_031_Fisheye.xml", format=Metashape.CalibrationFormatXML)
-#	my_sensor.user_calib = my_calib
-	doc.save()
-	Metashape.app.messageBox("Camera settings applied.\n\nCamera: null\nType: Frame\nFilename: ---")
-	Metashape.app.update()
-
-
-def cam_calibration0():
-	doc = Metashape.app.document
-	chunk = doc.chunk
-	
-	my_sensor = chunk.sensors[0]
-	my_sensor.type = Metashape.Sensor.Type.Fisheye
-#	my_calib = Metashape.Calibration()
-#	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera_HH3_031_Fisheye.xml", format=Metashape.CalibrationFormatXML)
-#	my_sensor.user_calib = my_calib
-	doc.save()
-	Metashape.app.messageBox("Camera settings applied.\n\nCamera: null\nType: Fisheye\nFilename: ---")
-	Metashape.app.update()
-
-
-def cam_calibration1a():
-	doc = Metashape.app.document
-	chunk = doc.chunk	
-
-	my_sensor = chunk.sensors[0]
-	my_sensor.type = Metashape.Sensor.Type.Fisheye
-	my_calib = Metashape.Calibration()
-	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera_HH3_031_Fisheye.xml", format=Metashape.CalibrationFormatXML)
-	my_sensor.user_calib = my_calib
-	doc.save()
-	Metashape.app.messageBox("Camera settings applied.\n\nCamera: #1 HH3 by dibit\nType: Fisheye\nFilename: dibit-kamera_HH3_031_Fisheye.xml")
-	Metashape.app.update()
-
-
-def cam_calibration1b():
-	doc = Metashape.app.document
-	chunk = doc.chunk	
-
-	my_sensor = chunk.sensors[0]
-	my_sensor.type = Metashape.Sensor.Type.Fisheye
-	my_calib = Metashape.Calibration()
-	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera-2_HH3_Fisheye.xml", format=Metashape.CalibrationFormatXML)
-	my_sensor.user_calib = my_calib
-	doc.save()
-	Metashape.app.messageBox("Camera settings applied.\n\nCamera: #2 HH3 by dibit\nType: Fisheye\nFilename: dibit-kamera-2_HH3_Fisheye.xml")
-	Metashape.app.update()
-
-
-def cam_calibration1c():
-	doc = Metashape.app.document
-	chunk = doc.chunk	
-
-	my_sensor = chunk.sensors[0]
-	my_sensor.type = Metashape.Sensor.Type.Fisheye
-	my_calib = Metashape.Calibration()
-	my_calib.load(path="\\\\Stroj\\1_ftg_t8-kp\\100_T8-KP_OBDELAVA\\dibit-kamera-3_HH3_Fisheye.xml", format=Metashape.CalibrationFormatXML)
-	my_sensor.user_calib = my_calib
-	doc.save()
-	Metashape.app.messageBox("Camera settings applied.\n\nCamera: HH3 by dibit\nType: Fisheye\nFilename: dibit-kamera-3_HH3_Fisheye.xml")
-	Metashape.app.update()
-
-
-def cam_calibration2():
-	doc = Metashape.app.document
-	chunk = doc.chunk	
-
-	my_sensor = chunk.sensors[0]
-	my_sensor.type = Metashape.Sensor.Type.Frame
-	my_calib = Metashape.Calibration()
-	my_calib.load(path="\\\\STROJ\\AeroProjekti-Arhiv\\_KalibracijeKamer\\DJI-Phantom-4-Pro2_20MP_2022-01_CELU.xml", format=Metashape.CalibrationFormatXML)
-	my_sensor.user_calib = my_calib
-	doc.save()
-	Metashape.app.messageBox("Camera settings applied.\n\nCamera: DJI Phantom 4 Pro 2.0 (CELU)\nType: Frame\nFilename: DJI-Phantom-4-Pro2_20MP_2022-01_CELU.xml")
-	Metashape.app.update()
-
-
-def cam_calibration3():
-	doc = Metashape.app.document
-	chunk = doc.chunk	
-
-	my_sensor = chunk.sensors[0]
-	my_sensor.type = Metashape.Sensor.Type.Frame
-	my_calib = Metashape.Calibration()
-	my_calib.load(path="\\\\STROJ\\AeroProjekti-Arhiv\\_KalibracijeKamer\\DJI-Phantom-4-Advanced_20MP_2022-01_2B.xml", format=Metashape.CalibrationFormatXML)
-	my_sensor.user_calib = my_calib
-	doc.save()
-	Metashape.app.messageBox("Camera settings applied.\n\nCamera: DJI Phantom 4 Advanced (2B)\nType: Frame\nFilename: DJI-Phantom-4-Advanced_20MP_2022-01_2B.xml")
-	Metashape.app.update()
 
 # Detect markers and import coords
 def marker_targets():
@@ -640,15 +727,17 @@ def newchunk_aero():
 		doc.save()
 		Metashape.app.messageBox("New chunk added!\n\nChunk Name: " + chunk_nameraw)
 		
-		addcalib = Metashape.app.getBool("Confirm to import default camera calibration.\n\nDefault Camera: " + cameraList[int(settings.defaultCamera)])
+		addcalib = Metashape.app.getBool("Confirm to import default camera calibration.\n\nDefault Camera: " + cam_name)
 		
 		if addcalib == True:
-			cam_calibration(int(settings.defaultCamera))
+			readCameraSettings(int(settings.defaultCamera))
+			useCameraSettings()
 			doc.save()
 		else:
-			cam_choice = easygui.choicebox("Choose Camra", title="Choose Camera", choices=cameraList, preselect=settings.defaultCamera, callback=None)
-			cam_choice_index = cameraList.index(cam_choice)
-			cam_calibration(cam_choice_index)
+			cam_choice = easygui.choicebox("Choose Camra", title="Choose Camera", choices=cam_list, preselect=settings.defaultCamera, callback=None)
+			cam_choice_index = cam_list.index(cam_choice)
+			readCameraSettings(cam_choice_index)
+			useCameraSettings()
 
 		nadaljujem = Metashape.app.getBool("Camera set...\nUsing Camera: " + str(cam_choice) + "\n\nContinue with marker detection and coordinates import?")
 		
@@ -684,7 +773,8 @@ def newchunk_kalota_auto():
 		doc.save(docPath)
 		Metashape.app.update()
 		Metashape.app.messageBox("Nalaganje slik...")
-		cam_calibration(int(settings.defaultCamera))
+		readCameraSettings(int(settings.defaultCamera))
+		useCameraSettings()
 		doc.save(docPath)
 		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
 		path_ref = Metashape.app.getOpenFileName("Uvoz koordinat markerjev", image_folder, "Text file (*.txt)")
@@ -715,7 +805,8 @@ def newchunk_stizk_auto():
 		doc.save(netpath)
 		Metashape.app.update()
 		Metashape.app.messageBox("Nalaganje slik...")
-		cam_calibration(int(settings.defaultCamera))
+		readCameraSettings(int(settings.defaultCamera))
+		useCameraSettings()
 		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
 		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
 		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
@@ -745,7 +836,8 @@ def newchunk_stbbet_auto():
 		doc.save()
 		Metashape.app.update()
 		Metashape.app.messageBox("Nalaganje slik...")
-		cam_calibration(int(settings.defaultCamera))
+		readCameraSettings(int(settings.defaultCamera))
+		useCameraSettings()
 		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
 		path_ref = Metashape.app.getOpenFileName("Import Target Coordinates", image_folder, "Text file (*.txt)")
 		chunk.importReference(path_ref, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
@@ -813,32 +905,32 @@ Metashape.app.addMenuItem(label4, copy_bbox, icon=iconimg17)
 labelsep2 = "AutoFTG/--------------------"
 Metashape.app.addMenuSeparator(labelsep2)
 
-labelset1 = "AutoFTG/Default Camera..."
-Metashape.app.addMenuItem(labelset1, cam_calibrationSettings, icon=iconimg18)
+labelset1 = "AutoFTG/Change Default Camera..."
+Metashape.app.addMenuItem(labelset1, cam_calibrationSettings, icon=iconimg14)
 
-label2 = "AutoFTG/Change camera/(0) Initial: NULL (Frame)"
-Metashape.app.addMenuItem(label2, cam_calibrationDefault)
+label2 = "AutoFTG/Apply Custom Camera..."
+Metashape.app.addMenuItem(label2, cam_calibrationChunk, icon=iconimg15)
 
-label2a = "AutoFTG/Change camera/(1) Initial: NULL (Fisheye)"
-Metashape.app.addMenuItem(label2a, cam_calibration0)
-
-label2b = "AutoFTG/Change camera/(2) Camera 1: HH3 by dibit (Fisheye)"
-Metashape.app.addMenuItem(label2b, cam_calibration1a)
-
-label2c = "AutoFTG/Change camera/(3) Camera 2: HH3 by dibit (Fisheye)"
-Metashape.app.addMenuItem(label2c, cam_calibration1b)
-
-label2f = "AutoFTG/Change camera/(4) Camera 3: HH3 by dibit (Fisheye)"
-Metashape.app.addMenuItem(label2f, cam_calibration1c)
-
-label2d = "AutoFTG/Change camera/(5) DJI Phantom 4 Pro 2.0 (CELU)"
-Metashape.app.addMenuItem(label2d, cam_calibration2)
-
-label2e = "AutoFTG/Change camera/(6) DJI Phantom 4 Advanced (2B)"
-Metashape.app.addMenuItem(label2e, cam_calibration3)
-
-labelsep1 = "AutoFTG/--------------------"
-Metashape.app.addMenuItem(labelsep1, prazno)
+# label2a = "AutoFTG/Change camera/(1) Initial: NULL (Fisheye)"
+# Metashape.app.addMenuItem(label2a, cam_calibration0)
+# 
+# label2b = "AutoFTG/Change camera/(2) Camera 1: HH3 by dibit (Fisheye)"
+# Metashape.app.addMenuItem(label2b, cam_calibration1a)
+# 
+# label2c = "AutoFTG/Change camera/(3) Camera 2: HH3 by dibit (Fisheye)"
+# Metashape.app.addMenuItem(label2c, cam_calibration1b)
+# 
+# label2f = "AutoFTG/Change camera/(4) Camera 3: HH3 by dibit (Fisheye)"
+# Metashape.app.addMenuItem(label2f, cam_calibration1c)
+# 
+# label2d = "AutoFTG/Change camera/(5) DJI Phantom 4 Pro 2.0 (CELU)"
+# Metashape.app.addMenuItem(label2d, cam_calibration2)
+# 
+# label2e = "AutoFTG/Change camera/(6) DJI Phantom 4 Advanced (2B)"
+# Metashape.app.addMenuItem(label2e, cam_calibration3)
+# 
+# labelsep1 = "AutoFTG/--------------------"
+# Metashape.app.addMenuItem(labelsep1, prazno)
 
 # label6 = "AutoFTG/Filter Points (Uniform - Region oriented)"
 # Metashape.app.addMenuItem(label6, run_filterpoints)
