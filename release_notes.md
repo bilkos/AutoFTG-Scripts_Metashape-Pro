@@ -52,6 +52,9 @@ Release notes for AutoFTG python script
 ## 2.2.0-beta
 
 - Major redesign for camera settings (no longer hard-coded)
-  - Camera settings are now stored in script folder
-  - Camera calibration XML files are now stored in /cameras/* subfolder where script is located
+- New camera settings configuration
+- New 'Add Camera' function
+- Better settings loading
+- Improved settings reset code
+- Bug fixes
 
