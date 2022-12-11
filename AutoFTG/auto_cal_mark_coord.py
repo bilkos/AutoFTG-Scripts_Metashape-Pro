@@ -418,10 +418,17 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		self.btnClose.setObjectName(u"btnClose")
 		self.btnClose.setGeometry(QRect(220, 90, 75, 24))
 		self.btnClose.setText(u"Close")
+		icon1 = QIcon()
+		icon1.addFile(u":/AutoFTG/icons8-close-30.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.btnClose.setIcon(icon1)
+
 		self.btnSave = QtWidgets.QPushButton()
 		self.btnSave.setObjectName(u"btnSave")
 		self.btnSave.setGeometry(QRect(300, 90, 75, 24))
 		self.btnSave.setText(u"Save")
+		icon2 = QIcon()
+		icon2.addFile(u":/AutoFTG/pencil-writing_107734.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.btnSave.setIcon(icon2)
 		
 		layout = QtWidgets.QGridLayout()  # creating layout
 		layout.setRowMinimumHeight(0, 24)
@@ -931,7 +938,7 @@ iconimg19 = ":/AutoFTG/pencil-writing_107734.png"
 iconimg20 = ":/AutoFTG/picture_file_image_icon_219497.png"
 
 # Menu items
-labelmenu= "Auto FTG/"
+labelmenu= "About Auto FTG"
 Metashape.app.addMenuItem(labelmenu, appAbout, icon=iconimg1)
 
 label1a = "AutoFTG/New Chunk"
@@ -958,16 +965,16 @@ Metashape.app.addMenuItem(label3a, marker_targets, icon=iconimg6)
 label4 = "AutoFTG/Copy Region (Bounding Box)"
 Metashape.app.addMenuItem(label4, copy_bbox, icon=iconimg17)
 
-labelsep2 = "AutoFTG/--------------------"
-Metashape.app.addMenuSeparator(labelsep2)
+# labelsep2 = "AutoFTG/--------------------"
+# Metashape.app.addMenuSeparator(labelsep2)
 
-label2 = "AutoFTG/Apply Custom Camera"
+label2 = "Camera/Apply Custom Camera"
 Metashape.app.addMenuItem(label2, cam_calibrationChunk, icon=iconimg15)
 
-label2a = "AutoFTG/Change Default Camera"
+label2a = "Camera/Change Default Camera"
 Metashape.app.addMenuItem(label2a, cam_calibrationSettings, icon=iconimg14)
 
-label2b = "AutoFTG/Add New Camera"
+label2b = "Camera/Add New Camera"
 Metashape.app.addMenuItem(label2b, addCameraDialog, icon=iconimg3)
 # 
 # label2c = "AutoFTG/Change camera/(3) Camera 2: HH3 by dibit (Fisheye)"
@@ -997,26 +1004,29 @@ Metashape.app.addMenuItem(label2b, addCameraDialog, icon=iconimg3)
 # label5b = "AutoFTG/Sample Points (Uniform Spacing)"
 # Metashape.app.addMenuItem(label5b, run_samplepointsuni)
  
-labelsep4 = "AutoFTG/--------------------"
-Metashape.app.addMenuItem(labelsep4, prazno)
+# labelsep4 = "AutoFTG/--------------------"
+# Metashape.app.addMenuItem(labelsep4, prazno)
 
 # labelset0 = "AutoFTG/Change data folder location"
 # Metashape.app.addMenuItem(labelset0, dataFolderChange, icon=iconimg5)
 
-labelset2 = "AutoFTG/Load project settings"
+labelset2 = "Settings/Load project settings"
 Metashape.app.addMenuItem(labelset2, checkProject, icon=iconimg16)
 
-labelset3 = "AutoFTG/Show current settings."
-Metashape.app.addMenuItem(labelset3, showSettings, icon=iconimg20)
-
-labelset4 = "AutoFTG/Edit current settings"
-Metashape.app.addMenuItem(labelset4, editSettings, icon=iconimg19)
-
-labelsep5 = "AutoFTG/--------------------"
+labelsep5 = "Settings/--------------------"
 Metashape.app.addMenuItem(labelsep5, prazno)
 
-labelabout = "AutoFTG/About AutoFTG..."
-Metashape.app.addMenuItem(labelabout, appAbout, icon=iconimg1)
+labelset3 = "Settings/Show current settings."
+Metashape.app.addMenuItem(labelset3, showSettings, icon=iconimg20)
+
+labelset4 = "Settings/Edit current settings"
+Metashape.app.addMenuItem(labelset4, editSettings, icon=iconimg19)
+
+# labelsep5 = "AutoFTG/--------------------"
+# Metashape.app.addMenuItem(labelsep5, prazno)
+
+# labelabout = "About AutoFTG..."
+# Metashape.app.addMenuItem(labelabout, appAbout, icon=iconimg1)
 
 # Initialize setting for AutoFTG
 initAutoFtg()
