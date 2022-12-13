@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<calibration>
-  <projection>fisheye</projection>
-  <width>5472</width>
-  <height>3648</height>
-  <f>2280</f>
-  <date>2022-11-16T21:04:43Z</date>
-</calibration>
