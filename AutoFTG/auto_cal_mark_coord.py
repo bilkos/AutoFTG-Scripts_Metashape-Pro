@@ -652,10 +652,10 @@ class Ui_DialogCameras(QtWidgets.QDialog):
 		self.close()
 
 # Routine for calling Edit Settings UI - called when user want's to edit settings
-def addCameraDialog(camfile, camname, camtype):
+def addCameraDialog():
 	app = QtWidgets.QApplication.instance()
 	parent = app.activeWindow()
-	cameraDialog = Ui_DialogCameras(parent, camfile, camname, camtype)
+	cameraDialog = Ui_DialogCameras(parent, "", "New Camera", "Frame")
 
 
 class Ui_dialogCamGui(QtWidgets.QDialog):
@@ -749,7 +749,7 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 
 		self.setLayout(layoutMain)
 
-		QtCore.QObject.connect(self.btnAddNewCam, QtCore.SIGNAL("clicked()"), addCameraDialog("", "New Camera", "Frame"))
+		QtCore.QObject.connect(self.btnAddNewCam, QtCore.SIGNAL("clicked()"), addCameraDialog)
 		QtCore.QObject.connect(self.btnEditCam, QtCore.SIGNAL("clicked()"), self.editSelCamera)
 		QtCore.QObject.connect(self.btnRemoveCam, QtCore.SIGNAL("clicked()"), self.removeSelCamera)
 		QtCore.QObject.connect(self.btnMainSave, QtCore.SIGNAL("clicked()"), self.saveCameraEdit)
@@ -1111,7 +1111,7 @@ label2a = "AutoFTG/Camera Settings/Change Default Camera"
 Metashape.app.addMenuItem(label2a, cam_calibrationSettings, icon=iconimg14)
 
 label2b = "AutoFTG/Camera Settings/Add New Camera"
-Metashape.app.addMenuItem(label2b, addCameraDialog("", "New Camera", "Frame"), icon=iconimg3)
+Metashape.app.addMenuItem(label2b, addCameraDialog, icon=iconimg3)
 
 label2c = "AutoFTG/Camera Settings/Cameras Editor"
 Metashape.app.addMenuItem(label2c, camerasEditor, icon=iconimg3)
