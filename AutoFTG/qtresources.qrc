@@ -1,5 +1,12 @@
 <RCC>
   <qresource prefix="/AutoFTG">
+    <file>resources/preferencesdesktop_103781.png</file>
+    <file>resources/3592841-cog-gear-general-machine-office-setting-settings_107765.png</file>
+    <file>resources/Flag1-green_37143.png</file>
+    <file>resources/Flag1-blue_37144.png</file>
+    <file>resources/Save_37110.png</file>
+    <file>resources/gui_save_icon_157040.png</file>
+    <file>resources/Save-as_37111.png</file>
     <file>resources/icons8-close-30.png</file>
     <file>resources/icons8-remove-48.png</file>
     <file>resources/icons8-clear-symbol-48.png</file>

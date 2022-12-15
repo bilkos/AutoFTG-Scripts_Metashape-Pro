@@ -32,6 +32,7 @@ import sys
 import time
 import shutil
 from os import path
+import textwrap
 
 import Metashape
 
@@ -57,23 +58,39 @@ if found_major_version != compatible_major_version:
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.2.1-beta"
-appsettings_ver = "2.1"
-app_author = "Author: Boris Bilc"
+app_ver = "2.3.0-beta"
+appsettings_ver = "2.3"
+app_author = "Author: Boris Bilc\n\n"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
 ref_repo = "Agisoft GitHub repository:\nhttps://github.com/agisoft-llc/metashape-scripts"
 ref_scripts = "Copy Bounding Box Script:\nhttps://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py"
-app_about = "Scripts for process automation in Agisoft Metashape Pro\n\nThis is an assembly of existing scripts from other users, and some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia."
+app_about = "Scripts for process automation in Agisoft Metashape Pro\n\nThis is an assembly of existing scripts from other users,\nand some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia."
 
 # Create About message dialog
 def appAbout():
-	app_aboutmsg = app_author + "\n\n" + app_about + "\n\n" + app_repo + "\n\nReferences:\n" + ref_repo + "\n\n" + ref_scripts + "\n"
+	app_aboutmsg = app_name + "\n\nVersion: " + app_ver + "\n" + app_author + "\n" + app_about + "\n\n" + app_repo + "\n\nReferences:\n" + ref_repo + "\n\n" + ref_scripts + "\n"
+	message_box = QMessageBox()
+	message_box.setMinimumSize(600,500)
+	message_box.setTextFormat(Qt.PlainText)
+	message_box.setText(app_aboutmsg)
+	# message_box.setInformativeText(
+	# 	f'Version: {app_ver}\n'
+	# 	f'About: {app_aboutmsg}'
+	# )
+	message_box.exec_()
+	
+	# app = QtWidgets.QApplication.instance()
+	# parent = app.activeWindow()
+	# aboutMsgbox = QMessageBox.about(parent, "About AutoFTG", app_aboutmsg)
+	# if aboutMsgbox == QMessageBox.Ok:
+	# 	print("About AutoFTG closed...")
+
 	# Metashape.app.messageBox(app_aboutmsg)
 	# filename = os.path.normcase("c:/autoexec.bat")
 	# f = open(filename, "r")
 	# text = f.readlines()
 	# f.close()
-	easygui.msgbox("About AutoFTG (" + app_ver + ")\n\n" + app_aboutmsg, title="About AutoFTG (" + app_ver + ")")
+	#easygui.msgbox("About AutoFTG (" + app_ver + ")\n\n" + app_aboutmsg, title="About AutoFTG (" + app_ver + ")")
 
 
 # Class for program and project settings initialization
@@ -83,7 +100,7 @@ class Settings(EgStore):
 		self.fileProject = ''
 		self.folderProject = ''
 		self.foldeData = ''
-		self.defaultCamera = 'NULL - Frame'
+		self.defaultCamera = 'NULL - Frame (Default)'
 		self.filename = filename  # this is required - init settings
 		self.restore()
 
@@ -111,7 +128,7 @@ def readIniConf():
 	cam_config.read(script_ini_path)
 	# Create list with cameras read from INI file. Each section is one camera.
 	cam_list = cam_config.sections()
-	print("Loaded camera settings file...\n" + script_ini_file)
+	print("Loaded camera settings...\n File: " + script_ini_file)
 
 readIniConf()
 
@@ -174,7 +191,7 @@ def initAutoFtg():
 		dataFolderChange()
 		Metashape.app.messageBox("Choose project default camera...")
 		cam_calibrationSettings()
-		settings.store()    # persist the settings
+		settings.store()	# persist the settings
 	else:
 		checkSettingsVer()
 		print("\n\nNalozene so osnovne nastavitve.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
@@ -196,7 +213,7 @@ def initAutoFtgProjekt():
 
 	fileDoc = Metashape.app.document
 	fileProject = str(fileDoc).replace("<Document '", "").replace("'>", "")
-	settingsFilename = fileProject.replace(".psx", "_settings.txt")    # Datoteka z nastavitvami projekta
+	settingsFilename = fileProject.replace(".psx", "_settings.txt")	# Datoteka z nastavitvami projekta
 	settingsFilenameExists = os.path.isfile(settingsFilename)	# Preveri, če datoteka z projektom obstaja
 	settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
 	
@@ -353,6 +370,54 @@ def cam_calibrationChunk(msg=camcalMsg, title=camcalTitle, callback=None, run=Tr
 		return cambox
 
 
+# Routine for adding/editing camera configuration
+def saveCamConfig(camorig, camname, camtype, camfile):
+	if cam_config.has_section(camorig) == True:
+		cam_config.remove_section(camorig)
+		cam_config.add_section(camname)
+		cam_config.set(camname, "Name", camname)
+		cam_config.set(camname, "Type", camtype)
+		cam_config.set(camname, "File", camfile)
+		Metashape.app.messageBox("Camera settings saved...\n" + "Name: " + camname + "\nType: " + camtype + "\nFile: " + camfile)
+	else:
+		cam_config.add_section(camname)
+		cam_config.set(camname, "Name", camname)
+		cam_config.set(camname, "Type", camtype)
+		cam_config.set(camname, "File", camfile)
+		Metashape.app.messageBox("Camera added...\n" + "Name: " + camname + "\nType: " + camtype + "\nFile: " + camfile)
+
+	with open(script_ini_path, 'w') as configfile:
+		cam_config.write(configfile)
+
+	readIniConf()
+
+
+
+# Routine for adding/editing camera configuration
+def removeCamConfig(camname):
+	if cam_config.has_section(camname) == True:
+		cameraXml = script_path + cam_config.get(camname, "File")
+		
+		if os.path.exists(cameraXml):
+			os.remove(cameraXml)
+			print("Camera XML file " + cameraXml + " deleted...")
+		else:
+			print("File not found!")
+		
+		cam_config.remove_section(camname)
+		
+		with open(script_ini_path, 'w') as configfile:
+			cam_config.write(configfile)
+		
+		readIniConf()
+		
+		Metashape.app.messageBox("Camera settings and XML file removed...")
+	else:
+		Metashape.app.messageBox("Error! No camera named (" + str(camname) + ") was found.\n\nDid you manualy edit comaera configuration?")
+
+	
+
+
 # Show current settings
 def showSettings():
 	easygui.msgbox("Settings currently in use...\n\nSettings file: " + str(settingsFilename) + "\n"
@@ -387,7 +452,7 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		self.btnProjFolder = QtWidgets.QPushButton()
 		self.btnProjFolder.setObjectName(u"btnProjFolder")
 		self.btnProjFolder.setGeometry(QRect(300, 10, 80, 24))
-		self.btnProjFolder.setText(u"Browse")
+		self.btnProjFolder.setText(u" Browse")
 		self.btnProjFolder.setIcon(icon)
 		self.btnProjFolder.setIconSize(QSize(21, 21))
 		
@@ -403,7 +468,7 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		self.btnDataFolder = QtWidgets.QPushButton()
 		self.btnDataFolder.setObjectName(u"btnDataFolder")
 		self.btnDataFolder.setGeometry(QRect(300, 40, 80, 24))
-		self.btnDataFolder.setText(u"Browse")
+		self.btnDataFolder.setText(u" Browse")
 		self.btnDataFolder.setIcon(icon)
 		self.btnDataFolder.setIconSize(QSize(21, 21))
 		
@@ -422,17 +487,18 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		self.btnClose.setObjectName(u"btnClose")
 		self.btnClose.setGeometry(QRect(220, 90, 75, 24))
 		self.btnClose.setText(u"Close")
-		icon1 = QIcon()
-		icon1.addFile(u":/AutoFTG/resources/icons8-close-30.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.btnClose.setIcon(icon1)
+		# icon1 = QIcon()
+		# icon1.addFile(u":/AutoFTG/resources/icons8-close-30.png", QSize(), QIcon.Normal, QIcon.Off)
+		# self.btnClose.setIcon(icon1)
 
 		self.btnSave = QtWidgets.QPushButton()
 		self.btnSave.setObjectName(u"btnSave")
 		self.btnSave.setGeometry(QRect(300, 90, 75, 24))
-		self.btnSave.setText(u"Save")
+		self.btnSave.setText(u" Save")
 		icon2 = QIcon()
-		icon2.addFile(u":/AutoFTG/resources/pencil-writing_107734.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon2.addFile(u":/AutoFTG/resources/Save-as_37111.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.btnSave.setIcon(icon2)
+		self.btnSave.setIconSize(QSize(12, 12))
 		
 		layout = QtWidgets.QGridLayout()  # creating layout
 		layout.setRowMinimumHeight(0, 24)
@@ -492,7 +558,9 @@ def editSettings():
 
 # Class for camera edit dialog
 class Ui_DialogCameras(QtWidgets.QDialog):
-	def __init__(self, parent, camfile, camname, camtype):
+	def __init__(self, parent, camnew, camname, camtype, camfile):
+		global camOrigName
+		camOrigName = camname
 		QtWidgets.QDialog.__init__(self, parent)
 		self.setObjectName(u"DialogCameras")
 		self.resize(400, 170)
@@ -505,7 +573,7 @@ class Ui_DialogCameras(QtWidgets.QDialog):
 		self.gridLayout.setContentsMargins(0, 0, 0, 0)
 		self.btnBrowseXML = QtWidgets.QPushButton()
 		self.btnBrowseXML.setObjectName(u"btnBrowseXML")
-		self.btnBrowseXML.setText(u"Browse")
+		self.btnBrowseXML.setText(u" Browse")
 		icon = QIcon()
 		icon.addFile(u":/AutoFTG/resources/openfolder.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.btnBrowseXML.setIcon(icon)
@@ -528,14 +596,18 @@ class Ui_DialogCameras(QtWidgets.QDialog):
 
 		layout.addWidget(self.label_3, 3, 0, 1, 1)
 
-		self.btnAddCam = QtWidgets.QPushButton()
-		self.btnAddCam.setObjectName(u"btnAddCam")
-		self.btnAddCam.setText(u"Add Camera")
+		self.btnSaveCam = QtWidgets.QPushButton()
+		self.btnSaveCam.setObjectName(u"btnSaveCam")
+		if camnew == True:
+			self.btnSaveCam.setText(u" Save")
+		else:
+			self.btnSaveCam.setText(u" Update")
 		icon1 = QIcon()
-		icon1.addFile(u":/AutoFTG/resources/CamImages.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.btnAddCam.setIcon(icon1)
+		icon1.addFile(u":/AutoFTG/resources/Save-as_37111.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.btnSaveCam.setIcon(icon1)
+		self.btnSaveCam.setIconSize(QSize(12, 12))
 
-		layout.addWidget(self.btnAddCam, 6, 3, 1, 1)
+		layout.addWidget(self.btnSaveCam, 6, 3, 1, 1)
 
 		self.line_2 = QtWidgets.QFrame()
 		self.line_2.setObjectName(u"line_2")
@@ -566,9 +638,9 @@ class Ui_DialogCameras(QtWidgets.QDialog):
 		self.btnCloseCamDialog = QtWidgets.QPushButton()
 		self.btnCloseCamDialog.setObjectName(u"btnCloseCamDialog")
 		self.btnCloseCamDialog.setText(u"Close")
-		icon2 = QIcon()
-		icon2.addFile(u":/AutoFTG/resources/icons8-close-30.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.btnCloseCamDialog.setIcon(icon2)
+		# icon2 = QIcon()
+		# icon2.addFile(u":/AutoFTG/resources/icons8-close-30.png", QSize(), QIcon.Normal, QIcon.Off)
+		# self.btnCloseCamDialog.setIcon(icon2)
 
 		layout.addWidget(self.btnCloseCamDialog, 6, 2, 1, 1)
 
@@ -601,7 +673,7 @@ class Ui_DialogCameras(QtWidgets.QDialog):
 		self.setLayout(layout)
 
 		QtCore.QObject.connect(self.btnBrowseXML, QtCore.SIGNAL("clicked()"), self.selectCameraFile)
-		QtCore.QObject.connect(self.btnAddCam, QtCore.SIGNAL("clicked()"), self.addCamera)
+		QtCore.QObject.connect(self.btnSaveCam, QtCore.SIGNAL("clicked()"), self.saveCamera)
 		QtCore.QObject.connect(self.btnCloseCamDialog, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("reject()"))
 
 		self.exec()
@@ -611,13 +683,13 @@ class Ui_DialogCameras(QtWidgets.QDialog):
 	def selectCameraFile(self):
 		global cameraXmlSource
 		global cameraXmlDest
-		cameraXmlSource = Metashape.app.getOpenFileName(hint="Select Camera Configuration (XML)", dir="*", filter="XML Camera Config (*.xml)")
+		cameraXmlSource = Metashape.app.getOpenFileName(hint="Select Camera Calibration", dir=str(settings.folderProject), filter="Metashape Camera Calibration (*.xml)")
 		camXmlFile = os.path.basename(cameraXmlSource)
 		cameraXmlDest = script_path + camXmlFile
 		self.lineEditFile.setText(camXmlFile)
 
 
-	def addCamera(self):
+	def saveCamera(self):
 #		global cameraXmlSource
 		cameraXmlDestExists = os.path.isfile(cameraXmlDest)
 		if cameraXmlDestExists == False:
@@ -626,36 +698,28 @@ class Ui_DialogCameras(QtWidgets.QDialog):
 				cameraNameAdd = self.lineEditName.text()
 				cameraTypeAdd = self.comboBoxType.currentText()
 				cameraFileAdd = self.lineEditFile.text()
-				cam_config.add_section(cameraNameAdd)
-				cam_config.set(cameraNameAdd, "Name", cameraNameAdd)
-				cam_config.set(cameraNameAdd, "Type", cameraTypeAdd)
-				cam_config.set(cameraNameAdd, "File", cameraFileAdd)
-		
-				with open(script_ini_path, 'w') as configfile:
-					cam_config.write(configfile)
+				saveCamConfig(cameraNameAdd, cameraNameAdd, cameraTypeAdd, cameraFileAdd)
 			except:
 				Metashape.app.messageBox("Error! No camera added...")
 		else:
 			cameraNameAdd = self.lineEditName.text()
 			cameraTypeAdd = self.comboBoxType.currentText()
 			cameraFileAdd = self.lineEditFile.text()
-			cam_config.add_section(cameraNameAdd)
-			cam_config.set(cameraNameAdd, "Name", cameraNameAdd)
-			cam_config.set(cameraNameAdd, "Type", cameraTypeAdd)
-			cam_config.set(cameraNameAdd, "File", cameraFileAdd)
-			
-			with open(script_ini_path, 'w') as configfile:
-					cam_config.write(configfile)
+			saveCamConfig(camOrigName, cameraNameAdd, cameraTypeAdd, cameraFileAdd)
+			Metashape.app.messageBox("Camera settings saved.\n" + "Name: " + cameraNameAdd + "\nType: " + cameraTypeAdd + "\nFile: " + cameraFileAdd)
+
 		readIniConf()
 
-		Metashape.app.messageBox("Camera configuration added..." + "Name: " + cameraNameAdd + "\nType: " + cameraTypeAdd + "\nFile: " + cameraFileAdd)
 		self.close()
 
 # Routine for calling Edit Settings UI - called when user want's to edit settings
-def addCameraDialog():
+def addCameraDialog(camnew, camname, camtype, camfile):
 	app = QtWidgets.QApplication.instance()
 	parent = app.activeWindow()
-	cameraDialog = Ui_DialogCameras(parent, "", "New Camera", "Frame")
+	if camnew == False:
+		cameraDialog = Ui_DialogCameras(parent, camnew, camname, camtype, camfile)
+	else:
+		cameraDialog = Ui_DialogCameras(parent, camnew, "New Camera", "Frame", "")
 
 
 class Ui_dialogCamGui(QtWidgets.QDialog):
@@ -691,7 +755,7 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		sizePolicy.setVerticalStretch(0)
 		sizePolicy.setHeightForWidth(self.btnAddNewCam.sizePolicy().hasHeightForWidth())
 		self.btnAddNewCam.setSizePolicy(sizePolicy)
-		self.btnAddNewCam.setText(u"Add")
+		self.btnAddNewCam.setText(u" Add")
 		icon = QIcon()
 		icon.addFile(u":/AutoFTG/resources/CamImages.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.btnAddNewCam.setIcon(icon)
@@ -702,7 +766,7 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		self.btnEditCam.setObjectName(u"btnEditCam")
 		sizePolicy.setHeightForWidth(self.btnEditCam.sizePolicy().hasHeightForWidth())
 		self.btnEditCam.setSizePolicy(sizePolicy)
-		self.btnEditCam.setText(u"Edit")
+		self.btnEditCam.setText(u" Edit")
 		icon1 = QIcon()
 		icon1.addFile(u":/AutoFTG/resources/pencil-writing_107734.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.btnEditCam.setIcon(icon1)
@@ -713,7 +777,7 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		self.btnRemoveCam.setObjectName(u"btnRemoveCam")
 		sizePolicy.setHeightForWidth(self.btnRemoveCam.sizePolicy().hasHeightForWidth())
 		self.btnRemoveCam.setSizePolicy(sizePolicy)
-		self.btnRemoveCam.setText(u"Remove")
+		self.btnRemoveCam.setText(u" Remove")
 		icon2 = QIcon()
 		icon2.addFile(u":/AutoFTG/resources/icons8-close-30.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.btnRemoveCam.setIcon(icon2)
@@ -726,46 +790,68 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 
 		self.hLayout_MainBtn = QHBoxLayout()
 		self.hLayout_MainBtn.setObjectName(u"hLayout_MainBtn")
-		self.btnMainCancel = QPushButton(self.verticalLayoutWidget_2)
-		self.btnMainCancel.setObjectName(u"btnMainCancel")
+		self.btnMainClose = QPushButton(self.verticalLayoutWidget_2)
+		self.btnMainClose.setObjectName(u"btnMainClose")
 		sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
 		sizePolicy1.setHorizontalStretch(0)
 		sizePolicy1.setVerticalStretch(0)
-		sizePolicy1.setHeightForWidth(self.btnMainCancel.sizePolicy().hasHeightForWidth())
-		self.btnMainCancel.setSizePolicy(sizePolicy1)
-		self.btnMainCancel.setText(u"Cancel")
+		sizePolicy1.setHeightForWidth(self.btnMainClose.sizePolicy().hasHeightForWidth())
+		self.btnMainClose.setSizePolicy(sizePolicy1)
+		self.btnMainClose.setText(u"Close")
 
-		self.hLayout_MainBtn.addWidget(self.btnMainCancel)
+		self.hLayout_MainBtn.addWidget(self.btnMainClose)
 
-		self.btnMainSave = QPushButton(self.verticalLayoutWidget_2)
-		self.btnMainSave.setObjectName(u"btnMainSave")
-		sizePolicy1.setHeightForWidth(self.btnMainSave.sizePolicy().hasHeightForWidth())
-		self.btnMainSave.setSizePolicy(sizePolicy1)
-		self.btnMainSave.setText(u"Save")
-
-		self.hLayout_MainBtn.addWidget(self.btnMainSave)
+		# self.btnMainSave = QPushButton(self.verticalLayoutWidget_2)
+		# self.btnMainSave.setObjectName(u"btnMainSave")
+		# sizePolicy1.setHeightForWidth(self.btnMainSave.sizePolicy().hasHeightForWidth())
+		# self.btnMainSave.setSizePolicy(sizePolicy1)
+		# self.btnMainSave.setText(u"Save")
+# 
+		# self.hLayout_MainBtn.addWidget(self.btnMainSave)
 
 		layoutMain.addLayout(self.hLayout_MainBtn)
 
 		self.setLayout(layoutMain)
 
-		QtCore.QObject.connect(self.btnAddNewCam, QtCore.SIGNAL("clicked()"), addCameraDialog)
+		QtCore.QObject.connect(self.btnAddNewCam, QtCore.SIGNAL("clicked()"), self.addNewCam)
 		QtCore.QObject.connect(self.btnEditCam, QtCore.SIGNAL("clicked()"), self.editSelCamera)
 		QtCore.QObject.connect(self.btnRemoveCam, QtCore.SIGNAL("clicked()"), self.removeSelCamera)
-		QtCore.QObject.connect(self.btnMainSave, QtCore.SIGNAL("clicked()"), self.saveCameraEdit)
-		QtCore.QObject.connect(self.btnMainCancel, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("reject()"))
+		# QtCore.QObject.connect(self.btnMainSave, QtCore.SIGNAL("clicked()"), self.saveCameraEdit)
+		QtCore.QObject.connect(self.btnMainClose, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("reject()"))
 
 		self.exec()
 
+	def addNewCam(self):
+		camNew = True
+		addCameraDialog(camNew, "New Camera", "Frame", "")
+		self.listWidgetCam.clear()
+		for camera in cam_list:
+			self.listWidgetCam.addItem(camera)
 
-	def editSelCamera():
-		print()
 
-	def removeSelCamera():
-		print()
+	def editSelCamera(self):
+		# defaultItem = self.listWidgetCam.isItemSelected("Default")
+		if self.listWidgetCam.currentRow() > 0:
+			camNew = False
+			selCamName = self.listWidgetCam.currentItem().text()
+			selCamType = cam_config.get(selCamName, "Type")
+			selCamFile = cam_config.get(selCamName, "File")
+			addCameraDialog(camNew, selCamName, selCamType, selCamFile)
+		elif self.listWidgetCam.currentRow() == 0:
+			Metashape.app.messageBox("Default camera can not be edited.")
+		else:
+			Metashape.app.messageBox("No camera selected...")
 
-	def saveCameraEdit():
-		print()
+
+	def removeSelCamera(self):
+		if self.listWidgetCam.isItemSelected() == True:
+			camname = self.listWidgetCam.currentItem().text()
+			removeCamConfig(camname)
+			self.listWidgetCam.takeItem(self.listWidgetCam.currentRow)
+
+
+	def saveCameraEdit(self):
+		print("")
 
 
 # Routine for calling Edit Settings UI - called when user want's to edit settings
@@ -905,7 +991,7 @@ def marker_targets():
 
 # Routine for finding files - used when creating new chunk
 def find_files(folder, types):
-    return [entry.path for entry in os.scandir(folder) if (entry.is_file() and os.path.splitext(entry.name)[1].lower() in types)]
+	return [entry.path for entry in os.scandir(folder) if (entry.is_file() and os.path.splitext(entry.name)[1].lower() in types)]
 
 
 # Create new chunk - Options are chosen manually
@@ -1072,6 +1158,13 @@ iconimg17 = ":/AutoFTG/resources/Screenshot.png"
 iconimg18 = ":/AutoFTG/resources/CamImages.png"
 iconimg19 = ":/AutoFTG/resources/pencil-writing_107734.png"
 iconimg20 = ":/AutoFTG/resources/picture_file_image_icon_219497.png"
+iconimg21 = ":/AutoFTG/resources/preferencesdesktop_103781.png"
+iconimg22 = ":/AutoFTG/resources/3592841-cog-gear-general-machine-office-setting-settings_107765.png"
+iconimg23 = ":/AutoFTG/resources/Flag1-green_37143.png"
+iconimg24 = ":/AutoFTG/resources/Flag1-blue_37144.png"
+iconimg25 = ":/AutoFTG/resources/Save_37110.png"
+iconimg26 = ":/AutoFTG/resources/gui_save_icon_157040.png"
+iconimg27 = ":/AutoFTG/resources/Save-as_37111.png"
 
 # Menu items
 labelmenu= "About Auto FTG"
@@ -1096,7 +1189,7 @@ labelsep3 = "AutoFTG/--------------------"
 Metashape.app.addMenuItem(labelsep3, prazno)
 
 label3a = "AutoFTG/Detect markers + Import coordinates"
-Metashape.app.addMenuItem(label3a, marker_targets, icon=iconimg6)
+Metashape.app.addMenuItem(label3a, marker_targets, icon=iconimg24)
 
 label4 = "AutoFTG/Copy Region (Bounding Box)"
 Metashape.app.addMenuItem(label4, copy_bbox, icon=iconimg17)
@@ -1104,16 +1197,16 @@ Metashape.app.addMenuItem(label4, copy_bbox, icon=iconimg17)
 labelsep2 = "AutoFTG/--------------------"
 Metashape.app.addMenuSeparator(labelsep2)
 
-label2 = "AutoFTG/Change Current Camera..."
+label2 = "AutoFTG/Change Current Camera (Chunk)"
 Metashape.app.addMenuItem(label2, cam_calibrationChunk, icon=iconimg15)
 
-label2a = "AutoFTG/Camera Settings/Change Default Camera"
+label2a = "AutoFTG/Set Default Camera (Project)"
 Metashape.app.addMenuItem(label2a, cam_calibrationSettings, icon=iconimg14)
 
-label2b = "AutoFTG/Camera Settings/Add New Camera"
-Metashape.app.addMenuItem(label2b, addCameraDialog, icon=iconimg3)
+# label2b = "AutoFTG/Camera Settings/Add New Camera"
+# Metashape.app.addMenuItem(label2b, addCameraDialog, icon=iconimg3)
 
-label2c = "AutoFTG/Camera Settings/Cameras Editor"
+label2c = "AutoFTG/Cameras Editor"
 Metashape.app.addMenuItem(label2c, camerasEditor, icon=iconimg3)
 # 
 # label2c = "AutoFTG/Change camera/(3) Camera 2: HH3 by dibit (Fisheye)"
@@ -1152,14 +1245,14 @@ Metashape.app.addMenuItem(label2c, camerasEditor, icon=iconimg3)
 labelsep5 = "AutoFTG/--------------------"
 Metashape.app.addMenuItem(labelsep5, prazno)
 
-labelset2 = "AutoFTG/Load project settings"
+labelset2 = "AutoFTG/Load Project Settings..."
 Metashape.app.addMenuItem(labelset2, checkProject, icon=iconimg16)
 
-labelset3 = "AutoFTG/Settings/Show current settings."
-Metashape.app.addMenuItem(labelset3, showSettings, icon=iconimg20)
+# labelset3 = "AutoFTG/Settings/Show Current Settings."
+# Metashape.app.addMenuItem(labelset3, showSettings, icon=iconimg20)
 
-labelset4 = "AutoFTG/Settings/Edit current settings"
-Metashape.app.addMenuItem(labelset4, editSettings, icon=iconimg19)
+labelset4 = "AutoFTG/Project Settings"
+Metashape.app.addMenuItem(labelset4, editSettings, icon=iconimg21)
 
 # labelsep5 = "AutoFTG/--------------------"
 # Metashape.app.addMenuItem(labelsep5, prazno)
