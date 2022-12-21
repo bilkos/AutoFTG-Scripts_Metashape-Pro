@@ -48,6 +48,16 @@ from PySide2.QtWidgets import *  # type: ignore
 from configparser import ConfigParser
 
 
+# App info
+app_name = "AutoFTG"
+app_ver = "2.3.1-beta"
+appsettings_ver = "2.3"
+app_author = "Author: Boris Bilc\n\n"
+app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
+ref_repo = "Agisoft GitHub repository:\nhttps://github.com/agisoft-llc/metashape-scripts"
+ref_scripts = "Copy Bounding Box Script:\nhttps://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py"
+app_about = "Scripts for process automation in Agisoft Metashape Pro\n\nThis is an assembly of existing scripts from other users,\nand some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia."
+
 
 # Check compatibility with Metashape
 compatible_major_version = "2.0"
@@ -55,16 +65,6 @@ found_major_version = ".".join(Metashape.app.version.split('.')[:2])
 if found_major_version != compatible_major_version:
 	raise Exception("Incompatible Metashape version: {} != {}".format(found_major_version, compatible_major_version))
 
-
-# App info
-app_name = "AutoFTG"
-app_ver = "2.3.0-beta"
-appsettings_ver = "2.3"
-app_author = "Author: Boris Bilc\n\n"
-app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
-ref_repo = "Agisoft GitHub repository:\nhttps://github.com/agisoft-llc/metashape-scripts"
-ref_scripts = "Copy Bounding Box Script:\nhttps://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py"
-app_about = "Scripts for process automation in Agisoft Metashape Pro\n\nThis is an assembly of existing scripts from other users,\nand some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia."
 
 # Create About message dialog
 def appAbout():
@@ -1177,7 +1177,7 @@ labelNewChunk = "AutoFTG/New Chunk (2TIR)"
 Metashape.app.addMenuSeparator(labelNewChunk)
 
 label0a = "AutoFTG/New Chunk (2TIR)/KALOTA"
-Metashape.app.addMenuItem(label0a, newchunk_kalota_auto, icon=iconimg10)
+Metashape.app.addMenuItem(label0a, newchunk_kalota_auto, icon=iconimg9)
 
 label0b = "AutoFTG/New Chunk (2TIR)/STOPNICA (IZKOP)"
 Metashape.app.addMenuItem(label0b, newchunk_stizk_auto, icon=iconimg11)

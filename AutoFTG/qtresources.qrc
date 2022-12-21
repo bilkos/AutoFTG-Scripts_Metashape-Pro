@@ -1,5 +1,40 @@
 <RCC>
   <qresource prefix="/AutoFTG">
+    <file>resources/Administrative Tools.png</file>
+    <file>resources/Connect To.png</file>
+    <file>resources/Documents Library.png</file>
+    <file>resources/Documents.png</file>
+    <file>resources/Downloads Library.png</file>
+    <file>resources/Downloads.png</file>
+    <file>resources/File Explorer 10.png</file>
+    <file>resources/File Explorer.png</file>
+    <file>resources/File History.png</file>
+    <file>resources/Folder Options alt.png</file>
+    <file>resources/Folder Options.png</file>
+    <file>resources/Internet Download Manager.png</file>
+    <file>resources/Mac FaceTime.png</file>
+    <file>resources/Mac Notes.png</file>
+    <file>resources/Magnifier.png</file>
+    <file>resources/Micro SD.png</file>
+    <file>resources/Notepad.png</file>
+    <file>resources/Picture Viewer.png</file>
+    <file>resources/Pictures Library.png</file>
+    <file>resources/Pictures.png</file>
+    <file>resources/Recent Places.png</file>
+    <file>resources/Recuva.png</file>
+    <file>resources/Recycle Bin Empty.png</file>
+    <file>resources/Recycle Bin Full.png</file>
+    <file>resources/Revo Uninstaller.png</file>
+    <file>resources/Security Approved.png</file>
+    <file>resources/Security Caution.png</file>
+    <file>resources/Security Denied.png</file>
+    <file>resources/Snagit.png</file>
+    <file>resources/Storage Spaces.png</file>
+    <file>resources/System Restore.png</file>
+    <file>resources/3171647_mail_send_friend_icon.png</file>
+    <file>resources/iconfinder-technologymachineelectronicdevice09-4026451_113350.png</file>
+    <file>resources/measure_build_length_repairs_tools_icon_189324.png</file>
+    <file>resources/real-setate-house-home-apartment_108558.png</file>
     <file>resources/preferencesdesktop_103781.png</file>
     <file>resources/3592841-cog-gear-general-machine-office-setting-settings_107765.png</file>
     <file>resources/Flag1-green_37143.png</file>
