@@ -50,8 +50,8 @@ from configparser import ConfigParser
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.3.1-beta"
-appsettings_ver = "2.3"
+app_ver = "2.3.2-beta"
+appsettings_ver = "3"
 app_author = "Author: Boris Bilc\n\n"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
 ref_repo = "Agisoft GitHub repository:\nhttps://github.com/agisoft-llc/metashape-scripts"
@@ -73,49 +73,36 @@ def appAbout():
 	message_box.setMinimumSize(600,500)
 	message_box.setTextFormat(Qt.PlainText)
 	message_box.setText(app_aboutmsg)
-	# message_box.setInformativeText(
-	# 	f'Version: {app_ver}\n'
-	# 	f'About: {app_aboutmsg}'
-	# )
-	message_box.exec_()
-	
-	# app = QtWidgets.QApplication.instance()
-	# parent = app.activeWindow()
-	# aboutMsgbox = QMessageBox.about(parent, "About AutoFTG", app_aboutmsg)
-	# if aboutMsgbox == QMessageBox.Ok:
-	# 	print("About AutoFTG closed...")
 
-	# Metashape.app.messageBox(app_aboutmsg)
-	# filename = os.path.normcase("c:/autoexec.bat")
-	# f = open(filename, "r")
-	# text = f.readlines()
-	# f.close()
-	#easygui.msgbox("About AutoFTG (" + app_ver + ")\n\n" + app_aboutmsg, title="About AutoFTG (" + app_ver + ")")
+	message_box.exec_()
+
 
 
 # Class for program and project settings initialization
 class Settings(EgStore):
 	def __init__(self, filename):  # filename is required
 		self.settingsVersion = appsettings_ver
-		self.fileProject = ''
 		self.folderProject = ''
 		self.foldeData = ''
 		self.defaultCamera = 'NULL - Frame (Default)'
 		self.filename = filename  # this is required - init settings
 		self.restore()
 
+
 settingsFilename = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\AutoFTG_settings.txt').replace("\\", "/")
 settingsFilenameExists = os.path.isfile(settingsFilename)	# Check if settings file exists
 settings = Settings(settingsFilename)	# Init settings
 projectOpened = False
 settingsRebuild = False
-	
-# Init configparser for camera settings
+
+
+# Init configparser for camera settings. Set empty camera variables for global use.
 cam_config = ConfigParser()
-# Set empty camera variables for global use
 cam_name = ''
 cam_type = ''
 cam_file = ''
+
+
 # Set path to camera settings INI file. Use the same location as scripts for Metashape.
 script_path = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\cameras\\').replace("\\", "/")
 script_ini_file = "cam_settings.ini"
@@ -132,6 +119,7 @@ def readIniConf():
 
 readIniConf()
 
+
 # Check settings version
 def checkSettingsVer():
 	global settingsRebuild
@@ -139,7 +127,6 @@ def checkSettingsVer():
 		settingsRebuild = True
 		settingsReset()
 		
-
 
 # Reset settings
 def settingsReset():
@@ -195,7 +182,6 @@ def initAutoFtg():
 	else:
 		checkSettingsVer()
 		print("\n\nNalozene so osnovne nastavitve.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
-		print("Project File: " + str(settings.fileProject))
 		print("Export Folder: " + str(settings.folderProject))
 		print("Data Folder: " + str(settings.foldeData))
 		print("Default Camera: " + str(settings.defaultCamera))
@@ -219,7 +205,6 @@ def initAutoFtgProjekt():
 	
 	if settingsFilenameExists == False:
 		print("\n\nInitializing project settings...")
-		settings.fileProject = fileProject
 		Metashape.app.messageBox("Show folder for data export")
 		settings.folderProject = Metashape.app.getExistingDirectory("Choose Export Folder")
 		Metashape.app.messageBox("Show folder with working data")
@@ -229,14 +214,12 @@ def initAutoFtgProjekt():
 		settings.store()
 		print("\n\nProject settings saved.")
 		print("Settings File: " + str(settingsFilename))
-		print("Project File: " + str(settings.fileProject))
 		print("Export Folder: " + str(settings.folderProject))
 		print("Data Folder: " + str(settings.foldeData))
 		print("Default Camera: " + str(cam_name))
 		print("\nInitialization complete!")
 		Metashape.app.messageBox("Initialization complete.\nProject settings saved...\n\n"
 			+ "Settings File: " + str(settingsFilename) + "\n"
-			+ "Project File: " + str(settings.fileProject) + "\n"
 			+ "Export Folder: " + str(settings.folderProject) + "\n"
 			+ "Data Folder: " + str(settings.foldeData) + "\n"
 			+ "Default Camera: " + str(cam_name)
@@ -249,7 +232,6 @@ def initAutoFtgProjekt():
 		readCameraSettings(settings.defaultCamera)
 		Metashape.app.messageBox("Project settings loaded.\n\n"
 			+ "Settings File: " + str(settingsFilename) + "\n"
-			+ "Project File: " + str(settings.fileProject) + "\n"
 			+ "Export Folder: " + str(settings.folderProject) + "\n"
 			+ "Data Folder: " + str(settings.foldeData) + "\n"
 			+ "Default Camera: " + str(cam_name)
@@ -334,6 +316,7 @@ def useCameraSettings():
 camcalMsgSet = "Choose default camera to be used when adding new chunks"
 camcalTitleSet = "Default Camera"
 
+
 # Choose default camera routine
 def cam_calibrationSettings(msg=camcalMsgSet, title=camcalTitleSet, callback=None, run=True):
 	readIniConf()
@@ -351,8 +334,10 @@ def cam_calibrationSettings(msg=camcalMsgSet, title=camcalTitleSet, callback=Non
 		print("\nCamera settings loaded....\n")
 		return mb
 
+
 camcalMsg = "Choose camera to be used in this chunk"
 camcalTitle = "Custom Camera"
+
 
 def cam_calibrationChunk(msg=camcalMsg, title=camcalTitle, callback=None, run=True):
 	readIniConf()
@@ -392,7 +377,6 @@ def saveCamConfig(camorig, camname, camtype, camfile):
 	readIniConf()
 
 
-
 # Routine for adding/editing camera configuration
 def removeCamConfig(camname):
 	if cam_config.has_section(camname) == True:
@@ -415,14 +399,11 @@ def removeCamConfig(camname):
 	else:
 		Metashape.app.messageBox("Error! No camera named (" + str(camname) + ") was found.\n\nDid you manualy edit comaera configuration?")
 
-	
-
 
 # Show current settings
 def showSettings():
 	easygui.msgbox("Settings currently in use...\n\nSettings file: " + str(settingsFilename) + "\n"
 							+ "Settings version: " + str(settings.settingsVersion) + "\n"
-							+ "Project file: " + str(settings.fileProject) + "\n"
 							+ "Project folder: " + str(settings.folderProject) + "\n"
 							+ "Data folder: " + str(settings.foldeData) + "\n"
 							+ "Default camera: " + str(settings.defaultCamera) + "\n"
@@ -1084,7 +1065,7 @@ def newchunk_stizk_auto():
 		chunk = doc.addChunk()
 		chunk.addPhotos(photos)
 		chunk_nameraw = os.path.basename(image_folder)
-		chunk_name = "ST_IZ_" + chunk_nameraw
+		chunk_name = chunk_nameraw + "_IZ"
 		chunk.label = Metashape.app.getString("Naziv chunka", chunk_name)
 		doc.chunk = chunk
 		doc.save(netpath)
@@ -1115,7 +1096,7 @@ def newchunk_stbbet_auto():
 		chunk = doc.addChunk()
 		chunk.addPhotos(photos)
 		chunk_nameraw = os.path.basename(image_folder)
-		chunk_name = "ST_BB_" + chunk_nameraw
+		chunk_name = chunk_nameraw + "_ST_BB"
 		chunk.label = Metashape.app.getString("Naziv chunkae", chunk_name)
 		doc.chunk = chunk
 		doc.save()

@@ -2,7 +2,7 @@
 
 *Python scripts for AgiSoft Metashape Pro.* 
 
-Version: '2.3.1-beta'
+Version: '2.3.2-beta'
 
 ###### Compatible with Metashape Pro version: 1.8.x and 2.0.x
 
