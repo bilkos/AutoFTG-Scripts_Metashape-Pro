@@ -1,69 +1,49 @@
 <RCC>
-  <qresource prefix="/AutoFTG">
-    <file>resources/Administrative Tools.png</file>
-    <file>resources/Connect To.png</file>
-    <file>resources/Documents Library.png</file>
-    <file>resources/Documents.png</file>
-    <file>resources/Downloads Library.png</file>
-    <file>resources/Downloads.png</file>
-    <file>resources/File Explorer 10.png</file>
-    <file>resources/File Explorer.png</file>
-    <file>resources/File History.png</file>
-    <file>resources/Folder Options alt.png</file>
-    <file>resources/Folder Options.png</file>
-    <file>resources/Internet Download Manager.png</file>
-    <file>resources/Mac FaceTime.png</file>
-    <file>resources/Mac Notes.png</file>
-    <file>resources/Magnifier.png</file>
-    <file>resources/Micro SD.png</file>
-    <file>resources/Notepad.png</file>
-    <file>resources/Picture Viewer.png</file>
-    <file>resources/Pictures Library.png</file>
-    <file>resources/Pictures.png</file>
-    <file>resources/Recent Places.png</file>
-    <file>resources/Recuva.png</file>
-    <file>resources/Recycle Bin Empty.png</file>
-    <file>resources/Recycle Bin Full.png</file>
-    <file>resources/Revo Uninstaller.png</file>
-    <file>resources/Security Approved.png</file>
-    <file>resources/Security Caution.png</file>
-    <file>resources/Security Denied.png</file>
-    <file>resources/Snagit.png</file>
-    <file>resources/Storage Spaces.png</file>
-    <file>resources/System Restore.png</file>
-    <file>resources/3171647_mail_send_friend_icon.png</file>
-    <file>resources/iconfinder-technologymachineelectronicdevice09-4026451_113350.png</file>
-    <file>resources/measure_build_length_repairs_tools_icon_189324.png</file>
-    <file>resources/real-setate-house-home-apartment_108558.png</file>
-    <file>resources/preferencesdesktop_103781.png</file>
-    <file>resources/3592841-cog-gear-general-machine-office-setting-settings_107765.png</file>
-    <file>resources/Flag1-green_37143.png</file>
-    <file>resources/Flag1-blue_37144.png</file>
-    <file>resources/Save_37110.png</file>
-    <file>resources/gui_save_icon_157040.png</file>
-    <file>resources/Save-as_37111.png</file>
-    <file>resources/icons8-close-30.png</file>
-    <file>resources/icons8-remove-48.png</file>
-    <file>resources/icons8-clear-symbol-48.png</file>
-    <file>resources/AutoFTG-appicon.png</file>
-    <file>resources/openfolder.png</file>
-    <file>resources/pic_lib.png</file>
-    <file>resources/picfileicon.png</file>
-    <file>resources/picture-folder.png</file>
-    <file>resources/target_icon_129425.png</file>
-    <file>resources/target_icon_224983.png</file>
-    <file>resources/target_icon_224995.png</file>
-    <file>resources/kalota_m.png</file>
-    <file>resources/kalota.png</file>
-    <file>resources/stopnca_o.png</file>
-    <file>resources/stopnca_s.png</file>
-    <file>resources/ABOUTmESSAGE.png</file>
-    <file>resources/CAMScreenCap.png</file>
-    <file>resources/CAMVideoStudio.png</file>
-    <file>resources/DeviceManager.png</file>
-    <file>resources/Screenshot.png</file>
-    <file>resources/CamImages.png</file>
-    <file>resources/pencil-writing_107734.png</file>
-    <file>resources/picture_file_image_icon_219497.png</file>
+  <qresource prefix="/">
+    <file>icons/AutoFTG-appicon.png</file>
+    <file>icons/kalota.png</file>
+    <file>icons/kalota_m.png</file>
+    <file>icons/stopnca_o.png</file>
+    <file>icons/stopnca_s.png</file>
+    <file>icons/icons8-toolbox-50.png</file>
+    <file>icons/icons8-map-marker-50.png</file>
+    <file>icons/icons8-about-50.png</file>
+    <file>icons/icons8-add-50.png</file>
+    <file>icons/icons8-add-camera-50.png</file>
+    <file>icons/icons8-add-list-50.png</file>
+    <file>icons/icons8-add-new-50.png</file>
+    <file>icons/icons8-aperture-50.png</file>
+    <file>icons/icons8-apps-tab-50.png</file>
+    <file>icons/icons8-bursts-50.png</file>
+    <file>icons/icons8-camera-50.png</file>
+    <file>icons/icons8-cameras-50.png</file>
+    <file>icons/icons8-cancel-50.png</file>
+    <file>icons/icons8-christmas-star-50.png</file>
+    <file>icons/icons8-close-50.png</file>
+    <file>icons/icons8-close-window-50.png</file>
+    <file>icons/icons8-design-50.png</file>
+    <file>icons/icons8-drag-and-drop-50.png</file>
+    <file>icons/icons8-edit-50.png</file>
+    <file>icons/icons8-full-page-view-50.png</file>
+    <file>icons/icons8-images-folder-50.png</file>
+    <file>icons/icons8-ios-application-placeholder-50.png</file>
+    <file>icons/icons8-my-location-50.png</file>
+    <file>icons/icons8-opened-folder-50.png</file>
+    <file>icons/icons8-overscan-settings-50.png</file>
+    <file>icons/icons8-panorama-50.png</file>
+    <file>icons/icons8-quadcopter-50.png</file>
+    <file>icons/icons8-restore-50.png</file>
+    <file>icons/icons8-save-50.png</file>
+    <file>icons/icons8-save-as-50.png</file>
+    <file>icons/icons8-services-50.png</file>
+    <file>icons/icons8-settings-50.png</file>
+    <file>icons/icons8-slr-back-side-50.png</file>
+    <file>icons/icons8-slr-camera-50.png</file>
+    <file>icons/icons8-tools-50.png</file>
+    <file>icons/icons8-video-stabilization-50.png</file>
+    <file>icons/icons8-video-wall-50.png</file>
+    <file>icons/icons8-vintage-camera-50.png</file>
+    <file>icons/icons8-wallpaper-50.png</file>
+    <file>icons/icons8-web-camera-50.png</file>
   </qresource>
 </RCC>

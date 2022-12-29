@@ -4,3 +4,6 @@ AutoFTG/__pycache__/qtresources_rc.cpython-38.pyc
 AutoFTG/__pycache__/resource.cpython-39.pyc
 AutoFTG/qtGui
 AutoFTG_*.zip
+__pycache__
+/.vs
+/.vscode

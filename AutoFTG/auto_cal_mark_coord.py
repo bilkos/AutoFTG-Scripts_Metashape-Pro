@@ -9,12 +9,10 @@
 # ---------------------------
 # URL: https://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro
 # 
+# 
 # References:
 # -----------
-# Agisoft GitHub repository - https://github.com/agisoft-llc/metashape-scripts
 # 
-# Scripts used:
-# -------------
 # Copy Bounding Box Script
 #  https://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py
 #  Copies bounding boxes from chunk to other chunks.
@@ -50,10 +48,10 @@ from configparser import ConfigParser
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.3.2-beta"
-appsettings_ver = "3"
+app_ver = "2.4.1-beta"
+appsettings_ver = "5"
 app_author = "Author: Boris Bilc\n\n"
-app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
+app_repo = "Repository URL:\nhttps://github.com/bilkos-Scripts_Metashape-Pro"
 ref_repo = "Agisoft GitHub repository:\nhttps://github.com/agisoft-llc/metashape-scripts"
 ref_scripts = "Copy Bounding Box Script:\nhttps://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py"
 app_about = "Scripts for process automation in Agisoft Metashape Pro\n\nThis is an assembly of existing scripts from other users,\nand some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia."
@@ -85,6 +83,12 @@ class Settings(EgStore):
 		self.folderProject = ''
 		self.foldeData = ''
 		self.defaultCamera = 'NULL - Frame (Default)'
+		self.chunkNameKlPre = ''
+		self.chunkNameKlSuf = ''
+		self.chunkNameStIzPre = ''
+		self.chunkNameStBbPre = ''
+		self.chunkNameStIzSuf = '_IZ'
+		self.chunkNameStBbSuf = '_ST_BB'
 		self.filename = filename  # this is required - init settings
 		self.restore()
 
@@ -100,6 +104,7 @@ settingsRebuild = False
 cam_config = ConfigParser()
 cam_name = ''
 cam_type = ''
+cam_res = ''
 cam_file = ''
 
 
@@ -115,9 +120,14 @@ def readIniConf():
 	cam_config.read(script_ini_path)
 	# Create list with cameras read from INI file. Each section is one camera.
 	cam_list = cam_config.sections()
-	print("Loaded camera settings...\n File: " + script_ini_file)
 
-readIniConf()
+	for camera in cam_list:
+		print("\n------------------")
+		cam_item = cam_config.items(camera, raw=False)
+		for item in cam_item:
+			print(item[0].capitalize() + ": " + item[1])
+		
+	print("Loaded camera settings...\n File: " + script_ini_file)
 
 
 # Check settings version
@@ -274,13 +284,15 @@ def novProjekt():
 def readCameraSettings(cam_section):
 	global cam_name
 	global cam_type
+	global cam_res
 	global cam_file
 
 	# Read settings for requested camera
 	cam_name = cam_config.get(cam_section, "Name")
 	cam_type = cam_config.get(cam_section, "Type")
+	cam_res = cam_config.get(cam_section, "Resolution")
 	cam_file = cam_config.get(cam_section, "File")
-	print("Using camera\n" + "Name: " + cam_name + "\nType: " + cam_type + "\nFile: " + cam_file)
+	print("Using camera\n" + "Name: " + cam_name + "\nType: " + cam_type + "n\Resolution: " + cam_res + "\nFile: " + cam_file)
 	
 
 # Called to apply camera settings when creating new chunk
@@ -400,6 +412,102 @@ def removeCamConfig(camname):
 		Metashape.app.messageBox("Error! No camera named (" + str(camname) + ") was found.\n\nDid you manualy edit comaera configuration?")
 
 
+# Change chunk name prefix STOPNICA IZKOP
+def changeNameStIzPre():
+	current_name = 'STOPNICA (IZKOP)'
+	current_setting = str(settings.chunkNameStIzPre)
+	current_append = 'prefix'
+		
+	new_append = Metashape.app.getString(label='Modify ' + current_append + ' for ' + current_name, value=current_setting)
+
+	settings.chunkNameStIzPre = str(new_append)
+	
+	settings.store()
+
+	Metashape.app.messageBox("New " + current_append + " for " + current_name + " changed to: " + str(new_append))
+
+
+# Change chunk name prefix STOPNICA IZKOP
+def changeNameStIzSuf():
+	current_name = 'STOPNICA (IZKOP)'
+	current_setting = str(settings.chunkNameStIzSuf)
+	current_append = 'suffix'
+		
+	new_append = Metashape.app.getString(label='Modify ' + current_append + ' for ' + current_name, value=current_setting)
+
+	settings.chunkNameStIzSuf = str(new_append)
+	
+	settings.store()
+
+	Metashape.app.messageBox("New " + current_append + " for " + current_name + " changed to: " + str(new_append))
+
+
+# Change chunk name prefix STOPNICA IZKOP
+def changeNameStBbPre():
+	current_name = 'STOPNICA (B.BET.)'
+	current_setting = str(settings.chunkNameStBbPre)
+	current_append = 'prefix'
+		
+	new_append = Metashape.app.getString(label='Modify ' + current_append + ' for ' + current_name, value=current_setting)
+
+	settings.chunkNameStBbPre = str(new_append)
+	
+	settings.store()
+
+	Metashape.app.messageBox("New " + current_append + " for " + current_name + " changed to: " + str(new_append))
+
+
+# Change chunk name prefix STOPNICA IZKOP
+def changeNameStBbSuf():
+	current_name = 'STOPNICA (B.BET.)'
+	current_setting = str(settings.chunkNameStBbSuf)
+	current_append = 'suffix'
+		
+	new_append = Metashape.app.getString(label='Modify ' + current_append + ' for ' + current_name, value=current_setting)
+
+	settings.chunkNameStBbSuf = str(new_append)
+	
+	settings.store()
+
+	Metashape.app.messageBox("New " + current_append + " for " + current_name + " changed to: " + str(new_append))
+
+
+# Change chunk name suffix
+def changeChunkAppend(setting_name, append_type):
+	if setting_name == 0 & append_type == 0:
+		current_name = 'STOPNICA (IZKOP)'
+		current_setting = str(settings.chunkNameStIzPre)
+	elif setting_name == 1 & append_type == 0:
+		current_name = 'STOPNICA (B.BET.)'
+		current_setting = str(settings.chunkNameStBbPre)
+	elif setting_name == 0 & append_type == 1:
+		current_name = 'STOPNICA (IZKOP)'
+		current_setting = str(settings.chunkNameStIzSuf)
+	elif setting_name == 1 & append_type == 1:
+		current_name = 'STOPNICA (B.BET.)'
+		current_setting = str(settings.chunkNameStBbSuf)
+	
+	if append_type == 0:
+		current_append = 'prefix'
+	elif append_type == 1:
+		current_append = 'suffix'
+		
+	new_append = Metashape.app.getString(label='Modify ' + current_append + ' for ' + current_name, value=current_setting)
+
+	if setting_name == 0 & append_type == 0:
+		settings.chunkNameStIzPre = str(new_append)
+	elif setting_name == 1 & append_type == 0:
+		settings.chunkNameStBbPre = str(new_append)
+	elif setting_name == 0 & append_type == 1:
+		settings.chunkNameStIzSuf = str(new_append)
+	elif setting_name == 1 & append_type == 1:
+		settings.chunkNameStBbSuf = str(new_append)
+	
+	settings.store()
+
+	Metashape.app.messageBox("New " + current_append + " for " + current_name + " changed to: " + str(new_append))
+
+
 # Show current settings
 def showSettings():
 	easygui.msgbox("Settings currently in use...\n\nSettings file: " + str(settingsFilename) + "\n"
@@ -419,7 +527,7 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		self.setWindowTitle(u"AutoFTG Settings")
 		
 		icon = QIcon()
-		icon.addFile(u":/AutoFTG/resources/openfolder.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon.addFile(u":/icons/icons8-opened-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
 
 		self.label = QtWidgets.QLabel()
 		self.label.setObjectName(u"label")
@@ -469,7 +577,7 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		self.btnClose.setGeometry(QRect(220, 90, 75, 24))
 		self.btnClose.setText(u"Close")
 		# icon1 = QIcon()
-		# icon1.addFile(u":/AutoFTG/resources/icons8-close-30.png", QSize(), QIcon.Normal, QIcon.Off)
+		# icon1.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		# self.btnClose.setIcon(icon1)
 
 		self.btnSave = QtWidgets.QPushButton()
@@ -477,7 +585,7 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		self.btnSave.setGeometry(QRect(300, 90, 75, 24))
 		self.btnSave.setText(u" Save")
 		icon2 = QIcon()
-		icon2.addFile(u":/AutoFTG/resources/Save-as_37111.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon2.addFile(u":/icons/icons8-save-as-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.btnSave.setIcon(icon2)
 		self.btnSave.setIconSize(QSize(12, 12))
 		
@@ -556,7 +664,7 @@ class Ui_DialogCameras(QtWidgets.QDialog):
 		self.btnBrowseXML.setObjectName(u"btnBrowseXML")
 		self.btnBrowseXML.setText(u" Browse")
 		icon = QIcon()
-		icon.addFile(u":/AutoFTG/resources/openfolder.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon.addFile(u":/icons/icons8-opened-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.btnBrowseXML.setIcon(icon)
 
 		layout.addWidget(self.btnBrowseXML, 4, 3, 1, 1)
@@ -584,7 +692,7 @@ class Ui_DialogCameras(QtWidgets.QDialog):
 		else:
 			self.btnSaveCam.setText(u" Update")
 		icon1 = QIcon()
-		icon1.addFile(u":/AutoFTG/resources/Save-as_37111.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon1.addFile(u":/icons/icons8-save-as-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.btnSaveCam.setIcon(icon1)
 		self.btnSaveCam.setIconSize(QSize(12, 12))
 
@@ -620,7 +728,7 @@ class Ui_DialogCameras(QtWidgets.QDialog):
 		self.btnCloseCamDialog.setObjectName(u"btnCloseCamDialog")
 		self.btnCloseCamDialog.setText(u"Close")
 		# icon2 = QIcon()
-		# icon2.addFile(u":/AutoFTG/resources/icons8-close-30.png", QSize(), QIcon.Normal, QIcon.Off)
+		# icon2.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		# self.btnCloseCamDialog.setIcon(icon2)
 
 		layout.addWidget(self.btnCloseCamDialog, 6, 2, 1, 1)
@@ -723,7 +831,12 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		self.listWidgetCam = QListWidget(self.verticalLayoutWidget_2)
 		self.listWidgetCam.setObjectName(u"listWidgetCam")
 		for camera in cam_list:
-			self.listWidgetCam.addItem(camera)
+			self.listWidgetCamItem = QListWidgetItem(camera, self.listWidgetCam)
+			self.listWidgetCamItem.setText(str(camera))
+			self.listWidgetCamItem.setToolTip("Type: " + str(cam_config.get(camera, 'type')) + "\nRes.: " + str(cam_config.get(camera, 'resolution')))
+			# self.listWidgetCam.addItem(camera)
+			# self.listWidgetCam.setToolTip("Type: " + str(cam_config.get(camera, 'type')) + "\nRes.: " + str(cam_config.get(camera, 'resolution')))
+			# print(item[0].capitalize() + ": " + item[1])
 
 		self.hLayoutCamEdit.addWidget(self.listWidgetCam)
 
@@ -738,7 +851,7 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		self.btnAddNewCam.setSizePolicy(sizePolicy)
 		self.btnAddNewCam.setText(u" Add")
 		icon = QIcon()
-		icon.addFile(u":/AutoFTG/resources/CamImages.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon.addFile(u":/icons/icons8-add-camera-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.btnAddNewCam.setIcon(icon)
 
 		self.vLayout_CamBtn.addWidget(self.btnAddNewCam)
@@ -749,7 +862,7 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		self.btnEditCam.setSizePolicy(sizePolicy)
 		self.btnEditCam.setText(u" Edit")
 		icon1 = QIcon()
-		icon1.addFile(u":/AutoFTG/resources/pencil-writing_107734.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon1.addFile(u":/icons/icons8-edit-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.btnEditCam.setIcon(icon1)
 
 		self.vLayout_CamBtn.addWidget(self.btnEditCam)
@@ -760,7 +873,7 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		self.btnRemoveCam.setSizePolicy(sizePolicy)
 		self.btnRemoveCam.setText(u" Remove")
 		icon2 = QIcon()
-		icon2.addFile(u":/AutoFTG/resources/icons8-close-30.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon2.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.btnRemoveCam.setIcon(icon2)
 
 		self.vLayout_CamBtn.addWidget(self.btnRemoveCam)
@@ -1018,7 +1131,7 @@ def newchunk_aero():
 			doc.save()
 	else:
 		checkProject()
-		newchunk_aero()
+		# newchunk_aero()
 
 #
 # Create chunk - custom auto routines
@@ -1050,7 +1163,7 @@ def newchunk_kalota_auto():
 		doc.save(docPath)
 	else:
 		checkProject()
-		newchunk_kalota_auto()
+		# newchunk_kalota_auto()
 
 
 def newchunk_stizk_auto():
@@ -1065,7 +1178,7 @@ def newchunk_stizk_auto():
 		chunk = doc.addChunk()
 		chunk.addPhotos(photos)
 		chunk_nameraw = os.path.basename(image_folder)
-		chunk_name = chunk_nameraw + "_IZ"
+		chunk_name = str(settings.chunkNameStIzPre) + chunk_nameraw + str(settings.chunkNameStIzSuf)
 		chunk.label = Metashape.app.getString("Naziv chunka", chunk_name)
 		doc.chunk = chunk
 		doc.save(netpath)
@@ -1081,7 +1194,7 @@ def newchunk_stizk_auto():
 		doc.save(netpath)
 	else:
 		checkProject()
-		newchunk_stizk_auto()
+		# newchunk_stizk_auto()
 
 
 def newchunk_stbbet_auto():
@@ -1096,7 +1209,7 @@ def newchunk_stbbet_auto():
 		chunk = doc.addChunk()
 		chunk.addPhotos(photos)
 		chunk_nameraw = os.path.basename(image_folder)
-		chunk_name = chunk_nameraw + "_ST_BB"
+		chunk_name = str(settings.chunkNameStBbPre) + chunk_nameraw + str(settings.chunkNameStBbSuf)
 		chunk.label = Metashape.app.getString("Naziv chunkae", chunk_name)
 		doc.chunk = chunk
 		doc.save()
@@ -1112,83 +1225,130 @@ def newchunk_stbbet_auto():
 		doc.save()
 	else:
 		checkProject()
-		newchunk_stbbet_auto()
+		# newchunk_stbbet_auto()
 
 
 
 def prazno():
 	print("Prazna vrstica")
 
-iconimg1 = ":/AutoFTG/resources/AutoFTG-appicon.png"
-iconimg2 = ":/AutoFTG/resources/openfolder.png"
-iconimg3 = ":/AutoFTG/resources/pic_lib.png"
-iconimg4 = ":/AutoFTG/resources/picfileicon.png"
-iconimg5 = ":/AutoFTG/resources/picture-folder.png"
-iconimg6 = ":/AutoFTG/resources/target_icon_129425.png"
-iconimg7 = ":/AutoFTG/resources/target_icon_224983.png"
-iconimg8 = ":/AutoFTG/resources/target_icon_224995.png"
-iconimg9 = ":/AutoFTG/resources/kalota_m.png"
-iconimg10 = ":/AutoFTG/resources/kalota.png"
-iconimg11 = ":/AutoFTG/resources/stopnca_o.png"
-iconimg12 = ":/AutoFTG/resources/stopnca_s.png"
-iconimg13 = ":/AutoFTG/resources/ABOUTmESSAGE.png"
-iconimg14 = ":/AutoFTG/resources/CAMScreenCap.png"
-iconimg15 = ":/AutoFTG/resources/CAMVideoStudio.png"
-iconimg16 = ":/AutoFTG/resources/DeviceManager.png"
-iconimg17 = ":/AutoFTG/resources/Screenshot.png"
-iconimg18 = ":/AutoFTG/resources/CamImages.png"
-iconimg19 = ":/AutoFTG/resources/pencil-writing_107734.png"
-iconimg20 = ":/AutoFTG/resources/picture_file_image_icon_219497.png"
-iconimg21 = ":/AutoFTG/resources/preferencesdesktop_103781.png"
-iconimg22 = ":/AutoFTG/resources/3592841-cog-gear-general-machine-office-setting-settings_107765.png"
-iconimg23 = ":/AutoFTG/resources/Flag1-green_37143.png"
-iconimg24 = ":/AutoFTG/resources/Flag1-blue_37144.png"
-iconimg25 = ":/AutoFTG/resources/Save_37110.png"
-iconimg26 = ":/AutoFTG/resources/gui_save_icon_157040.png"
-iconimg27 = ":/AutoFTG/resources/Save-as_37111.png"
+
+icon_app = ":/icons/AutoFTG-appicon.png"
+icon0 = ":/icons/icons8-about-50.png"
+icon1 = ":/icons/icons8-add-50.png"
+icon2 = ":/icons/icons8-add-camera-50.png"
+icon3 = ":/icons/icons8-add-list-50.png"
+icon4 = ":/icons/icons8-add-new-50.png"
+icon5 = ":/icons/icons8-aperture-50.png"
+icon6 = ":/icons/icons8-apps-tab-50.png"
+icon7 = ":/icons/icons8-bursts-50.png"
+icon8 = ":/icons/icons8-camera-50.png"
+icon9 = ":/icons/icons8-cameras-50.png"
+icon10 = ":/icons/icons8-cancel-50.png"
+icon11 = ":/icons/icons8-christmas-star-50.png"
+icon12 = ":/icons/icons8-close-50.png"
+icon13 = ":/icons/icons8-close-window-50.png"
+icon14 = ":/icons/icons8-design-50.png"
+icon15 = ":/icons/icons8-drag-and-drop-50.png"
+icon16 = ":/icons/icons8-edit-50.png"
+icon17 = ":/icons/icons8-full-page-view-50.png"
+icon18 = ":/icons/icons8-images-folder-50.png"
+icon19 = ":/icons/icons8-ios-application-placeholder-50.png"
+icon20 = ":/icons/icons8-my-location-50.png"
+icon21 = ":/icons/icons8-opened-folder-50.png"
+icon22 = ":/icons/icons8-overscan-settings-50.png"
+icon23 = ":/icons/icons8-panorama-50.png"
+icon24 = ":/icons/icons8-quadcopter-50.png"
+icon25 = ":/icons/icons8-restore-50.png"
+icon26 = ":/icons/icons8-save-50.png"
+icon27 = ":/icons/icons8-save-as-50.png"
+icon28 = ":/icons/icons8-services-50.png"
+icon29 = ":/icons/icons8-settings-50.png"
+icon30 = ":/icons/icons8-slr-back-side-50.png"
+icon31 = ":/icons/icons8-slr-camera-50.png"
+icon32 = ":/icons/icons8-tools-50.png"
+icon33 = ":/icons/icons8-video-stabilization-50.png"
+icon34 = ":/icons/icons8-video-wall-50.png"
+icon35 = ":/icons/icons8-vintage-camera-50.png"
+icon36 = ":/icons/icons8-wallpaper-50.png"
+icon37 = ":/icons/icons8-web-camera-50.png"
+icon38 = ":/icons/icons8-map-marker-50.png"
+icon40 = ":/icons/icons8-toolbox-50.png"
+
+iconimg28 = ":/icons/kalota.png"
+iconimg29 = ":/icons/kalota_m.png"
+iconimg59 = ":/icons/stopnca_o.png"
+iconimg60 = ":/icons/stopnca_s.png"
+
 
 # Menu items
 labelmenu= "About Auto FTG"
-Metashape.app.addMenuItem(labelmenu, appAbout, icon=iconimg1)
+Metashape.app.addMenuItem(labelmenu, appAbout, icon=icon_app)
 
 label1a = "AutoFTG/New Chunk"
-Metashape.app.addMenuItem(label1a, newchunk_aero, icon=iconimg20)
+Metashape.app.addMenuItem(label1a, newchunk_aero, icon=icon1)
 
 labelNewChunk = "AutoFTG/New Chunk (2TIR)"
 Metashape.app.addMenuSeparator(labelNewChunk)
 
 label0a = "AutoFTG/New Chunk (2TIR)/KALOTA"
-Metashape.app.addMenuItem(label0a, newchunk_kalota_auto, icon=iconimg9)
+Metashape.app.addMenuItem(label0a, newchunk_kalota_auto, icon=iconimg29)
+
+labelsep33 = "AutoFTG/New Chunk (2TIR)/--------------------"
+Metashape.app.addMenuItem(labelsep33, prazno)
 
 label0b = "AutoFTG/New Chunk (2TIR)/STOPNICA (IZKOP)"
-Metashape.app.addMenuItem(label0b, newchunk_stizk_auto, icon=iconimg11)
+Metashape.app.addMenuItem(label0b, newchunk_stizk_auto, icon=iconimg59)
 
-label0c = "AutoFTG/New Chunk (2TIR)/STOPNICA (B.BET)"
-Metashape.app.addMenuItem(label0c, newchunk_stbbet_auto, icon=iconimg12)
+label0e = "AutoFTG/New Chunk (2TIR)/STOPNICA (B.BET.)"
+Metashape.app.addMenuItem(label0e, newchunk_stbbet_auto, icon=iconimg60)
 
-labelsep3 = "AutoFTG/--------------------"
+labelsep3 = "AutoFTG/New Chunk (2TIR)/--------------------"
 Metashape.app.addMenuItem(labelsep3, prazno)
 
+labelNewStIz = "AutoFTG/New Chunk (2TIR)/STOPNICA (IZKOP) Pefix\Suffix"
+Metashape.app.addMenuSeparator(labelNewStIz)
+
+label0c = "AutoFTG/New Chunk (2TIR)/STOPNICA (IZKOP) Pefix\Suffix/< Modify prefix"
+Metashape.app.addMenuItem(label0c, changeNameStIzPre)
+
+label0d = "AutoFTG/New Chunk (2TIR)/STOPNICA (IZKOP) Pefix\Suffix/> Modify suffix"
+Metashape.app.addMenuItem(label0d, changeNameStIzSuf)
+
+labelNewStBb = "AutoFTG/New Chunk (2TIR)/STOPNICA (B.BET.) Pefix\Suffix"
+Metashape.app.addMenuSeparator(labelNewStBb)
+
+label0f = "AutoFTG/New Chunk (2TIR)/STOPNICA (B.BET.) Pefix\Suffix/< Modify prefix"
+Metashape.app.addMenuItem(label0f, changeNameStBbPre)
+
+label0g = "AutoFTG/New Chunk (2TIR)/STOPNICA (B.BET.) Pefix\Suffix/> Modify suffix"
+Metashape.app.addMenuItem(label0g, changeNameStBbSuf)
+
+# changeChunkAppend(setting_name, append_type)
+
+labelsep3a = "AutoFTG/--------------------"
+Metashape.app.addMenuItem(labelsep3a, prazno)
+
 label3a = "AutoFTG/Detect markers + Import coordinates"
-Metashape.app.addMenuItem(label3a, marker_targets, icon=iconimg24)
+Metashape.app.addMenuItem(label3a, marker_targets, icon=icon38)
 
 label4 = "AutoFTG/Copy Region (Bounding Box)"
-Metashape.app.addMenuItem(label4, copy_bbox, icon=iconimg17)
+Metashape.app.addMenuItem(label4, copy_bbox, icon=icon15)
 
 labelsep2 = "AutoFTG/--------------------"
 Metashape.app.addMenuSeparator(labelsep2)
 
 label2 = "AutoFTG/Change Current Camera (Chunk)"
-Metashape.app.addMenuItem(label2, cam_calibrationChunk, icon=iconimg15)
+Metashape.app.addMenuItem(label2, cam_calibrationChunk, icon=icon8)
 
 label2a = "AutoFTG/Set Default Camera (Project)"
-Metashape.app.addMenuItem(label2a, cam_calibrationSettings, icon=iconimg14)
+Metashape.app.addMenuItem(label2a, cam_calibrationSettings, icon=icon35)
 
 # label2b = "AutoFTG/Camera Settings/Add New Camera"
 # Metashape.app.addMenuItem(label2b, addCameraDialog, icon=iconimg3)
 
 label2c = "AutoFTG/Cameras Editor"
-Metashape.app.addMenuItem(label2c, camerasEditor, icon=iconimg3)
+Metashape.app.addMenuItem(label2c, camerasEditor, icon=icon9)
 # 
 # label2c = "AutoFTG/Change camera/(3) Camera 2: HH3 by dibit (Fisheye)"
 # Metashape.app.addMenuItem(label2c, cam_calibration1b)
@@ -1227,13 +1387,13 @@ labelsep5 = "AutoFTG/--------------------"
 Metashape.app.addMenuItem(labelsep5, prazno)
 
 labelset2 = "AutoFTG/Load Project Settings..."
-Metashape.app.addMenuItem(labelset2, checkProject, icon=iconimg16)
+Metashape.app.addMenuItem(labelset2, checkProject, icon=icon40)
 
 # labelset3 = "AutoFTG/Settings/Show Current Settings."
 # Metashape.app.addMenuItem(labelset3, showSettings, icon=iconimg20)
 
 labelset4 = "AutoFTG/Project Settings"
-Metashape.app.addMenuItem(labelset4, editSettings, icon=iconimg21)
+Metashape.app.addMenuItem(labelset4, editSettings, icon=icon32)
 
 # labelsep5 = "AutoFTG/--------------------"
 # Metashape.app.addMenuItem(labelsep5, prazno)
