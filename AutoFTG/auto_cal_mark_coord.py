@@ -48,10 +48,10 @@ from configparser import ConfigParser
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.4.1-beta"
+app_ver = "2.4.2-RC"
 appsettings_ver = "5"
 app_author = "Author: Boris Bilc\n\n"
-app_repo = "Repository URL:\nhttps://github.com/bilkos-Scripts_Metashape-Pro"
+app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
 ref_repo = "Agisoft GitHub repository:\nhttps://github.com/agisoft-llc/metashape-scripts"
 ref_scripts = "Copy Bounding Box Script:\nhttps://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py"
 app_about = "Scripts for process automation in Agisoft Metashape Pro\n\nThis is an assembly of existing scripts from other users,\nand some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia."
@@ -104,9 +104,10 @@ settingsRebuild = False
 cam_config = ConfigParser()
 cam_name = ''
 cam_type = ''
+cam_subtype = ''
 cam_res = ''
 cam_file = ''
-
+selected_camera = None
 
 # Set path to camera settings INI file. Use the same location as scripts for Metashape.
 script_path = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\cameras\\').replace("\\", "/")
@@ -284,15 +285,17 @@ def novProjekt():
 def readCameraSettings(cam_section):
 	global cam_name
 	global cam_type
+	global cam_subtype
 	global cam_res
 	global cam_file
 
 	# Read settings for requested camera
 	cam_name = cam_config.get(cam_section, "Name")
 	cam_type = cam_config.get(cam_section, "Type")
+	cam_subtype = cam_config.get(cam_section, "SubType")
 	cam_res = cam_config.get(cam_section, "Resolution")
 	cam_file = cam_config.get(cam_section, "File")
-	print("Using camera\n" + "Name: " + cam_name + "\nType: " + cam_type + "n\Resolution: " + cam_res + "\nFile: " + cam_file)
+	print("Using camera\n" + "Name: " + cam_name + "\nType: " + cam_type + "\nSubType: " + cam_subtype + "\nResolution: " + cam_res + "\nFile: " + cam_file)
 	
 
 # Called to apply camera settings when creating new chunk
@@ -324,47 +327,27 @@ def useCameraSettings():
 	Metashape.app.update()
 
 
-# Camera choicebox variables
-camcalMsgSet = "Choose default camera to be used when adding new chunks"
-camcalTitleSet = "Default Camera"
-
-
 # Choose default camera routine
-def cam_calibrationSettings(msg=camcalMsgSet, title=camcalTitleSet, callback=None, run=True):
+def cam_calibrationSettings():
 	readIniConf()
-	mb = easygui.choicebox(msg, title, choices=cam_list, preselect=cam_list.index(settings.defaultCamera), callback=callback)
-	if run:
-		if mb == None:
-			print("No camera chosen. Nothing has changed...")
-		else:
-#			replyindex = choices.index(mb)
-#			readCameraSettings(replyindex)
-			settings.defaultCamera = str(mb)
-			settings.store()
-			print("Default camera settings saved.\nDefault Camera: " + mb)
+	diaSelectCamera()
+	if selected_camera == None:
+		print("No camera chosen. Nothing has changed...")
 	else:
-		print("\nCamera settings loaded....\n")
-		return mb
+		settings.defaultCamera = str(selected_camera)
+		settings.store()
+		print("Default camera settings saved.\nDefault Camera: " + selected_camera)
 
 
-camcalMsg = "Choose camera to be used in this chunk"
-camcalTitle = "Custom Camera"
-
-
-def cam_calibrationChunk(msg=camcalMsg, title=camcalTitle, callback=None, run=True):
+def cam_calibrationChunk():
 	readIniConf()
-	cambox = easygui.choicebox(msg, title, choices=cam_list, preselect=cam_list.index(settings.defaultCamera), callback=callback)
-	if run:
-		if cambox == None:
-			print("No camera chosen. Using default camera.")
-		else:
-#			camboxindex = choices.index(cambox)
-			readCameraSettings(cambox)
-			useCameraSettings()
-			print("\n\nApplied custom camera: " + cambox)
+	diaSelectCamera()
+	if selected_camera == None:
+		print("No camera chosen. Using default camera.")
 	else:
-		print("\nCamera settings loaded....\n")
-		return cambox
+		readCameraSettings(selected_camera)
+		useCameraSettings()
+		print("\n\nApplied custom camera: " + selected_camera)
 
 
 # Routine for adding/editing camera configuration
@@ -510,13 +493,18 @@ def changeChunkAppend(setting_name, append_type):
 
 # Show current settings
 def showSettings():
-	easygui.msgbox("Settings currently in use...\n\nSettings file: " + str(settingsFilename) + "\n"
+	show_settings_text = ("Settings currently in use...\n\nSettings file: " + str(settingsFilename) + "\n"
 							+ "Settings version: " + str(settings.settingsVersion) + "\n"
 							+ "Project folder: " + str(settings.folderProject) + "\n"
 							+ "Data folder: " + str(settings.foldeData) + "\n"
-							+ "Default camera: " + str(settings.defaultCamera) + "\n"
-							 , title="Current settings")
+							+ "Default camera: " + str(settings.defaultCamera) + "\n")
+	show_settings = QMessageBox()
+	show_settings.setMinimumSize(600,500)
+	show_settings.setTextFormat(Qt.PlainText)
+	show_settings.setText(show_settings_text)
+	show_settings.setWindowTitle("Current Settings")
 
+	show_settings.exec_()
 
 # Class for settings editing UI
 class Ui_settingsDialog(QtWidgets.QDialog):
@@ -576,9 +564,9 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		self.btnClose.setObjectName(u"btnClose")
 		self.btnClose.setGeometry(QRect(220, 90, 75, 24))
 		self.btnClose.setText(u"Close")
-		# icon1 = QIcon()
-		# icon1.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		# self.btnClose.setIcon(icon1)
+		icon1 = QIcon()
+		icon1.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.btnClose.setIcon(icon1)
 
 		self.btnSave = QtWidgets.QPushButton()
 		self.btnSave.setObjectName(u"btnSave")
@@ -727,9 +715,9 @@ class Ui_DialogCameras(QtWidgets.QDialog):
 		self.btnCloseCamDialog = QtWidgets.QPushButton()
 		self.btnCloseCamDialog.setObjectName(u"btnCloseCamDialog")
 		self.btnCloseCamDialog.setText(u"Close")
-		# icon2 = QIcon()
-		# icon2.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		# self.btnCloseCamDialog.setIcon(icon2)
+		icon2 = QIcon()
+		icon2.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.btnCloseCamDialog.setIcon(icon2)
 
 		layout.addWidget(self.btnCloseCamDialog, 6, 2, 1, 1)
 
@@ -834,9 +822,6 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 			self.listWidgetCamItem = QListWidgetItem(camera, self.listWidgetCam)
 			self.listWidgetCamItem.setText(str(camera))
 			self.listWidgetCamItem.setToolTip("Type: " + str(cam_config.get(camera, 'type')) + "\nRes.: " + str(cam_config.get(camera, 'resolution')))
-			# self.listWidgetCam.addItem(camera)
-			# self.listWidgetCam.setToolTip("Type: " + str(cam_config.get(camera, 'type')) + "\nRes.: " + str(cam_config.get(camera, 'resolution')))
-			# print(item[0].capitalize() + ": " + item[1])
 
 		self.hLayoutCamEdit.addWidget(self.listWidgetCam)
 
@@ -895,14 +880,6 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 
 		self.hLayout_MainBtn.addWidget(self.btnMainClose)
 
-		# self.btnMainSave = QPushButton(self.verticalLayoutWidget_2)
-		# self.btnMainSave.setObjectName(u"btnMainSave")
-		# sizePolicy1.setHeightForWidth(self.btnMainSave.sizePolicy().hasHeightForWidth())
-		# self.btnMainSave.setSizePolicy(sizePolicy1)
-		# self.btnMainSave.setText(u"Save")
-# 
-		# self.hLayout_MainBtn.addWidget(self.btnMainSave)
-
 		layoutMain.addLayout(self.hLayout_MainBtn)
 
 		self.setLayout(layoutMain)
@@ -910,7 +887,6 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		QtCore.QObject.connect(self.btnAddNewCam, QtCore.SIGNAL("clicked()"), self.addNewCam)
 		QtCore.QObject.connect(self.btnEditCam, QtCore.SIGNAL("clicked()"), self.editSelCamera)
 		QtCore.QObject.connect(self.btnRemoveCam, QtCore.SIGNAL("clicked()"), self.removeSelCamera)
-		# QtCore.QObject.connect(self.btnMainSave, QtCore.SIGNAL("clicked()"), self.saveCameraEdit)
 		QtCore.QObject.connect(self.btnMainClose, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("reject()"))
 
 		self.exec()
@@ -955,6 +931,124 @@ def camerasEditor():
 	camEditDialog = Ui_dialogCamGui(parent)
 
 
+class Ui_dialogChooseCamera(QtWidgets.QDialog):
+	
+	def __init__(self, parent):
+		QtWidgets.QDialog.__init__(self, parent)
+		self.setObjectName(u"dialogChooseCamera")
+		self.resize(280, 280)
+		self.setWindowTitle(u"Choose Camera")
+		sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+		self.setSizePolicy(sizePolicy)
+		self.setMinimumSize(QSize(280, 280))
+		self.setMaximumSize(QSize(280, 280))
+		self.setWindowTitle(u"Choose Camera")
+		self.verticalLayoutWidget = QWidget(self)
+		self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
+		self.verticalLayoutWidget.setGeometry(QRect(10, 10, 261, 261))
+		self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
+		self.verticalLayout.setSpacing(5)
+		self.verticalLayout.setContentsMargins(10, 10, 10, 10)
+		self.verticalLayout.setObjectName(u"verticalLayout")
+		self.verticalLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
+		self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+		self.label = QLabel(self.verticalLayoutWidget)
+		self.label.setObjectName(u"label")
+		font = QFont()
+		font.setPointSize(11)
+		self.label.setFont(font)
+		self.label.setText(u"Choose default camera")
+
+		self.verticalLayout.addWidget(self.label)
+
+		self.listWidget = QListWidget(self.verticalLayoutWidget)
+		icon = QIcon()
+		icon.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon1 = QIcon()
+		icon1.addFile(u":/icons/icons8-panorama-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon2 = QIcon()
+		icon2.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon3 = QIcon()
+		icon3.addFile(u":/icons/icons8-video-stabilization-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon4 = QIcon()
+		icon4.addFile(u":/icons/icons8-touchscreen-48.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon5 = QIcon()
+		icon5.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		font1 = QFont()
+		font1.setPointSize(10)
+		for cam in cam_list:
+			icon_type = cam_config.get(cam, "Type")
+			icon_subtype = cam_config.get(cam, "SubType")
+			self.listwidget = QListWidgetItem(self.listWidget)
+			self.listwidget.setText(cam)
+			if icon_subtype == "Smartphone":
+				self.listwidget.setIcon(icon4)
+			elif icon_subtype == "Drone":
+				self.listwidget.setIcon(icon5)
+			else:
+				if icon_type == "Fisheye":
+					self.listwidget.setIcon(icon1)
+				elif icon_type == "Conical":
+					self.listwidget.setIcon(icon2)
+				elif icon_type == "Spherical":
+					self.listwidget.setIcon(icon3)
+				else:
+					self.listwidget.setIcon(icon)
+
+		self.listWidget.setObjectName(u"listWidget")
+		self.listWidget.setFont(font1)
+		self.listWidget.setFrameShape(QFrame.StyledPanel)
+		self.listWidget.setFrameShadow(QFrame.Plain)
+		self.listWidget.setDefaultDropAction(Qt.IgnoreAction)
+		self.listWidget.setIconSize(QSize(20, 20))
+
+		self.verticalLayout.addWidget(self.listWidget)
+
+		self.horizontalLayout_2 = QHBoxLayout()
+		self.horizontalLayout_2.setSpacing(5)
+		self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+		self.pushButton_2 = QPushButton(self.verticalLayoutWidget)
+		self.pushButton_2.setObjectName(u"pushButton_2")
+		icon5 = QIcon()
+		icon5.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton_2.setIcon(icon5)
+		self.pushButton_2.setText(u"Cancel")
+
+		self.horizontalLayout_2.addWidget(self.pushButton_2)
+
+		self.pushButton = QPushButton(self.verticalLayoutWidget)
+		self.pushButton.setObjectName(u"pushButton")
+		icon6 = QIcon()
+		icon6.addFile(u":/icons/icons8-done-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton.setIcon(icon6)
+		self.pushButton.setText(u"Ok")
+
+		self.horizontalLayout_2.addWidget(self.pushButton)
+		
+		self.verticalLayout.addLayout(self.horizontalLayout_2)
+
+		self.listWidget.setCurrentRow(cam_list.index(settings.defaultCamera))
+
+		__sortingEnabled = self.listWidget.isSortingEnabled()
+		self.listWidget.setSortingEnabled(False)
+		self.listWidget.setSortingEnabled(__sortingEnabled)
+
+		QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("clicked()"), self.selectCam)
+		QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("reject()"))
+
+		self.exec()
+
+	def selectCam(self):
+		global selected_camera
+		selected_camera = self.listWidget.currentItem().text()
+		self.close()
+
+
+# Routine for calling Edit Settings UI - called when user want's to edit settings
+def diaSelectCamera():
+	app = QtWidgets.QApplication.instance()
+	parent = app.activeWindow()
+	diaChCam = Ui_dialogChooseCamera(parent)
 
 
 # Class for Copy Region UI
@@ -1113,12 +1207,11 @@ def newchunk_aero():
 			useCameraSettings()
 			doc.save()
 		else:
-			cam_choice = easygui.choicebox("Choose Camra", title="Choose Camera", choices=cam_list, preselect=settings.defaultCamera, callback=None)
-			cam_choice_index = cam_list.index(cam_choice)
-			readCameraSettings(cam_choice)
+			diaSelectCamera()
+			readCameraSettings(selected_camera)
 			useCameraSettings()
 
-		nadaljujem = Metashape.app.getBool("Camera set...\nUsing Camera: " + str(cam_choice) + "\n\nContinue with marker detection and coordinates import?")
+		nadaljujem = Metashape.app.getBool("Camera set...\nUsing Camera: " + str(selected_camera) + "\n\nContinue with marker detection and coordinates import?")
 		
 		if nadaljujem == True:
 			chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)

@@ -142,6 +142,7 @@ Release notes for AutoFTG python script
 - [x] Options for modifiying chunk naming format (prefix/suffix)
 - [ ] Importing multiple folders as chunks
 - [ ] Write log of processed data to CSV or XLS/XLSX table
+- [x] Replace easygui dialogs for Qt PySide2 (supported by Metashape)
 
 
 ---
@@ -151,4 +152,15 @@ Release notes for AutoFTG python script
 ### 2.4.1-beta
 
 - Replaced icon resorces to a more consistent themeing
+
+
+### 2.4.2-RC
+
+- Replaced easygui dialogs for Qt PySide2 custom dialog:
+  - `class Ui_dialogChooseCamera`
+
+- Function definitions using new camera selection dialog:
+  - `def cam_calibrationSettings()`
+  - `def cam_calibrationChunk()`
+  - `def newchunk_aero()`
 

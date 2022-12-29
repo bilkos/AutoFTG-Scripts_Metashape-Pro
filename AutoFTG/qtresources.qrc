@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/icons8-done-50.png</file>
+    <file>icons/icons8-touchscreen-48.png</file>
     <file>icons/AutoFTG-appicon.png</file>
     <file>icons/kalota.png</file>
     <file>icons/kalota_m.png</file>
