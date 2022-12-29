@@ -147,7 +147,7 @@ Release notes for AutoFTG python script
 
 ---
 
-## `2022/12/28`
+## `2022/12/29`
 
 ### 2.4.1-beta
 
@@ -156,11 +156,15 @@ Release notes for AutoFTG python script
 
 ### 2.4.2-RC
 
+- Added option `SubType` and `Resolution` to camera settings configuration (__cam_settings.ini__)
 - Replaced easygui dialogs for Qt PySide2 custom dialog:
-  - `class Ui_dialogChooseCamera`
+  - New Dialog Class: `class Ui_dialogChooseCamera()`
 
 - Function definitions using new camera selection dialog:
-  - `def cam_calibrationSettings()`
-  - `def cam_calibrationChunk()`
-  - `def newchunk_aero()`
+  - Updated: `def cam_calibrationSettings()`
+  - Updated: `def cam_calibrationChunk()`
+  - Updated: `def newchunk_aero()`
+
+- Updated camera list in Camera Editor to use new icons
+- Updated `def appAbout()` to use PySide2 message box dialog
 

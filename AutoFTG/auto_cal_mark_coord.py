@@ -808,6 +808,20 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 
 		layoutMain = QtWidgets.QVBoxLayout()  # creating layout
 
+		icon = QIcon()
+		icon.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon1 = QIcon()
+		icon1.addFile(u":/icons/icons8-panorama-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon2 = QIcon()
+		icon2.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon3 = QIcon()
+		icon3.addFile(u":/icons/icons8-video-stabilization-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon4 = QIcon()
+		icon4.addFile(u":/icons/icons8-touchscreen-48.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon5 = QIcon()
+		icon5.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		font1 = QFont()
+		font1.setPointSize(10)
 		self.verticalLayoutWidget_2 = QWidget()
 		self.verticalLayoutWidget_2.setObjectName(u"verticalLayoutWidget_2")
 		self.verticalLayoutWidget_2.setGeometry(QRect(10, 10, 321, 151))
@@ -818,10 +832,35 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		self.hLayoutCamEdit.setObjectName(u"hLayoutCamEdit")
 		self.listWidgetCam = QListWidget(self.verticalLayoutWidget_2)
 		self.listWidgetCam.setObjectName(u"listWidgetCam")
+		self.listWidgetCam.setFont(font1)
+		self.listWidgetCam.setFrameShape(QFrame.StyledPanel)
+		self.listWidgetCam.setFrameShadow(QFrame.Plain)
+		self.listWidgetCam.setDefaultDropAction(Qt.IgnoreAction)
+		self.listWidgetCam.setIconSize(QSize(20, 20))
 		for camera in cam_list:
+			icon_type = cam_config.get(camera, "Type")
+			icon_subtype = cam_config.get(camera, "SubType")
 			self.listWidgetCamItem = QListWidgetItem(camera, self.listWidgetCam)
 			self.listWidgetCamItem.setText(str(camera))
-			self.listWidgetCamItem.setToolTip("Type: " + str(cam_config.get(camera, 'type')) + "\nRes.: " + str(cam_config.get(camera, 'resolution')))
+			if icon_subtype == "Smartphone":
+				self.listWidgetCamItem.setIcon(icon4)
+				self.listWidgetCamItem.setToolTip("Type: " + str(cam_config.get(camera, 'Type')) + "\nSubType: " + str(cam_config.get(camera, 'SubType')) + "\nRes.: " + str(cam_config.get(camera, 'Resolution')))
+			elif icon_subtype == "Drone":
+				self.listWidgetCamItem.setIcon(icon5)
+				self.listWidgetCamItem.setToolTip("Type: " + str(cam_config.get(camera, 'Type')) + "\nSubType: " + str(cam_config.get(camera, 'SubType')) + "\nRes.: " + str(cam_config.get(camera, 'Resolution')))
+			else:
+				if icon_type == "Fisheye":
+					self.listWidgetCamItem.setIcon(icon1)
+					self.listWidgetCamItem.setToolTip("Type: " + str(cam_config.get(camera, 'Type')) + "\nRes.: " + str(cam_config.get(camera, 'Resolution')))
+				elif icon_type == "Conical":
+					self.listWidgetCamItem.setIcon(icon2)
+					self.listWidgetCamItem.setToolTip("Type: " + str(cam_config.get(camera, 'Type')) + "\nRes.: " + str(cam_config.get(camera, 'Resolution')))
+				elif icon_type == "Spherical":
+					self.listWidgetCamItem.setIcon(icon3)
+					self.listWidgetCamItem.setToolTip("Type: " + str(cam_config.get(camera, 'Type')) + "\nRes.: " + str(cam_config.get(camera, 'Resolution')))
+				else:
+					self.listWidgetCamItem.setIcon(icon)
+					self.listWidgetCamItem.setToolTip("Type: " + str(cam_config.get(camera, 'Type')) + "\nRes.: " + str(cam_config.get(camera, 'Resolution')))
 
 		self.hLayoutCamEdit.addWidget(self.listWidgetCam)
 
