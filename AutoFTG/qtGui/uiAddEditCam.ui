@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0" connectslotsbyname="false">
+ <class>DialogAddEditCam</class>
+ <widget class="QDialog" name="DialogAddEditCam">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>480</width>
+    <height>270</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>480</width>
+    <height>270</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>480</width>
+    <height>270</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string notr="true">Add/Edit Camera</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../qtresources.qrc">
+    <normaloff>:/icons/AutoFTG-appicon.png</normaloff>:/icons/AutoFTG-appicon.png</iconset>
+  </property>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>461</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="3" column="1">
+     <widget class="QComboBox" name="comboBox_2">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
+      <item>
+       <property name="text">
+        <string notr="true">Standard</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-camera-50.png</normaloff>:/icons/icons8-camera-50.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">DSLR</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-slr-small-lens-96.png</normaloff>:/icons/icons8-slr-small-lens-96.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Special</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-camera-on-tripod-96.png</normaloff>:/icons/icons8-camera-on-tripod-96.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Drone</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-quadcopter-50.png</normaloff>:/icons/icons8-quadcopter-50.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">SmartPhone</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-touchscreen-96.png</normaloff>:/icons/icons8-touchscreen-96.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">SportCam</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-gopro-96.png</normaloff>:/icons/icons8-gopro-96.png</iconset>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEdit_2">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="placeholderText">
+       <string notr="true">Camera name</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLineEdit" name="lineEdit_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>28</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>28</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="placeholderText">
+         <string notr="true">Choose calibration XML file...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string notr="true">Choose XML calibration file...</string>
+        </property>
+        <property name="text">
+         <string notr="true">Browse</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../qtresources.qrc">
+          <normaloff>:/icons/icons8-images-folder-50.png</normaloff>:/icons/icons8-images-folder-50.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string notr="true">Camera Name</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>90</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string notr="true">Cancel</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../qtresources.qrc">
+          <normaloff>:/icons/icons8-close-50.png</normaloff>:/icons/icons8-close-50.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>90</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string notr="true">Save</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../qtresources.qrc">
+          <normaloff>:/icons/icons8-save-all-50.png</normaloff>:/icons/icons8-save-all-50.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string notr="true">Type</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string notr="true">Resolution</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string notr="true">Description</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="2">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QComboBox" name="comboBox">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
+      <item>
+       <property name="text">
+        <string notr="true">Frame</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-full-page-view-50.png</normaloff>:/icons/icons8-full-page-view-50.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Fisheye</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-video-wall-50.png</normaloff>:/icons/icons8-video-wall-50.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Spherical</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-live-photos-96.png</normaloff>:/icons/icons8-live-photos-96.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Cylindical</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-aperture-50.png</normaloff>:/icons/icons8-aperture-50.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">RPC</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-ios-application-placeholder-50.png</normaloff>:/icons/icons8-ios-application-placeholder-50.png</iconset>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_5">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string notr="true">Callibration</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string notr="true">Sub-Type</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QLineEdit" name="lineEdit">
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string notr="true">0</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string notr="true">MP</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_4">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="placeholderText">
+       <string notr="true">Description of camera (optional)</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="5" margin="10"/>
+ <tabstops>
+  <tabstop>lineEdit_2</tabstop>
+  <tabstop>lineEdit_4</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>comboBox_2</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>lineEdit_3</tabstop>
+  <tabstop>pushButton_3</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>pushButton</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../qtresources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>DialogAddEditCam</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>144</x>
+     <y>210</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>239</x>
+     <y>119</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <designerdata>
+  <property name="gridDeltaX">
+   <number>10</number>
+  </property>
+  <property name="gridDeltaY">
+   <number>10</number>
+  </property>
+  <property name="gridSnapX">
+   <bool>true</bool>
+  </property>
+  <property name="gridSnapY">
+   <bool>true</bool>
+  </property>
+  <property name="gridVisible">
+   <bool>true</bool>
+  </property>
+ </designerdata>
+</ui>

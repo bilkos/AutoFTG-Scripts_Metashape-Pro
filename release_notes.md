@@ -168,3 +168,47 @@ Release notes for AutoFTG python script
 - Updated camera list in Camera Editor to use new icons
 - Updated `def appAbout()` to use PySide2 message box dialog
 
+
+---
+
+## `2022/12/30`
+
+### 2.4.3-RC
+
+- Fixed list in camera editor (not loading properly ofter adding/editing camera)
+- Fixed camera Save/Edit functions in Camera Editor, so they are now saved with correct values
+
+
+---
+
+## `2022/12/31`
+
+### 2.4.4-RC
+
+- Fixed list in camera editor (not loading properly ofter adding/editing camera)
+- Fixed dialogs for editing prefix/suffix for chunk name creation
+
+
+---
+
+## `2023/01/01`
+
+### 2.4.5-RC
+
+1. Upgraded Add/Edit Camera dialog to use PySide2 module
+2. Added new options for camera Type/SubType in cameras settings (cam_settings.ini)
+3. Added 'Spherical', 'Cylindrical', and 'RPC' camera type options
+4. Added new icons for camera type/subtype
+5. Redone camera list refreshing in Camera Editor
+6. Added new settings for chunk creation (category, menu icon, chunk name prefix/suffix)
+7. Changed menu options for adding chunks<br>*Now opens a dialog window with drop-down menu containing a list of availabile settings for new chunk creation.*
+
+---
+
+## `2023/01/01`
+
+### 2.4.6-RC
+
+1. Reworked settings storage for all settings files to use *.ini file strusture.
+2. Minor improvements for Camera Editer, Camera Add/Edit, and Edit Settings dialogs.
+

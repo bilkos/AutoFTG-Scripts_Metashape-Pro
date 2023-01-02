@@ -48,7 +48,7 @@ from configparser import ConfigParser
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.4.5-RC"
+app_ver = "2.4.6-RC"
 appsettings_ver = "5"
 app_author = "Author: Boris Bilc\n\n"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
@@ -92,235 +92,263 @@ class Settings(EgStore):
 		self.filename = filename  # this is required - init settings
 		self.restore()
 
-appCfg = ConfigParser()
-settingsFilename = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\AutoFTG_settings.txt').replace("\\", "/")
-settingsFilenameExists = os.path.isfile(settingsFilename)	# Check if settings file exists
-settings = Settings(settingsFilename)	# Init settings
+
+# settingsFilename = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\AutoFTG_settings.txt').replace("\\", "/")
+# settingsFilenameExists = os.path.isfile(settingsFilename)	# Check if settings file exists
+# settings = Settings(settingsFilename)	# Init settings
 projectOpened = False
 settingsRebuild = False
+selected_data_folder = ''
+selected_camera = "No Calibration - Frame (Default)"
+
+# Load main app settings
+appCfg = ConfigParser()
+appCfgFile = 'settings_autoftg.ini'
+appCfgPath = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\\').replace("\\", "/")
+appCfgFilePath =  appCfgPath + appCfgFile
+appCfgFileExists = os.path.isfile(appCfgFilePath)	# Check if settings file exists
+
+
+def appCfgLoad():
+	global selected_data_folder
+	global selected_camera
+	if appCfgFileExists == False:
+		print("\nSettings initialization...\nPlease choose data folder, and default camera.")
+		Metashape.app.messageBox("Settings initialization...\nPlease choose data folder, and default camera.")
+		foldeData = str(Metashape.app.getExistingDirectory("Working data folder"))
+		#selectCamDefault()
+		diaSelectCamera()
+		appCfg.add_section('SETTINGS')
+		appCfg.set('SETTINGS', 'settings_version', appsettings_ver)
+		appCfg.set('SETTINGS', 'folder_data', foldeData)
+		appCfg.set('SETTINGS', 'default_camera', selected_camera)
+
+		# Writing our configuration file to 'example.cfg'
+		with open(appCfgFilePath, 'w') as configfile:
+			appCfg.write(configfile)
+
+	appCfg.read(appCfgFilePath)
+	selected_data_folder = appCfg.get('SETTINGS', 'folder_data')
+	selected_camera = appCfg.get('SETTINGS', 'default_camera')
+
+# Load custom menu settings
+menuCfg = ConfigParser()
+menuCfgFile = "settings_newchunk.ini"
+menuCfgPath = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG').replace("\\", "/")
+menuCfgFilePath =  menuCfgPath + "/" + menuCfgFile
+menuCfgFilePathExists = os.path.isfile(menuCfgFilePath)
+chunk_sections = []
+
+
+def menuCfgLoad():
+	global chunk_sections
+	if menuCfgFilePathExists == False:
+		menu_section_m = "GENERAL"
+		menuCfg.add_section(menu_section_m)
+		menuCfg.set(menu_section_m, "menu_category", "")
+		menuCfg.set(menu_section_m, "menu_icon", ":/icons/icons8-add-50.png")
+		menuCfg.set(menu_section_m, "chunk_name_prefix", "")
+		menuCfg.set(menu_section_m, "chunk_name_suffix", "")
+	
+		with open(menuCfgFilePath, 'w') as menuconfig:
+			menuCfg.write(menuconfig)
+
+	menuCfg.read(menuCfgFilePath)
+	chunk_sections = menuCfg.sections()
+	print("Custom chunk settings loaded...\nFile: " + menuCfgFile)
 
 
 # Init configparser for camera settings. Set empty camera variables for global use.
-cam_config = ConfigParser()
+camCfg = ConfigParser()
 cam_name = ''
+cam_desc = ''
 cam_type = ''
 cam_subtype = ''
 cam_res = ''
 cam_file = ''
-selected_camera = None
+
 cameraXmlSource = ''
 cameraXmlDest = ''
 
-
-# Load custom menu config
-menuCfg = ConfigParser()
-menuCfgPath = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG').replace("\\", "/")
-menuCfgFile = "newchunk_settings.ini"
-menuCfgFilePath =  menuCfgPath + "/" + menuCfgFile
-menuCfgFilePathExists = os.path.isfile(menuCfgFilePath)
-if menuCfgFilePathExists == False:
-	menu_section_m = "GENERAL"
-	menuCfg.add_section(menu_section_m)
-	menuCfg.set(menu_section_m, "menu_category", "")
-	menuCfg.set(menu_section_m, "menu_icon", ":/icons/icons8-add-50.png")
-	menuCfg.set(menu_section_m, "chunk_name_prefix", "")
-	menuCfg.set(menu_section_m, "chunk_name_suffix", "")
-	
-	with open(menuCfgFilePath, 'w') as menuconfig:
-		menuCfg.write(menuconfig)
-
-menuCfg.read(menuCfgFilePath)
-
-chunk_sections = menuCfg.sections()
+camCfgFile = "settings_cam.ini"
+camCfgPath = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\cameras\\').replace("\\", "/")
+camCfgFilePath =  camCfgPath + camCfgFile
+camCfgFilePathExists = os.path.isfile(camCfgFilePath)
+cam_list = []
 
 
-# Set path to camera settings INI file. Use the same location as scripts for Metashape.
-script_path = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\cameras\\').replace("\\", "/")
-script_ini_file = "cam_settings.ini"
-script_ini_path =  script_path + script_ini_file
-
-
-def readIniConf():
+def camCfgLoad():
 	global cam_list
-	# Read INI settings file
-	cam_config.read(script_ini_path)
-	# Create list with cameras read from INI file. Each section is one camera.
-	cam_list = cam_config.sections()
 
-	for camera in cam_list:
-		print("\n------------------")
-		cam_item = cam_config.items(camera, raw=False)
-		for item in cam_item:
-			print(item[0].capitalize() + ": " + item[1])
+	if camCfgFilePathExists == False:
+		defcam_name = 'No Calibration - Frame (Default)'
+		defcam_description = 'Default Metashape camera settings for type FRAME. Calibration is calculated On-The-Fly.'
+		defcam_type = 'Frame'
+		defcam_subtype = 'Standard'
+		defcam_resolution = '0'
+		defcam_file = 'None'
+
+		defcam2_name = 'No Calibration - Fisheye'
+		defcam2_description = 'Default Metashape camera settings for type FISHEYE. Calibration is calculated On-The-Fly.'
+		defcam2_type = 'Fisheye'
+		defcam2_subtype = 'Standard'
+		defcam2_resolution = '0'
+		defcam2_file = 'None'
+
+		camCfg.add_section(defcam_name)
+		camCfg.set(defcam_name, "description", defcam_description)
+		camCfg.set(defcam_name, "type", defcam_type)
+		camCfg.set(defcam_name, "subtype", defcam_subtype)
+		camCfg.set(defcam_name, "resolution", defcam_resolution)
+		camCfg.set(defcam_name, "file", defcam_file)
+		camCfg.add_section(defcam2_name)
+		camCfg.set(defcam2_name, "description", defcam2_description)
+		camCfg.set(defcam2_name, "type", defcam2_type)
+		camCfg.set(defcam2_name, "subtype", defcam2_subtype)
+		camCfg.set(defcam2_name, "resolution", defcam2_resolution)
+		camCfg.set(defcam2_name, "file", defcam2_file)
+
+		with open(camCfgFilePath, 'w') as camconfigfile:
+			camCfg.write(camconfigfile)
+
+	camCfg.read(camCfgFilePath)
+	cam_list = camCfg.sections()
+	print("Camera settings loaded...\nFile: " + camCfgFile)
+
+
+# Main settings file initialization (used when no project is loaded)
+def initAutoFtg():
+	global projectOpened
+	projectOpened = False
+	camCfgLoad()
+	appCfgLoad()
+	checkSettingsVer()
+	menuCfgLoad()
+	projectOpenedCheck()
+	print("\n\nAutoFTG Settings loaded...\nSettings version: " + str(appCfg.get('SETTINGS', 'settings_version')))
+	print("Data Folder: " + str(appCfg.get('SETTINGS', 'folder_data')))
+	print("Default Camera: " + str(appCfg.get('SETTINGS', 'default_camera')))
+
+
+# Project settings initialization (used when .psx project is loaded)
+def projCfgLoad():
+	global settingsRebuild
+	global projDoc
+	global projCfgFilePath
+	global projCfgFilePathExists
+	global projCfg
+	global projectOpened
+	global selected_camera
+	global selected_data_folder
+
+	projDoc = Metashape.app.document
+	projDocFile = str(projDoc).replace("<Document '", "").replace("'>", "")
+	projCfg = ConfigParser()	# INICALIZACIJA NASTAVITEV
+	projCfgFilePath = projDocFile.replace(".psx", "_settings.ini")	# Datoteka z nastavitvami projekta
+	projCfgFilePathExists = os.path.isfile(projCfgFilePath)	# Preveri, če datoteka z projektom obstaja
+	
+	if projCfgFilePathExists == False:
+		print("\nProject settings initialization...\nPlease choose data folder, and default camera.")
+		Metashape.app.messageBox("Settings initialization...\nPlease choose data folder, and default camera.")
+		proj_data = Metashape.app.getExistingDirectory("Project data folder")
+		diaSelectCamera()
+		projCfg.add_section('SETTINGS')
+		projCfg.set('SETTINGS', 'settings_version', appsettings_ver)
+		projCfg.set('SETTINGS', 'folder_data', str(proj_data))
+		projCfg.set('SETTINGS', 'default_camera', selected_camera)
 		
-	print("Loaded camera settings...\n File: " + script_ini_file)
+		# Writing our configuration file to 'example.cfg'
+		with open(projCfgFilePath, 'w') as configfile:
+			projCfg.write(configfile)
+
+	projCfg.read(projCfgFilePath)
+	checkSettingsVer()
+	selected_camera = projCfg.get('SETTINGS', 'default_camera')
+	selected_data_folder = projCfg.get('SETTINGS', 'folder_data')
+	readCameraSettings(selected_camera)
+	projectOpened = True
+	Metashape.app.messageBox("Project settings loaded.\n\n"
+			+ "Data Folder: " + str(proj_data) + "\n"
+			+ "Default Camera: " + str(selected_camera))
+
+
+# Reset settings
+def settingsReset(settingsRebuild):
+	if settingsRebuild == True:
+		if projectOpened == True:
+			os.remove(appCfgFilePath)
+			os.remove(projCfgFilePath)
+			settingsRebuild = False
+			projCfgLoad()
+		else:
+			os.remove(appCfgFilePath)
+			settingsRebuild = False
+			initAutoFtg()
 
 
 # Check settings version
 def checkSettingsVer():
 	global settingsRebuild
-	if settings.settingsVersion != appsettings_ver:
-		settingsRebuild = True
-		settingsReset()
+	if appCfg.get("SETTINGS", "settings_version") != appsettings_ver:
+		settingsReset(True)
 		
 
-# Reset settings
-def settingsReset():
-	global settingsRebuild
-	if settingsRebuild == True:
-		os.remove(settingsFilename)
-		if projectOpened == True:
-			settingsRebuild = False
-			initAutoFtgProjekt()
-		else:
-			settingsRebuild = False
-			initAutoFtg()
-
-
 # Routine to check if project exists before initializing settings
-def checkProject():
+def projectOpenedCheck():
 	global projectOpened
 	doc = Metashape.app.document
-	fileDoc = str(doc).replace("<Document '", "").replace("'>", "")
+	#fileDoc = str(doc).replace("<Document '", "").replace("'>", "")
 
-	if fileDoc == '' or fileDoc == None:
+	if doc == '' or doc == None:
 		projectOpened = False
-		Metashape.app.messageBox("Project not saved!\n\nSave project or open an existing (Filetype *.psx).")
-		# novProjekt()
+		Metashape.app.messageBox("Empty project?\n\nSave project first, or open an existing project. (*.psx).")
+		appCfgLoad()
 	else:
 		projectOpened = True
-		initAutoFtgProjekt()
+		projCfgLoad()
 
 
-# Main settings file initialization (used when no project is loaded)
-def initAutoFtg():
-	global settingsFilename
-	global settingsFilenameExists
-	global settings
-	global projectOpened
-	global settingsRebuild
-
-	settingsFilename = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\AutoFTG_settings.txt').replace("\\", "/")
-	settingsFilenameExists = os.path.isfile(settingsFilename)	# Check if settings file exists
-	settings = Settings(settingsFilename)	# Init settings
-	readIniConf()
-	projectOpened = False
-	
-	if settingsFilenameExists == False:
-		print("\n\nInicializacija osnovnih nastavitev.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
-		Metashape.app.messageBox("Show folder for exported data...\n\nFolder where exported data will be sotred.")
-		projFolderChange()
-		Metashape.app.messageBox("Show folder with working data ...\nThis should be a folder where raw data to process is located.)")
-		dataFolderChange()
-		Metashape.app.messageBox("Choose project default camera...")
-		cam_calibrationSettings()
-		settings.store()	# persist the settings
-	else:
-		checkSettingsVer()
-		print("\n\nNalozene so osnovne nastavitve.\nUstvari nov AvtoFTG propjekt za uporabo nastavitev za posamezen projekt. Menu: <AutoFTG>")
-		print("Export Folder: " + str(settings.folderProject))
-		print("Data Folder: " + str(settings.foldeData))
-		print("Default Camera: " + str(settings.defaultCamera))
-		print("\nUrejanje nastavitev je dostopno preko menija <AutoFTG>.")
+# # Change project data folder
+# def dataFolderChange():
+# 	settings.foldeData = Metashape.app.getExistingDirectory("Working data folder")
+# 	settings.store()
+# 	print("Working Folder: " + str(settings.foldeData))
 
 
-# Project settings initialization (used when .psx project is loaded)
-def initAutoFtgProjekt():
-	global settingsFilename
-	global settingsFilenameExists
-	global settings
-	global projectOpened
-	global settingsRebuild
-	global fileProject
-
-	fileDoc = Metashape.app.document
-	fileProject = str(fileDoc).replace("<Document '", "").replace("'>", "")
-	settingsFilename = fileProject.replace(".psx", "_settings.txt")	# Datoteka z nastavitvami projekta
-	settingsFilenameExists = os.path.isfile(settingsFilename)	# Preveri, če datoteka z projektom obstaja
-	settings = Settings(settingsFilename)	# INICALIZACIJA NASTAVITEV
-	
-	if settingsFilenameExists == False:
-		print("\n\nInitializing project settings...")
-		Metashape.app.messageBox("Show folder for data export")
-		settings.folderProject = Metashape.app.getExistingDirectory("Choose Export Folder")
-		Metashape.app.messageBox("Show folder with working data")
-		settings.foldeData = Metashape.app.getExistingDirectory("Choose Data Folder")
-		cam_calibrationSettings()
-		readCameraSettings(settings.defaultCamera)
-		settings.store()
-		print("\n\nProject settings saved.")
-		print("Settings File: " + str(settingsFilename))
-		print("Export Folder: " + str(settings.folderProject))
-		print("Data Folder: " + str(settings.foldeData))
-		print("Default Camera: " + str(cam_name))
-		print("\nInitialization complete!")
-		Metashape.app.messageBox("Initialization complete.\nProject settings saved...\n\n"
-			+ "Settings File: " + str(settingsFilename) + "\n"
-			+ "Export Folder: " + str(settings.folderProject) + "\n"
-			+ "Data Folder: " + str(settings.foldeData) + "\n"
-			+ "Default Camera: " + str(cam_name)
-			)
-		fileDoc.save(fileProject)
-		projectOpened = True
-
-	else:
-		checkSettingsVer()
-		readCameraSettings(settings.defaultCamera)
-		Metashape.app.messageBox("Project settings loaded.\n\n"
-			+ "Settings File: " + str(settingsFilename) + "\n"
-			+ "Export Folder: " + str(settings.folderProject) + "\n"
-			+ "Data Folder: " + str(settings.foldeData) + "\n"
-			+ "Default Camera: " + str(cam_name)
-			)
-		projectOpened = True
-
-
-# Change project export folder
-def projFolderChange():
-	settings.folderProject = Metashape.app.getExistingDirectory("Data export folder")
-	settings.store()
-	print("Export Folder: " + str(settings.folderProject))
-
-
-# Change project data folder
-def dataFolderChange():
-	settings.foldeData = Metashape.app.getExistingDirectory("Working data folder")
-	settings.store()
-	print("Working Folder: " + str(settings.foldeData))
-
-
-# Create new project routine - used when no project is present when user tries to add new chunk
-def novProjekt():
-	global projectOpened
-	doc = Metashape.app.document
-	docPath = Metashape.app.getSaveFileName("Save new project", "",  "Metashape Project (*.psx)")
-	try:
-		doc.save(docPath)
-		Metashape.app.messageBox("New project saved.\n")
-		initAutoFtgProjekt()
-		projectOpened = True
-	except RuntimeError:
-		Metashape.app.messageBox("Process canceled...")
-		projectOpened = False
-	
-	Metashape.app.update()
+# # Create new project routine - used when no project is present when user tries to add new chunk
+# def novProjekt():
+# 	global projectOpened
+# 	doc = Metashape.app.document
+# 	docPath = Metashape.app.getSaveFileName("Save new project", "",  "Metashape Project (*.psx)")
+# 	try:
+# 		doc.save(docPath)
+# 		Metashape.app.messageBox("New project saved.\n")
+# 		projCfgLoad()
+# 		projectOpened = True
+# 	except RuntimeError:
+# 		Metashape.app.messageBox("Process canceled...")
+# 		projectOpened = False
+# 	
+# 	Metashape.app.update()
 
 
 # Read camera settings from INI config file
 def readCameraSettings(cam_section):
 	global cam_name
+	global cam_desc
 	global cam_type
 	global cam_subtype
 	global cam_res
 	global cam_file
 
 	# Read settings for requested camera
-	cam_name = cam_config.get(cam_section, "Name")
-	cam_type = cam_config.get(cam_section, "Type")
-	cam_subtype = cam_config.get(cam_section, "SubType")
-	cam_res = cam_config.get(cam_section, "Resolution")
-	cam_file = cam_config.get(cam_section, "File")
-	print("Using camera\n" + "Name: " + cam_name + "\nType: " + cam_type + "\nSubType: " + cam_subtype + "\nResolution: " + cam_res + "\nFile: " + cam_file)
+	cam_name = cam_section
+	cam_desc = camCfg.get(cam_section, "Description")
+	cam_type = camCfg.get(cam_section, "Type")
+	cam_subtype = camCfg.get(cam_section, "SubType")
+	cam_res = camCfg.get(cam_section, "Resolution")
+	cam_file = camCfg.get(cam_section, "File")
+	print("Using camera\n" + "Name: " + cam_name + "\nDesc.: " + cam_desc + "\nType: " + cam_type + "\nSubType: " + cam_subtype + "\nResolution: " + cam_res + "\nFile: " + cam_file)
 	
 
 # Called to apply camera settings when creating new chunk
@@ -329,7 +357,7 @@ def useCameraSettings():
 	doc = Metashape.app.document
 	chunk = doc.chunk
 	# readCameraSettings(settings.defaultCamera)
-	camera_path = script_path + cam_file
+	camera_path = camCfgPath + cam_file
 	
 	# Sensor to which we will apply settings
 	chunk_sensor = chunk.sensors[0]
@@ -361,19 +389,28 @@ def useCameraSettings():
 
 
 # Choose default camera routine
-def cam_calibrationSettings():
-	readIniConf()
+def selectCamDefault():
+	camCfgLoad()
 	diaSelectCamera()
 	if selected_camera == None:
-		print("No camera chosen. Nothing has changed...")
+		Metashape.app.messageBox("No camera selected. Nothing has changed...")
 	else:
-		settings.defaultCamera = str(selected_camera)
-		settings.store()
+		if projectOpened == True:
+			projCfg.set('SETTINGS', 'default_camera', selected_camera)
+			with open(projCfgFilePath, 'w') as configfile:
+				projCfg.write(configfile)
+			projCfg.read(projCfgFilePath)
+		else:
+			appCfg.set('SETTINGS', 'default_camera', selected_camera)
+			with open(appCfgFilePath, 'w') as configfile:
+				appCfg.write(configfile)
+			appCfg.read(appCfgFilePath)
+		
 		print("Default camera settings saved.\nDefault Camera: " + selected_camera)
 
 
-def cam_calibrationChunk():
-	readIniConf()
+def selectCamChunk():
+	camCfgLoad()
 	diaSelectCamera()
 	if selected_camera == None:
 		print("No camera chosen. Using default camera.")
@@ -384,186 +421,80 @@ def cam_calibrationChunk():
 
 
 # Routine for adding/editing camera configuration
-def saveCamConfig(camorig, camname, camtype, camsub, camres, camfile):
-	if cam_config.has_section(camorig) == True:
-		cam_config.remove_section(camorig)
-		cam_config.add_section(camname)
-		cam_config.set(camname, "Name", camname)
-		cam_config.set(camname, "Type", camtype)
-		cam_config.set(camname, "SubType", camsub)
-		cam_config.set(camname, "Resolution", camres)
-		cam_config.set(camname, "File", camfile)
-		Metashape.app.messageBox("Camera added...\n" + "Name: " + camname + "\nType: " + camtype + "\nSubType: " + camsub + "\nRes.:: " + camres + " MP\nFile: " + camfile)
+def saveCamConfig(camorig, camname, camdesc, camtype, camsub, camres, camfile):
+	if camCfg.has_section(camorig) == True:
+		camCfg.remove_section(camorig)
+		camCfg.add_section(camname)
+		camCfg.set(camname, "Description", camdesc)
+		camCfg.set(camname, "Type", camtype)
+		camCfg.set(camname, "SubType", camsub)
+		camCfg.set(camname, "Resolution", camres)
+		camCfg.set(camname, "File", camfile)
+		Metashape.app.messageBox("Camera added...\n" + "Name: " + camname + "\nDesc.: " + camdesc + "\nType: " + camtype + "\nSubType: " + camsub + "\nRes.:: " + camres + " MP\nFile: " + camfile)
 	else:
-		cam_config.add_section(camname)
-		cam_config.set(camname, "Name", camname)
-		cam_config.set(camname, "Type", camtype)
-		cam_config.set(camname, "SubType", camsub)
-		cam_config.set(camname, "Resolution", camres)
-		cam_config.set(camname, "File", camfile)
-		Metashape.app.messageBox("Camera added...\n" + "Name: " + camname + "\nType: " + camtype + "\nSubType: " + camsub + "\nRes.:: " + camres + " MP\nFile: " + camfile)
+		camCfg.add_section(camname)
+		camCfg.set(camname, "Description", camdesc)
+		camCfg.set(camname, "Type", camtype)
+		camCfg.set(camname, "SubType", camsub)
+		camCfg.set(camname, "Resolution", camres)
+		camCfg.set(camname, "File", camfile)
+		Metashape.app.messageBox("Camera added...\n" + "Name: " + camname + "\nDesc.: " + camdesc + "\nType: " + camtype + "\nSubType: " + camsub + "\nRes.:: " + camres + " MP\nFile: " + camfile)
 
-	with open(script_ini_path, 'w') as configfile:
-		cam_config.write(configfile)
+	with open(camCfgFilePath, 'w') as configfile:
+		camCfg.write(configfile)
 
-	readIniConf()
+	camCfgLoad()
 
 
 # Routine for adding/editing camera configuration
 def removeCamConfig(camname):
 	cam_xmlmsg = ''
-	if cam_config.has_section(camname) == True:
-		if cam_config.get(camname, "File") != "":
-			cameraXml = script_path + cam_config.get(camname, "File")
+	if camCfg.has_section(camname) == True:
+		if camCfg.get(camname, "File") != "":
+			cameraXml = camCfgPath + camCfg.get(camname, "File")
 			if os.path.isfile(cameraXml):
 				os.remove(cameraXml)
 				cam_xmlmsg = "\nXML file " + cameraXml + " deleted."
 
-		cam_config.remove_section(camname)
+		camCfg.remove_section(camname)
 		cam_secmsg = "Camera [" + camname + "] removed from settings." + cam_xmlmsg
 		
-		with open(script_ini_path, 'w') as configfile:
-			cam_config.write(configfile)
+		with open(camCfgFilePath, 'w') as configfile:
+			camCfg.write(configfile)
 		
-		readIniConf()
+		camCfgLoad()
 		
 		Metashape.app.messageBox(cam_secmsg)
 	else:
 		Metashape.app.messageBox("Error! No camera named (" + str(camname) + ") was found.\n\nDid you manualy edit comaera configuration?")
 
 
-# Change chunk name prefix STOPNICA IZKOP
-def changeNameStIzPre():
-	current_name = 'STOPNICA (IZKOP)'
-	current_setting = str(settings.chunkNameStIzPre)
-	current_append = 'prefix'
-	
-	new_append = Metashape.app.getString(label='Modify ' + current_append + ' for ' + current_name, value=current_setting)
-	if new_append != None:
-		settings.chunkNameStIzPre = str(new_append)
-		settings.store()
-		Metashape.app.messageBox("New " + current_append + " for " + current_name + " changed to: " + str(new_append))
-
-
-# Change chunk name prefix STOPNICA IZKOP
-def changeNameStIzSuf():
-	current_name = 'STOPNICA (IZKOP)'
-	current_setting = str(settings.chunkNameStIzSuf)
-	current_append = 'suffix'
-		
-	new_append = Metashape.app.getString(label='Modify ' + current_append + ' for ' + current_name, value=current_setting)
-
-	if new_append != None:
-		settings.chunkNameStIzSuf = str(new_append)
-		settings.store()
-		Metashape.app.messageBox("New " + current_append + " for " + current_name + " changed to: " + str(new_append))
-
-
-# Change chunk name prefix STOPNICA IZKOP
-def changeNameStBbPre():
-	current_name = 'STOPNICA (B.BET.)'
-	current_setting = str(settings.chunkNameStBbPre)
-	current_append = 'prefix'
-		
-	new_append = Metashape.app.getString(label='Modify ' + current_append + ' for ' + current_name, value=current_setting)
-
-	if new_append != None:
-		settings.chunkNameStBbPre = str(new_append)
-		settings.store()
-		Metashape.app.messageBox("New " + current_append + " for " + current_name + " changed to: " + str(new_append))
-
-
-# Change chunk name prefix STOPNICA IZKOP
-def changeNameStBbSuf():
-	current_name = 'STOPNICA (B.BET.)'
-	current_setting = str(settings.chunkNameStBbSuf)
-	current_append = 'suffix'
-		
-	new_append = Metashape.app.getString(label='Modify ' + current_append + ' for ' + current_name, value=current_setting)
-
-	if new_append != None:
-		settings.chunkNameStBbSuf = str(new_append)
-		settings.store()
-		Metashape.app.messageBox("New " + current_append + " for " + current_name + " changed to: " + str(new_append))
-
-
-# Change chunk name suffix
-def changeChunkAppend(setting_name, append_type):
-	if setting_name == 0 & append_type == 0:
-		current_name = 'STOPNICA (IZKOP)'
-		current_setting = str(settings.chunkNameStIzPre)
-	elif setting_name == 1 & append_type == 0:
-		current_name = 'STOPNICA (B.BET.)'
-		current_setting = str(settings.chunkNameStBbPre)
-	elif setting_name == 0 & append_type == 1:
-		current_name = 'STOPNICA (IZKOP)'
-		current_setting = str(settings.chunkNameStIzSuf)
-	elif setting_name == 1 & append_type == 1:
-		current_name = 'STOPNICA (B.BET.)'
-		current_setting = str(settings.chunkNameStBbSuf)
-	
-	if append_type == 0:
-		current_append = 'prefix'
-	elif append_type == 1:
-		current_append = 'suffix'
-		
-	new_append = Metashape.app.getString(label='Modify ' + current_append + ' for ' + current_name, value=current_setting)
-
-	if setting_name == 0 & append_type == 0:
-		settings.chunkNameStIzPre = str(new_append)
-	elif setting_name == 1 & append_type == 0:
-		settings.chunkNameStBbPre = str(new_append)
-	elif setting_name == 0 & append_type == 1:
-		settings.chunkNameStIzSuf = str(new_append)
-	elif setting_name == 1 & append_type == 1:
-		settings.chunkNameStBbSuf = str(new_append)
-	
-	settings.store()
-
-	Metashape.app.messageBox("New " + current_append + " for " + current_name + " changed to: " + str(new_append))
-
-
-# Show current settings
-def showSettings():
-	show_settings_text = ("Settings currently in use...\n\nSettings file: " + str(settingsFilename) + "\n"
-							+ "Settings version: " + str(settings.settingsVersion) + "\n"
-							+ "Project folder: " + str(settings.folderProject) + "\n"
-							+ "Data folder: " + str(settings.foldeData) + "\n"
-							+ "Default camera: " + str(settings.defaultCamera) + "\n")
-	show_settings = QMessageBox()
-	show_settings.setMinimumSize(600,500)
-	show_settings.setTextFormat(Qt.PlainText)
-	show_settings.setText(show_settings_text)
-	show_settings.setWindowTitle("Current Settings")
-
-	show_settings.exec_()
-
 # Class for settings editing UI
 class Ui_settingsDialog(QtWidgets.QDialog):
 	def __init__(self, parent):
 		QtWidgets.QDialog.__init__(self, parent)
 		self.setObjectName(u"settingsDialog")
-		self.resize(400, 170)
+		self.resize(300, 100)
 		self.setWindowTitle(u"AutoFTG Settings")
 		
 		icon = QIcon()
 		icon.addFile(u":/icons/icons8-opened-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
 
-		self.label = QtWidgets.QLabel()
-		self.label.setObjectName(u"label")
-		self.label.setGeometry(QRect(10, 10, 80, 16))
-		self.label.setText("Project Folder:")
-		self.lineProjFolder = QtWidgets.QLineEdit()
-		self.lineProjFolder.setObjectName(u"lineProjFolder")
-		self.lineProjFolder.setGeometry(QRect(10, 10, 280, 24))
-		self.lineProjFolder.setText(str(settings.folderProject))
-		self.lineProjFolder.setClearButtonEnabled(True)
-		self.btnProjFolder = QtWidgets.QPushButton()
-		self.btnProjFolder.setObjectName(u"btnProjFolder")
-		self.btnProjFolder.setGeometry(QRect(300, 10, 80, 24))
-		self.btnProjFolder.setText(u" Browse")
-		self.btnProjFolder.setIcon(icon)
-		self.btnProjFolder.setIconSize(QSize(21, 21))
+		# self.label = QtWidgets.QLabel()
+		# self.label.setObjectName(u"label")
+		# self.label.setGeometry(QRect(10, 10, 80, 16))
+		# self.label.setText("Project Folder:")
+		# self.lineProjFolder = QtWidgets.QLineEdit()
+		# self.lineProjFolder.setObjectName(u"lineProjFolder")
+		# self.lineProjFolder.setGeometry(QRect(10, 10, 280, 24))
+		# self.lineProjFolder.setText(str(selected_data_folder))
+		# self.lineProjFolder.setClearButtonEnabled(True)
+		# self.btnProjFolder = QtWidgets.QPushButton()
+		# self.btnProjFolder.setObjectName(u"btnProjFolder")
+		# self.btnProjFolder.setGeometry(QRect(300, 10, 80, 24))
+		# self.btnProjFolder.setText(u" Browse")
+		# self.btnProjFolder.setIcon(icon)
+		# self.btnProjFolder.setIconSize(QSize(21, 21))
 		
 		self.label_2 = QtWidgets.QLabel()
 		self.label_2.setObjectName(u"label_2")
@@ -572,7 +503,7 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		self.lineDataFolder = QtWidgets.QLineEdit()
 		self.lineDataFolder.setObjectName(u"lineDataFolder")
 		self.lineDataFolder.setGeometry(QRect(10, 40, 280, 24))
-		self.lineDataFolder.setText(str(settings.foldeData))
+		self.lineDataFolder.setText(str(selected_data_folder))
 		self.lineDataFolder.setClearButtonEnabled(True)
 		self.btnDataFolder = QtWidgets.QPushButton()
 		self.btnDataFolder.setObjectName(u"btnDataFolder")
@@ -590,7 +521,7 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		self.comboBoxCamera.setGeometry(QRect(10, 70, 280, 24))
 		for camera in cam_list:
 			self.comboBoxCamera.addItem(camera)
-		self.comboBoxCamera.setCurrentText(str(settings.defaultCamera))
+		self.comboBoxCamera.setCurrentText(str(selected_camera))
 		
 		self.btnClose = QtWidgets.QPushButton()
 		self.btnClose.setObjectName(u"btnClose")
@@ -613,48 +544,57 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		layout.setRowMinimumHeight(0, 24)
 		layout.setRowMinimumHeight(1, 24)
 		layout.setRowMinimumHeight(2, 24)
-		layout.setRowMinimumHeight(3, 24)
+		# layout.setRowMinimumHeight(3, 24)
 		layout.setVerticalSpacing(1)
 
-		layout.setColumnMinimumWidth(1, 300) # minimum column width
-		layout.setColumnMinimumWidth(2, 50) # minimum column width
+		layout.setColumnMinimumWidth(1, 250) # minimum column width
+		layout.setColumnMinimumWidth(2, 80) # minimum column width
 
-		layout.addWidget(self.label, 0, 0)
-		layout.addWidget(self.lineProjFolder, 0, 1)
-		layout.addWidget(self.btnProjFolder, 0, 2)
+		# layout.addWidget(self.label, 0, 0)
+		# layout.addWidget(self.lineProjFolder, 0, 1)
+		# layout.addWidget(self.btnProjFolder, 0, 2)
 
-		layout.addWidget(self.label_2, 1, 0)
-		layout.addWidget(self.lineDataFolder, 1, 1)
-		layout.addWidget(self.btnDataFolder, 1, 2)
+		layout.addWidget(self.label_2, 0, 0)
+		layout.addWidget(self.lineDataFolder, 0, 1)
+		layout.addWidget(self.btnDataFolder, 0, 2)
 
-		layout.addWidget(self.label_3, 2, 0)
-		layout.addWidget(self.comboBoxCamera, 2, 1)
+		layout.addWidget(self.label_3, 1, 0)
+		layout.addWidget(self.comboBoxCamera, 1, 1)
 
-		layout.addWidget(self.btnClose, 3, 2)
-		layout.addWidget(self.btnSave, 3, 1)
+		layout.addWidget(self.btnClose, 2, 2)
+		layout.addWidget(self.btnSave, 2, 1)
 
 		self.setLayout(layout)
 
-		QtCore.QObject.connect(self.btnProjFolder, QtCore.SIGNAL("clicked()"), self.projFolderChange)
 		QtCore.QObject.connect(self.btnDataFolder, QtCore.SIGNAL("clicked()"), self.dataFolderChange)
 		QtCore.QObject.connect(self.btnSave, QtCore.SIGNAL("clicked()"), self.saveSettingsDialog)
 		QtCore.QObject.connect(self.btnClose, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("reject()"))
 
 		self.exec()
 
-	def projFolderChange(self):
-		folderExport = Metashape.app.getExistingDirectory("Export folder")
-		self.lineProjFolder.setText(folderExport)
+	# def projFolderChange(self):
+	# 	folderExport = Metashape.app.getExistingDirectory("Export folder")
+	# 	self.lineProjFolder.setText(folderExport)
 
 	def dataFolderChange(self):
 		foldeData = Metashape.app.getExistingDirectory("Data folder")
 		self.lineDataFolder.setText(foldeData)
 
 	def saveSettingsDialog(self):
-		settings.folderProject = self.lineProjFolder.text()
-		settings.foldeData = self.lineDataFolder.text()
-		settings.defaultCamera = self.comboBoxCamera.currentText()
-		settings.store()
+		if projectOpened == False:
+			# settings.folderProject = self.lineProjFolder.text()
+			appCfg.set('SETTINGS', 'folder_data', self.lineDataFolder.text())
+			appCfg.set('SETTINGS', 'default_camera', self.comboBoxCamera.currentText())
+			with open(appCfgFilePath, 'w') as configfile:
+				projCfg.write(configfile)
+			appCfgLoad()
+		else:
+			projCfg.set('SETTINGS', 'folder_data', self.lineDataFolder.text())
+			projCfg.set('SETTINGS', 'default_camera', self.comboBoxCamera.currentText())
+			with open(projCfgFilePath, 'w') as configfile:
+				projCfg.write(configfile)
+			projCfgLoad
+		
 		print("New settings stored.")
 		self.close()
 
@@ -673,241 +613,256 @@ class Ui_DialogAddEditCam(QtWidgets.QDialog):
 		camOrigName = camname
 		QtWidgets.QDialog.__init__(self, parent)
 		self.setObjectName(u"DialogAddEditCam")
-		self.resize(480, 240)
-		self.setWindowTitle(u"Add/Edit Camera")
+		self.resize(480, 270)
 		sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+		sizePolicy.setHorizontalStretch(0)
+		sizePolicy.setVerticalStretch(0)
+		sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
 		self.setSizePolicy(sizePolicy)
-		self.setMinimumSize(QSize(480, 240))
-		self.setMaximumSize(QSize(480, 240))
+		self.setMinimumSize(QSize(480, 270))
+		self.setMaximumSize(QSize(480, 270))
 		font = QFont()
 		font.setFamily(u"Segoe UI")
-		font.setPointSize(9)
+		font.setPointSize(10)
 		self.setFont(font)
+		self.setWindowTitle(u"Add/Edit Camera")
 		icon = QIcon()
 		icon.addFile(u":/icons/AutoFTG-appicon.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.setWindowIcon(icon)
 		self.gridLayoutWidget = QWidget(self)
 		self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
-		self.gridLayoutWidget.setGeometry(QRect(10, 10, 461, 220))
+		self.gridLayoutWidget.setGeometry(QRect(10, 10, 461, 251))
 		self.gridLayout = QGridLayout(self.gridLayoutWidget)
 		self.gridLayout.setSpacing(5)
 		self.gridLayout.setContentsMargins(10, 10, 10, 10)
 		self.gridLayout.setObjectName(u"gridLayout")
 		self.gridLayout.setContentsMargins(0, 0, 0, 0)
-		self.label = QLabel(self.gridLayoutWidget)
-		self.label.setObjectName(u"label")
-		sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
-		sizePolicy.setHorizontalStretch(0)
-		sizePolicy.setVerticalStretch(0)
-		sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-		self.label.setSizePolicy(sizePolicy)
-		font1 = QFont()
-		font1.setFamily(u"Segoe UI")
-		font1.setPointSize(10)
-		self.label.setFont(font1)
-		self.label.setText(u"Camera Type")
+		self.comboBox_2 = QComboBox(self.gridLayoutWidget)
+		icon1 = QIcon()
+		icon1.addFile(u":/icons/icons8-camera-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.comboBox_2.addItem(icon1, u"Standard")
+		icon2 = QIcon()
+		icon2.addFile(u":/icons/icons8-slr-small-lens-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.comboBox_2.addItem(icon2, u"DSLR")
+		icon3 = QIcon()
+		icon3.addFile(u":/icons/icons8-camera-on-tripod-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.comboBox_2.addItem(icon3, u"Special")
+		icon4 = QIcon()
+		icon4.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.comboBox_2.addItem(icon4, u"Drone")
+		icon5 = QIcon()
+		icon5.addFile(u":/icons/icons8-touchscreen-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.comboBox_2.addItem(icon5, u"SmartPhone")
+		icon6 = QIcon()
+		icon6.addFile(u":/icons/icons8-gopro-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.comboBox_2.addItem(icon6, u"SportCam")
+		self.comboBox_2.setObjectName(u"comboBox_2")
+		self.comboBox_2.setFont(font)
+		self.comboBox_2.setIconSize(QSize(24, 24))
 
-		self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
-
-		self.line = QFrame(self.gridLayoutWidget)
-		self.line.setObjectName(u"line")
-		self.line.setFrameShape(QFrame.HLine)
-		self.line.setFrameShadow(QFrame.Sunken)
-
-		self.gridLayout.addWidget(self.line, 5, 0, 1, 2)
-
-		self.label_4 = QLabel(self.gridLayoutWidget)
-		self.label_4.setObjectName(u"label_4")
-		sizePolicy.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
-		self.label_4.setSizePolicy(sizePolicy)
-		self.label_4.setText(u"Resolution")
-
-		self.gridLayout.addWidget(self.label_4, 3, 0, 1, 1)
-
-		self.label_5 = QLabel(self.gridLayoutWidget)
-		self.label_5.setObjectName(u"label_5")
-		sizePolicy.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
-		self.label_5.setSizePolicy(sizePolicy)
-		self.label_5.setText(u"Callibration File")
-
-		self.gridLayout.addWidget(self.label_5, 4, 0, 1, 1)
+		self.gridLayout.addWidget(self.comboBox_2, 3, 1, 1, 1)
 
 		self.lineEdit_2 = QLineEdit(self.gridLayoutWidget)
 		self.lineEdit_2.setObjectName(u"lineEdit_2")
-		sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-		sizePolicy1.setHorizontalStretch(0)
-		sizePolicy1.setVerticalStretch(0)
-		sizePolicy1.setHeightForWidth(self.lineEdit_2.sizePolicy().hasHeightForWidth())
-		self.lineEdit_2.setSizePolicy(sizePolicy1)
-		self.lineEdit_2.setMaximumSize(QSize(200, 16777215))
-		font2 = QFont()
-		font2.setFamily(u"Segoe UI")
-		font2.setPointSize(11)
-		self.lineEdit_2.setFont(font2)
+		self.lineEdit_2.setFont(font)
 		self.lineEdit_2.setPlaceholderText(u"Camera name")
 
 		self.gridLayout.addWidget(self.lineEdit_2, 0, 1, 1, 1)
-
-		self.comboBox = QComboBox(self.gridLayoutWidget)
-		icon1 = QIcon()
-		icon1.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox.addItem(icon1, u"Frame")
-		icon2 = QIcon()
-		icon2.addFile(u":/icons/icons8-video-wall-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox.addItem(icon2, u"Fisheye")
-		icon3 = QIcon()
-		icon3.addFile(u":/icons/icons8-live-photos-96.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox.addItem(icon3, u"Spherical")
-		icon4 = QIcon()
-		icon4.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox.addItem(icon4, u"Cylindrical")
-		icon12 = QIcon()
-		icon12.addFile(u":/icons/icons8-ios-application-placeholder-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox.addItem(icon12, u"RPC")
-		self.comboBox.setObjectName(u"comboBox")
-		sizePolicy2 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
-		sizePolicy2.setHorizontalStretch(0)
-		sizePolicy2.setVerticalStretch(0)
-		sizePolicy2.setHeightForWidth(self.comboBox.sizePolicy().hasHeightForWidth())
-		self.comboBox.setSizePolicy(sizePolicy2)
-		self.comboBox.setFont(font1)
-		self.comboBox.setIconSize(QSize(24, 24))
-
-		self.gridLayout.addWidget(self.comboBox, 1, 1, 1, 1)
-
-		self.horizontalLayout_3 = QHBoxLayout()
-		self.horizontalLayout_3.setSpacing(5)
-		self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-		self.lineEdit = QLineEdit(self.gridLayoutWidget)
-		self.lineEdit.setObjectName(u"lineEdit")
-		sizePolicy1.setHeightForWidth(self.lineEdit.sizePolicy().hasHeightForWidth())
-		self.lineEdit.setSizePolicy(sizePolicy1)
-		self.lineEdit.setMaximumSize(QSize(50, 16777215))
-		self.lineEdit.setFont(font)
-		self.lineEdit.setCursorPosition(0)
-		self.lineEdit.setPlaceholderText(u"0.0")
-
-		self.horizontalLayout_3.addWidget(self.lineEdit)
-
-		self.label_6 = QLabel(self.gridLayoutWidget)
-		self.label_6.setObjectName(u"label_6")
-		sizePolicy.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
-		self.label_6.setSizePolicy(sizePolicy)
-		self.label_6.setText(u"MP")
-
-		self.horizontalLayout_3.addWidget(self.label_6)
-
-
-		self.gridLayout.addLayout(self.horizontalLayout_3, 3, 1, 1, 1)
-
-		self.label_3 = QLabel(self.gridLayoutWidget)
-		self.label_3.setObjectName(u"label_3")
-		sizePolicy.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
-		self.label_3.setSizePolicy(sizePolicy)
-		self.label_3.setFont(font2)
-		self.label_3.setText(u"Camera Name:")
-
-		self.gridLayout.addWidget(self.label_3, 0, 0, 1, 1)
-
-		self.label_2 = QLabel(self.gridLayoutWidget)
-		self.label_2.setObjectName(u"label_2")
-		sizePolicy.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
-		self.label_2.setSizePolicy(sizePolicy)
-		self.label_2.setFont(font1)
-		self.label_2.setText(u"Camera Sub-Type")
-
-		self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1)
-
-		self.comboBox_2 = QComboBox(self.gridLayoutWidget)
-		icon5 = QIcon()
-		icon5.addFile(u":/icons/icons8-camera-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox_2.addItem(icon5, u"Standard")
-		icon6 = QIcon()
-		icon6.addFile(u":/icons/icons8-slr-small-lens-96.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox_2.addItem(icon6, u"DSLR")
-		icon7 = QIcon()
-		icon7.addFile(u":/icons/icons8-camera-on-tripod-96.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox_2.addItem(icon7, u"Special")
-		icon8 = QIcon()
-		icon8.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox_2.addItem(icon8, u"Drone")
-		icon9 = QIcon()
-		icon9.addFile(u":/icons/icons8-touchscreen-96.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox_2.addItem(icon9, u"SmartPhone")
-		icon10 = QIcon()
-		icon10.addFile(u":/icons/icons8-gopro-96.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox_2.addItem(icon10, u"SportCam")
-		self.comboBox_2.setObjectName(u"comboBox_2")
-		sizePolicy2.setHeightForWidth(self.comboBox_2.sizePolicy().hasHeightForWidth())
-		self.comboBox_2.setSizePolicy(sizePolicy2)
-		self.comboBox_2.setFont(font1)
-		self.comboBox_2.setIconSize(QSize(24, 24))
-
-		self.gridLayout.addWidget(self.comboBox_2, 2, 1, 1, 1)
 
 		self.horizontalLayout_2 = QHBoxLayout()
 		self.horizontalLayout_2.setSpacing(5)
 		self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
 		self.lineEdit_3 = QLineEdit(self.gridLayoutWidget)
 		self.lineEdit_3.setObjectName(u"lineEdit_3")
+		sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+		sizePolicy1.setHorizontalStretch(0)
+		sizePolicy1.setVerticalStretch(0)
+		sizePolicy1.setHeightForWidth(self.lineEdit_3.sizePolicy().hasHeightForWidth())
+		self.lineEdit_3.setSizePolicy(sizePolicy1)
+		self.lineEdit_3.setMinimumSize(QSize(0, 28))
+		self.lineEdit_3.setMaximumSize(QSize(16777215, 28))
+		font1 = QFont()
+		font1.setFamily(u"Segoe UI")
+		font1.setPointSize(8)
+		self.lineEdit_3.setFont(font1)
 		self.lineEdit_3.setPlaceholderText(u"Choose calibration XML file...")
 
 		self.horizontalLayout_2.addWidget(self.lineEdit_3)
 
 		self.pushButton_3 = QPushButton(self.gridLayoutWidget)
 		self.pushButton_3.setObjectName(u"pushButton_3")
-		sizePolicy3 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Preferred)
-		sizePolicy3.setHorizontalStretch(0)
-		sizePolicy3.setVerticalStretch(0)
-		sizePolicy3.setHeightForWidth(self.pushButton_3.sizePolicy().hasHeightForWidth())
-		self.pushButton_3.setSizePolicy(sizePolicy3)
+		sizePolicy2 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+		sizePolicy2.setHorizontalStretch(0)
+		sizePolicy2.setVerticalStretch(0)
+		sizePolicy2.setHeightForWidth(self.pushButton_3.sizePolicy().hasHeightForWidth())
+		self.pushButton_3.setSizePolicy(sizePolicy2)
+		self.pushButton_3.setFont(font1)
+		self.pushButton_3.setToolTip(u"Choose XML calibration file...")
 		self.pushButton_3.setText(u"Browse")
-		icon9 = QIcon()
-		icon9.addFile(u":/icons/icons8-images-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.pushButton_3.setIcon(icon9)
+		icon7 = QIcon()
+		icon7.addFile(u":/icons/icons8-images-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton_3.setIcon(icon7)
 		self.pushButton_3.setIconSize(QSize(24, 24))
-		self.pushButton_3.setFlat(True)
 
 		self.horizontalLayout_2.addWidget(self.pushButton_3)
 
 
-		self.gridLayout.addLayout(self.horizontalLayout_2, 4, 1, 1, 1)
+		self.gridLayout.addLayout(self.horizontalLayout_2, 5, 1, 1, 1)
+
+		self.label_3 = QLabel(self.gridLayoutWidget)
+		self.label_3.setObjectName(u"label_3")
+		sizePolicy3 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+		sizePolicy3.setHorizontalStretch(0)
+		sizePolicy3.setVerticalStretch(0)
+		sizePolicy3.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
+		self.label_3.setSizePolicy(sizePolicy3)
+		font2 = QFont()
+		font2.setFamily(u"Segoe UI")
+		font2.setPointSize(10)
+		font2.setBold(True)
+		font2.setWeight(75)
+		self.label_3.setFont(font2)
+		self.label_3.setText(u"Camera Name")
+
+		self.gridLayout.addWidget(self.label_3, 0, 0, 1, 1)
 
 		self.horizontalLayout = QHBoxLayout()
 		self.horizontalLayout.setSpacing(5)
 		self.horizontalLayout.setObjectName(u"horizontalLayout")
 		self.pushButton = QPushButton(self.gridLayoutWidget)
 		self.pushButton.setObjectName(u"pushButton")
-		sizePolicy1.setHeightForWidth(self.pushButton.sizePolicy().hasHeightForWidth())
-		self.pushButton.setSizePolicy(sizePolicy1)
+		sizePolicy.setHeightForWidth(self.pushButton.sizePolicy().hasHeightForWidth())
+		self.pushButton.setSizePolicy(sizePolicy)
 		self.pushButton.setMinimumSize(QSize(0, 0))
-		self.pushButton.setMaximumSize(QSize(110, 30))
+		self.pushButton.setMaximumSize(QSize(90, 30))
 		self.pushButton.setText(u"Cancel")
-		icon10 = QIcon()
-		icon10.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.pushButton.setIcon(icon10)
+		icon8 = QIcon()
+		icon8.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton.setIcon(icon8)
 		self.pushButton.setIconSize(QSize(20, 20))
 
 		self.horizontalLayout.addWidget(self.pushButton)
 
 		self.pushButton_2 = QPushButton(self.gridLayoutWidget)
 		self.pushButton_2.setObjectName(u"pushButton_2")
-		sizePolicy1.setHeightForWidth(self.pushButton_2.sizePolicy().hasHeightForWidth())
-		self.pushButton_2.setSizePolicy(sizePolicy1)
+		sizePolicy.setHeightForWidth(self.pushButton_2.sizePolicy().hasHeightForWidth())
+		self.pushButton_2.setSizePolicy(sizePolicy)
 		self.pushButton_2.setMinimumSize(QSize(0, 0))
-		self.pushButton_2.setMaximumSize(QSize(110, 30))
+		self.pushButton_2.setMaximumSize(QSize(90, 30))
 		self.pushButton_2.setText(u"Save")
-		icon11 = QIcon()
-		icon11.addFile(u":/icons/icons8-save-all-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.pushButton_2.setIcon(icon11)
+		icon9 = QIcon()
+		icon9.addFile(u":/icons/icons8-save-all-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton_2.setIcon(icon9)
 		self.pushButton_2.setIconSize(QSize(20, 20))
 
 		self.horizontalLayout.addWidget(self.pushButton_2)
 
 
-		self.gridLayout.addLayout(self.horizontalLayout, 6, 0, 1, 2)
+		self.gridLayout.addLayout(self.horizontalLayout, 7, 0, 1, 2)
 
-		QWidget.setTabOrder(self.lineEdit_2, self.comboBox)
+		self.label = QLabel(self.gridLayoutWidget)
+		self.label.setObjectName(u"label")
+		sizePolicy3.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+		self.label.setSizePolicy(sizePolicy3)
+		self.label.setFont(font)
+		self.label.setText(u"Type")
+
+		self.gridLayout.addWidget(self.label, 2, 0, 1, 1)
+
+		self.label_4 = QLabel(self.gridLayoutWidget)
+		self.label_4.setObjectName(u"label_4")
+		sizePolicy3.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
+		self.label_4.setSizePolicy(sizePolicy3)
+		font3 = QFont()
+		font3.setFamily(u"Segoe UI")
+		font3.setPointSize(9)
+		self.label_4.setFont(font3)
+		self.label_4.setText(u"Resolution")
+
+		self.gridLayout.addWidget(self.label_4, 4, 0, 1, 1)
+
+		self.label_7 = QLabel(self.gridLayoutWidget)
+		self.label_7.setObjectName(u"label_7")
+		self.label_7.setFont(font3)
+		self.label_7.setText(u"Description")
+
+		self.gridLayout.addWidget(self.label_7, 1, 0, 1, 1)
+
+		self.line = QFrame(self.gridLayoutWidget)
+		self.line.setObjectName(u"line")
+		self.line.setFrameShape(QFrame.HLine)
+		self.line.setFrameShadow(QFrame.Sunken)
+
+		self.gridLayout.addWidget(self.line, 6, 0, 1, 2)
+
+		self.comboBox = QComboBox(self.gridLayoutWidget)
+		icon10 = QIcon()
+		icon10.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.comboBox.addItem(icon10, u"Frame")
+		icon11 = QIcon()
+		icon11.addFile(u":/icons/icons8-video-wall-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.comboBox.addItem(icon11, u"Fisheye")
+		icon12 = QIcon()
+		icon12.addFile(u":/icons/icons8-live-photos-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.comboBox.addItem(icon12, u"Spherical")
+		icon13 = QIcon()
+		icon13.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.comboBox.addItem(icon13, u"Cylindical")
+		icon14 = QIcon()
+		icon14.addFile(u":/icons/icons8-ios-application-placeholder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.comboBox.addItem(icon14, u"RPC")
+		self.comboBox.setObjectName(u"comboBox")
+		self.comboBox.setFont(font)
+		self.comboBox.setIconSize(QSize(24, 24))
+
+		self.gridLayout.addWidget(self.comboBox, 2, 1, 1, 1)
+
+		self.label_5 = QLabel(self.gridLayoutWidget)
+		self.label_5.setObjectName(u"label_5")
+		sizePolicy3.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
+		self.label_5.setSizePolicy(sizePolicy3)
+		self.label_5.setText(u"Callibration")
+
+		self.gridLayout.addWidget(self.label_5, 5, 0, 1, 1)
+
+		self.label_2 = QLabel(self.gridLayoutWidget)
+		self.label_2.setObjectName(u"label_2")
+		sizePolicy3.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
+		self.label_2.setSizePolicy(sizePolicy3)
+		self.label_2.setFont(font3)
+		self.label_2.setText(u"Sub-Type")
+
+		self.gridLayout.addWidget(self.label_2, 3, 0, 1, 1)
+
+		self.horizontalLayout_3 = QHBoxLayout()
+		self.horizontalLayout_3.setSpacing(5)
+		self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+		self.lineEdit = QLineEdit(self.gridLayoutWidget)
+		self.lineEdit.setObjectName(u"lineEdit")
+		self.lineEdit.setMaximumSize(QSize(50, 16777215))
+		self.lineEdit.setFont(font)
+		self.lineEdit.setText(u"0")
+
+		self.horizontalLayout_3.addWidget(self.lineEdit)
+
+		self.label_6 = QLabel(self.gridLayoutWidget)
+		self.label_6.setObjectName(u"label_6")
+		self.label_6.setText(u"MP")
+
+		self.horizontalLayout_3.addWidget(self.label_6)
+
+
+		self.gridLayout.addLayout(self.horizontalLayout_3, 4, 1, 1, 1)
+
+		self.lineEdit_4 = QLineEdit(self.gridLayoutWidget)
+		self.lineEdit_4.setObjectName(u"lineEdit_4")
+		self.lineEdit_4.setFont(font)
+		self.lineEdit_4.setPlaceholderText(u"Description of camera (optional)")
+
+		self.gridLayout.addWidget(self.lineEdit_4, 1, 1, 1, 1)
+
+		QWidget.setTabOrder(self.lineEdit_2, self.lineEdit_4)
+		QWidget.setTabOrder(self.lineEdit_4, self.comboBox)
 		QWidget.setTabOrder(self.comboBox, self.comboBox_2)
 		QWidget.setTabOrder(self.comboBox_2, self.lineEdit)
 		QWidget.setTabOrder(self.lineEdit, self.lineEdit_3)
@@ -921,10 +876,11 @@ class Ui_DialogAddEditCam(QtWidgets.QDialog):
 			self.setWindowTitle(u"Add New Camera")
 			self.pushButton_2.setText(u"Add Camera")
 		else:
-			selCamType = cam_config.get(camname, "Type")
-			selCamSubType = cam_config.get(camname, "SubType")
-			selCamRes = cam_config.get(camname, "Resolution")
-			selCamFile = cam_config.get(camname, "File")
+			selCamType = camCfg.get(camname, "Description")
+			selCamType = camCfg.get(camname, "Type")
+			selCamSubType = camCfg.get(camname, "SubType")
+			selCamRes = camCfg.get(camname, "Resolution")
+			selCamFile = camCfg.get(camname, "File")
 			cameraXmlSource = selCamFile
 			cameraXmlDest = selCamFile
 			self.lineEdit_2.setText(camname)
@@ -945,9 +901,9 @@ class Ui_DialogAddEditCam(QtWidgets.QDialog):
 	def selectCameraFile(self):
 		global cameraXmlSource
 		global cameraXmlDest
-		cameraXmlSource = Metashape.app.getOpenFileName(hint="Select Camera Calibration", dir=str(settings.folderProject), filter="Metashape Camera Calibration (*.xml)")
+		cameraXmlSource = Metashape.app.getOpenFileName(hint="Select Camera Calibration", dir=str(selected_data_folder), filter="Metashape Camera Calibration (*.xml)")
 		camXmlFile = os.path.basename(cameraXmlSource)
-		cameraXmlDest = script_path + camXmlFile
+		cameraXmlDest = camCfgPath + camXmlFile
 		self.lineEdit_3.setText(camXmlFile)
 
 
@@ -968,7 +924,7 @@ class Ui_DialogAddEditCam(QtWidgets.QDialog):
 				cameraFileAdd = "None"
 			saveCamConfig(camOrigName, cameraNameAdd, cameraTypeAdd, cameraSubTypeAdd, cameraResAdd, cameraFileAdd)
 			Metashape.app.messageBox("Camera settings saved.\n" + "Name: " + cameraNameAdd + "\nType: " + cameraTypeAdd + "\nFile: " + cameraFileAdd)
-			readIniConf()
+			camCfgLoad()
 			cameraXmlSource = ''
 			cameraXmlDest = ''
 			self.close()
@@ -995,7 +951,7 @@ class Ui_DialogAddEditCam(QtWidgets.QDialog):
 
 
 	def closeCameraDialog(self):
-		readIniConf()
+		camCfgLoad()
 		self.close()
 
 
@@ -1013,7 +969,7 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 	def __init__(self, parent):
 		QtWidgets.QDialog.__init__(self, parent)
 		self.setObjectName(u"dialogCamGui")
-		self.resize(340, 240)
+		self.resize(350, 300)
 		self.setWindowTitle(u"Cameras Editor")
 
 		layoutMain = QtWidgets.QVBoxLayout()  # creating layout
@@ -1041,7 +997,7 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		font1.setPointSize(10)
 		self.verticalLayoutWidget_2 = QWidget()
 		self.verticalLayoutWidget_2.setObjectName(u"verticalLayoutWidget_2")
-		self.verticalLayoutWidget_2.setGeometry(QRect(10, 10, 321, 151))
+		self.verticalLayoutWidget_2.setGeometry(QRect(10, 10, 331, 211))
 		self.vLayout_Main = QVBoxLayout(self.verticalLayoutWidget_2)
 		self.vLayout_Main.setObjectName(u"vLayout_Main")
 		self.vLayout_Main.setContentsMargins(0, 0, 0, 0)
@@ -1055,9 +1011,9 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		self.listWidgetCam.setDefaultDropAction(Qt.IgnoreAction)
 		self.listWidgetCam.setIconSize(QSize(20, 20))
 		for camera in cam_list:
-			cam_type = str(cam_config.get(camera, 'Type'))
-			cam_stype = str(cam_config.get(camera, "SubType"))
-			cam_res = str(cam_config.get(camera, 'Resolution'))
+			cam_type = str(camCfg.get(camera, 'Type'))
+			cam_stype = str(camCfg.get(camera, "SubType"))
+			cam_res = str(camCfg.get(camera, 'Resolution'))
 			self.listWidgetCamItem = QListWidgetItem(camera, self.listWidgetCam)
 			self.listWidgetCamItem.setText(str(camera))
 			if cam_stype == "Drone":
@@ -1154,9 +1110,9 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		# # for camera in cam_list:
 		# # 	self.listWidgetCam.addItem(camera)
 		for camera in cam_list:
-			cam_type = str(cam_config.get(camera, 'Type'))
-			cam_stype = str(cam_config.get(camera, "SubType"))
-			cam_res = str(cam_config.get(camera, 'Resolution'))
+			cam_type = str(camCfg.get(camera, 'Type'))
+			cam_stype = str(camCfg.get(camera, "SubType"))
+			cam_res = str(camCfg.get(camera, 'Resolution'))
 			self.listWidgetCamItem = QListWidgetItem(camera, self.listWidgetCam)
 			self.listWidgetCamItem.setText(str(camera))
 			if cam_stype == "Drone":
@@ -1238,20 +1194,19 @@ def camerasEditor():
 
 
 class Ui_dialogChooseCamera(QtWidgets.QDialog):
-	
 	def __init__(self, parent):
 		QtWidgets.QDialog.__init__(self, parent)
 		self.setObjectName(u"dialogChooseCamera")
-		self.resize(280, 280)
+		self.resize(320, 300)
 		self.setWindowTitle(u"Choose Camera")
 		sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 		self.setSizePolicy(sizePolicy)
-		self.setMinimumSize(QSize(280, 280))
-		self.setMaximumSize(QSize(280, 280))
+		self.setMinimumSize(QSize(320, 300))
+		self.setMaximumSize(QSize(320, 300))
 		self.setWindowTitle(u"Choose Camera")
 		self.verticalLayoutWidget = QWidget(self)
 		self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
-		self.verticalLayoutWidget.setGeometry(QRect(10, 10, 261, 261))
+		self.verticalLayoutWidget.setGeometry(QRect(10, 10, 301, 281))
 		self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
 		self.verticalLayout.setSpacing(5)
 		self.verticalLayout.setContentsMargins(10, 10, 10, 10)
@@ -1263,7 +1218,7 @@ class Ui_dialogChooseCamera(QtWidgets.QDialog):
 		font = QFont()
 		font.setPointSize(11)
 		self.label.setFont(font)
-		self.label.setText(u"Choose default camera")
+		self.label.setText(u"Select Camera")
 
 		self.verticalLayout.addWidget(self.label)
 
@@ -1285,8 +1240,8 @@ class Ui_dialogChooseCamera(QtWidgets.QDialog):
 		font1 = QFont()
 		font1.setPointSize(10)
 		for cam in cam_list:
-			icon_type = cam_config.get(cam, "Type")
-			icon_subtype = cam_config.get(cam, "SubType")
+			icon_type = camCfg.get(cam, "Type")
+			icon_subtype = camCfg.get(cam, "SubType")
 			self.listwidget = QListWidgetItem(self.listWidget)
 			self.listwidget.setText(cam)
 			if icon_subtype == "Smartphone":
@@ -1337,11 +1292,9 @@ class Ui_dialogChooseCamera(QtWidgets.QDialog):
 		
 		self.verticalLayout.addLayout(self.horizontalLayout_2)
 
-		self.listWidget.setCurrentRow(cam_list.index(settings.defaultCamera))
+		self.listWidget.setCurrentRow(cam_list.index(selected_camera))
 
-		__sortingEnabled = self.listWidget.isSortingEnabled()
 		self.listWidget.setSortingEnabled(False)
-		self.listWidget.setSortingEnabled(__sortingEnabled)
 
 		QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("clicked()"), self.selectCam)
 		QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("reject()"))
@@ -1652,7 +1605,7 @@ def newchunk_manual(name_prefix, name_suffix):
 	if projectOpened == True:
 		doc = Metashape.app.document
 		# netroot = path.dirname(netpath)
-		netroot = settings.foldeData
+		netroot = selected_data_folder
 		image_folder = Metashape.app.getExistingDirectory("Select data folder", netroot)
 		photos = find_files(image_folder, [".jpg", ".jpeg", ".png", ".tif", ".tiff"])
 		chunk = doc.addChunk()
@@ -1665,7 +1618,7 @@ def newchunk_manual(name_prefix, name_suffix):
 		Metashape.app.messageBox("New chunk added!\n\nChunk Name: " + chunk_name)
 		addcalib = Metashape.app.getBool("Confirm to import default camera calibration.\n\nDefault Camera: " + cam_name)
 		if addcalib == True:
-			readCameraSettings(settings.defaultCamera)
+			readCameraSettings(selected_camera)
 			useCameraSettings()
 			doc.save()
 		else:
@@ -1683,7 +1636,7 @@ def newchunk_manual(name_prefix, name_suffix):
 			Metashape.app.update()
 			doc.save()
 	else:
-		checkProject()
+		projectOpenedCheck()
 
 
 # Create chunk AUTO - automaticaly use predefined options
@@ -1692,7 +1645,7 @@ def newchunk_auto(name_prefix, name_suffix):
 	if projectOpened == True:
 		doc = Metashape.app.document
 		netpath = Metashape.app.document.path
-		netroot = settings.foldeData
+		netroot = selected_data_folder
 		image_folder = Metashape.app.getExistingDirectory("Select data folder", netroot)
 		photos = find_files(image_folder, [".jpg", ".jpeg", ".png", ".tif", ".tiff"])
 		chunk = doc.addChunk()
@@ -1706,7 +1659,7 @@ def newchunk_auto(name_prefix, name_suffix):
 		Metashape.app.update()
 		# Metashape.app.messageBox("Nalaganje slik...")
 		time.sleep(3)
-		readCameraSettings(settings.defaultCamera)
+		readCameraSettings(selected_camera)
 		useCameraSettings()
 		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
 		# path_ref = Metashape.app.getOpenFileName("Import marker coordinates", image_folder, "Text file (*.txt)")
@@ -1716,7 +1669,7 @@ def newchunk_auto(name_prefix, name_suffix):
 		Metashape.app.update()
 		doc.save(netpath)
 	else:
-		checkProject()
+		projectOpenedCheck()
 
 
 def prazno():
@@ -1805,7 +1758,7 @@ Metashape.app.addMenuItem(label=labelAddChQuick, func=diaAddChunkQuick, icon=ico
 
 
 labelset2 = "AutoFTG/Load Project Settings..."
-Metashape.app.addMenuItem(labelset2, checkProject, icon=iconloads)
+Metashape.app.addMenuItem(labelset2, projectOpenedCheck, icon=iconloads)
 
 labelsep3a = "AutoFTG/--------------------"
 Metashape.app.addMenuItem(labelsep3a, prazno)
@@ -1823,7 +1776,7 @@ labelsep1 = "AutoFTG/--------------------"
 Metashape.app.addMenuItem(labelsep1, prazno)
 
 label2 = "AutoFTG/Change Camera (Current Chunk)"
-Metashape.app.addMenuItem(label2, cam_calibrationChunk, icon=icon8)
+Metashape.app.addMenuItem(label2, selectCamChunk, icon=icon8)
 
 labelsep5 = "AutoFTG/--------------------"
 Metashape.app.addMenuItem(labelsep5, prazno)
@@ -1835,7 +1788,7 @@ labelsep55 = "AutoFTG/Settings/--------------------"
 Metashape.app.addMenuItem(labelsep55, prazno)
 
 label2aaa = "AutoFTG/Settings/Set Default Camera"
-Metashape.app.addMenuItem(label2aaa, cam_calibrationSettings, icon=icon35)
+Metashape.app.addMenuItem(label2aaa, selectCamDefault, icon=icon35)
 
 labelset4 = "AutoFTG/Settings/Edit Settings"
 Metashape.app.addMenuItem(labelset4, editSettings, icon=icon32)
