@@ -48,7 +48,7 @@ from configparser import ConfigParser
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.4.6-RC"
+app_ver = "2.4.7-RC"
 appsettings_ver = "5"
 app_author = "Author: Boris Bilc\n\n"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
@@ -100,6 +100,8 @@ projectOpened = False
 settingsRebuild = False
 selected_data_folder = ''
 selected_camera = "No Calibration - Frame (Default)"
+selected_pre = ''
+selected_suf = ''
 
 # Load main app settings
 appCfg = ConfigParser()
@@ -263,12 +265,12 @@ def projCfgLoad():
 
 	projCfg.read(projCfgFilePath)
 	checkSettingsVer()
-	selected_camera = projCfg.get('SETTINGS', 'default_camera')
 	selected_data_folder = projCfg.get('SETTINGS', 'folder_data')
+	selected_camera = projCfg.get('SETTINGS', 'default_camera')
 	readCameraSettings(selected_camera)
 	projectOpened = True
 	Metashape.app.messageBox("Project settings loaded.\n\n"
-			+ "Data Folder: " + str(proj_data) + "\n"
+			+ "Data Folder: " + str(selected_data_folder) + "\n"
 			+ "Default Camera: " + str(selected_camera))
 
 
@@ -384,7 +386,7 @@ def useCameraSettings():
 	
 	# Save document and show message with applied settings
 	doc.save()
-	Metashape.app.messageBox("Camera settings applied.\n\nCamera: " + cam_name + "\nType: " + cam_type + "\nFilename: " + cam_file)
+	# Metashape.app.messageBox("Camera settings applied.\n\nCamera: " + cam_name + "\nType: " + cam_type + "\nFilename: " + cam_file)
 	Metashape.app.update()
 
 
@@ -1564,9 +1566,9 @@ class Ui_DialogAddChunkQuick(QtWidgets.QDialog):
 		self.btnCancel.setObjectName(u"btnCancel")
 		sizePolicy3.setHeightForWidth(self.btnCancel.sizePolicy().hasHeightForWidth())
 		self.btnCancel.setSizePolicy(sizePolicy3)
-		self.btnCancel.setText(u"Cancel")
+		self.btnCancel.setText(u"Close")
 		icon6 = QIcon()
-		icon6.addFile(u":/icons/icons8-cancel-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon6.addFile(u":/icons/icons8-enter-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.btnCancel.setIcon(icon6)
 		self.btnCancel.setIconSize(QSize(20, 20))
 
@@ -1582,16 +1584,18 @@ class Ui_DialogAddChunkQuick(QtWidgets.QDialog):
 
 
 	def startProcess(self):
+		global selected_pre
+		global selected_suf
 		selected_menu = self.cbChunkSettings.currentText()
-		self.name_prefix = menuCfg.get(selected_menu, "chunk_name_prefix")
-		self.name_suffix = menuCfg.get(selected_menu, "chunk_name_suffix")
+		selected_pre = menuCfg.get(selected_menu, "chunk_name_prefix")
+		selected_suf = menuCfg.get(selected_menu, "chunk_name_suffix")
 
 		if self.checkBoxAutoProc.isChecked == False:
-			newchunk_manual(self.name_prefix, self.name_suffix)
+			self.accept()
+			newchunk_manual(selected_pre, selected_suf)
 		else:
-			newchunk_auto(self.name_prefix, self.name_suffix)
-		
-		self.close()
+			self.accept()
+			newchunk_auto(selected_pre, selected_suf)		
 
 
 def diaAddChunkQuick():
@@ -1663,7 +1667,7 @@ def newchunk_auto(name_prefix, name_suffix):
 		useCameraSettings()
 		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
 		# path_ref = Metashape.app.getOpenFileName("Import marker coordinates", image_folder, "Text file (*.txt)")
-		points_file = image_folder + "\\" + chunk_nameraw + ".txt"
+		points_file = image_folder + "/" + chunk_nameraw + ".txt"
 		chunk.importReference(points_file, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
 		chunk.updateTransform()
 		Metashape.app.update()
@@ -1729,9 +1733,44 @@ iconimg60 = ":/icons/stopnca_s.png"
 labelmenu= "About Auto FTG"
 Metashape.app.addMenuItem(labelmenu, appAbout, icon=icon_app)
 
-labelAddChQuick = "Add New Chunk"
+labelAddChQuick = "AutoFTG/Add New Chunk"
 Metashape.app.addMenuItem(label=labelAddChQuick, func=diaAddChunkQuick, icon=iconadd)
 
+labelset2 = "AutoFTG/Load Project Settings"
+Metashape.app.addMenuItem(labelset2, projectOpenedCheck, icon=icon40)
+
+labelsep3a = "AutoFTG/--------------------"
+Metashape.app.addMenuItem(labelsep3a, prazno)
+
+label3a = "AutoFTG/Detect markers + Import coordinates"
+Metashape.app.addMenuItem(label3a, marker_targets, icon=icon38)
+
+label4 = "AutoFTG/Copy Region (Bounding Box)"
+Metashape.app.addMenuItem(label4, copy_bbox, icon=icon15)
+
+labelsep1 = "AutoFTG/--------------------"
+Metashape.app.addMenuItem(labelsep1, prazno)
+
+label2 = "AutoFTG/Change Camera (Current Chunk)"
+Metashape.app.addMenuItem(label2, selectCamChunk, icon=icon8)
+
+label2aaa = "AutoFTG/Set Default Camera"
+Metashape.app.addMenuItem(label2aaa, selectCamDefault, icon=icon35)
+
+label2cccc = "AutoFTG/Cameras Editor"
+Metashape.app.addMenuItem(label2cccc, camerasEditor, icon=icon9)
+
+labelsep55 = "AutoFTG/--------------------"
+Metashape.app.addMenuItem(labelsep55, prazno)
+
+labelset4 = "AutoFTG/Edit Settings"
+Metashape.app.addMenuItem(labelset4, editSettings, icon=icon32)
+
+labelAddChQuicki = "Add New Chunk"
+Metashape.app.addMenuItem(label=labelAddChQuicki, func=diaAddChunkQuick, icon=iconadd)
+
+labelset2i = "Load Project Settings"
+Metashape.app.addMenuItem(labelset2i, projectOpenedCheck, icon=icon40)
 
 # labelsep3 = "AutoFTG/New Chunk (2TIR)/--------------------"
 # Metashape.app.addMenuItem(labelsep3, prazno)
@@ -1756,42 +1795,11 @@ Metashape.app.addMenuItem(label=labelAddChQuick, func=diaAddChunkQuick, icon=ico
 
 # changeChunkAppend(setting_name, append_type)
 
-
-labelset2 = "AutoFTG/Load Project Settings..."
-Metashape.app.addMenuItem(labelset2, projectOpenedCheck, icon=iconloads)
-
-labelsep3a = "AutoFTG/--------------------"
-Metashape.app.addMenuItem(labelsep3a, prazno)
-
-label3a = "AutoFTG/Detect markers + Import coordinates"
-Metashape.app.addMenuItem(label3a, marker_targets, icon=icon38)
-
-label4 = "AutoFTG/Copy Region (Bounding Box)"
-Metashape.app.addMenuItem(label4, copy_bbox, icon=icon15)
-
 # labelsep2 = "Cameras"
 # Metashape.app.addMenuSeparator(labelsep2)
 
-labelsep1 = "AutoFTG/--------------------"
-Metashape.app.addMenuItem(labelsep1, prazno)
-
-label2 = "AutoFTG/Change Camera (Current Chunk)"
-Metashape.app.addMenuItem(label2, selectCamChunk, icon=icon8)
-
-labelsep5 = "AutoFTG/--------------------"
-Metashape.app.addMenuItem(labelsep5, prazno)
-
-label2cccc = "AutoFTG/Settings/Cameras Editor"
-Metashape.app.addMenuItem(label2cccc, camerasEditor, icon=icon9)
-
-labelsep55 = "AutoFTG/Settings/--------------------"
-Metashape.app.addMenuItem(labelsep55, prazno)
-
-label2aaa = "AutoFTG/Settings/Set Default Camera"
-Metashape.app.addMenuItem(label2aaa, selectCamDefault, icon=icon35)
-
-labelset4 = "AutoFTG/Settings/Edit Settings"
-Metashape.app.addMenuItem(labelset4, editSettings, icon=icon32)
+# labelsep5 = "AutoFTG/--------------------"
+# Metashape.app.addMenuItem(labelsep5, prazno)
 
 # Initialize setting for AutoFTG
 initAutoFtg()

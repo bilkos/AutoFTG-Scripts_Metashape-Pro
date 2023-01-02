@@ -170,7 +170,7 @@
       <item>
        <widget class="QPushButton" name="btnCreate">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -207,17 +207,17 @@
       <item>
        <widget class="QPushButton" name="btnCancel">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="text">
-         <string notr="true">Cancel</string>
+         <string notr="true">Close</string>
         </property>
         <property name="icon">
          <iconset resource="../qtresources.qrc">
-          <normaloff>:/icons/icons8-cancel-50.png</normaloff>:/icons/icons8-cancel-50.png</iconset>
+          <normaloff>:/icons/icons8-enter-50.png</normaloff>:/icons/icons8-enter-50.png</iconset>
         </property>
         <property name="iconSize">
          <size>
