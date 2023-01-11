@@ -76,32 +76,33 @@ def appAbout():
 
 
 
-# Class for program and project settings initialization
-class Settings(EgStore):
-	def __init__(self, filename):  # filename is required
-		self.settingsVersion = appsettings_ver
-		self.folderProject = ''
-		self.foldeData = ''
-		self.defaultCamera = 'NULL - Frame (Default)'
-		self.chunkNameKlPre = ''
-		self.chunkNameKlSuf = ''
-		self.chunkNameStIzPre = ''
-		self.chunkNameStBbPre = ''
-		self.chunkNameStIzSuf = '_IZ'
-		self.chunkNameStBbSuf = '_ST_BB'
-		self.filename = filename  # this is required - init settings
-		self.restore()
-
-
-# settingsFilename = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\AutoFTG_settings.txt').replace("\\", "/")
-# settingsFilenameExists = os.path.isfile(settingsFilename)	# Check if settings file exists
-# settings = Settings(settingsFilename)	# Init settings
+# # Class for program and project settings initialization
+# class Settings(EgStore):
+# 	def __init__(self, filename):  # filename is required
+# 		self.settingsVersion = appsettings_ver
+# 		self.folderProject = ''
+# 		self.foldeData = ''
+# 		self.defaultCamera = 'NULL - Frame (Default)'
+# 		self.chunkNameKlPre = ''
+# 		self.chunkNameKlSuf = ''
+# 		self.chunkNameStIzPre = ''
+# 		self.chunkNameStBbPre = ''
+# 		self.chunkNameStIzSuf = '_IZ'
+# 		self.chunkNameStBbSuf = '_ST_BB'
+# 		self.filename = filename  # this is required - init settings
+# 		self.restore()
+# 
+# 
+# # settingsFilename = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\AutoFTG_settings.txt').replace("\\", "/")
+# # settingsFilenameExists = os.path.isfile(settingsFilename)	# Check if settings file exists
+# # settings = Settings(settingsFilename)	# Init settings
 projectOpened = False
 settingsRebuild = False
 selected_data_folder = ''
 selected_camera = "No Calibration - Frame (Default)"
 selected_pre = ''
 selected_suf = ''
+selected_menu = ''
 
 # Load main app settings
 appCfg = ConfigParser()
@@ -151,6 +152,7 @@ def menuCfgLoad():
 		menuCfg.set(menu_section_m, "menu_icon", ":/icons/icons8-add-50.png")
 		menuCfg.set(menu_section_m, "chunk_name_prefix", "")
 		menuCfg.set(menu_section_m, "chunk_name_suffix", "")
+		menuCfg.set(menu_section_m, "work_folder", "")
 	
 		with open(menuCfgFilePath, 'w') as menuconfig:
 			menuCfg.write(menuconfig)
@@ -1589,13 +1591,14 @@ class Ui_DialogAddChunkQuick(QtWidgets.QDialog):
 		selected_menu = self.cbChunkSettings.currentText()
 		selected_pre = menuCfg.get(selected_menu, "chunk_name_prefix")
 		selected_suf = menuCfg.get(selected_menu, "chunk_name_suffix")
+		selected_workfolder = menuCfg.get(selected_menu, "work_folder")
 
 		if self.checkBoxAutoProc.isChecked == False:
 			self.accept()
-			newchunk_manual(selected_pre, selected_suf)
+			newchunk_manual(selected_pre, selected_suf, selected_workfolder)
 		else:
 			self.accept()
-			newchunk_auto(selected_pre, selected_suf)		
+			newchunk_auto(selected_pre, selected_suf, selected_workfolder)		
 
 
 def diaAddChunkQuick():
@@ -1604,12 +1607,12 @@ def diaAddChunkQuick():
 	dia = Ui_DialogAddChunkQuick(parent)
 
 
-def newchunk_manual(name_prefix, name_suffix):
+def newchunk_manual(name_prefix, name_suffix, work_folder):
 	global projectOpened
 	if projectOpened == True:
 		doc = Metashape.app.document
 		# netroot = path.dirname(netpath)
-		netroot = selected_data_folder
+		netroot = work_folder
 		image_folder = Metashape.app.getExistingDirectory("Select data folder", netroot)
 		photos = find_files(image_folder, [".jpg", ".jpeg", ".png", ".tif", ".tiff"])
 		chunk = doc.addChunk()
@@ -1644,12 +1647,12 @@ def newchunk_manual(name_prefix, name_suffix):
 
 
 # Create chunk AUTO - automaticaly use predefined options
-def newchunk_auto(name_prefix, name_suffix):
+def newchunk_auto(name_prefix, name_suffix, work_folder):
 	global projectOpened
 	if projectOpened == True:
 		doc = Metashape.app.document
 		netpath = Metashape.app.document.path
-		netroot = selected_data_folder
+		netroot = work_folder
 		image_folder = Metashape.app.getExistingDirectory("Select data folder", netroot)
 		photos = find_files(image_folder, [".jpg", ".jpeg", ".png", ".tif", ".tiff"])
 		chunk = doc.addChunk()
@@ -1662,7 +1665,7 @@ def newchunk_auto(name_prefix, name_suffix):
 		doc.save(netpath)
 		Metashape.app.update()
 		# Metashape.app.messageBox("Nalaganje slik...")
-		time.sleep(3)
+		# time.sleep(3)
 		readCameraSettings(selected_camera)
 		useCameraSettings()
 		chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
@@ -1670,8 +1673,8 @@ def newchunk_auto(name_prefix, name_suffix):
 		points_file = image_folder + "/" + chunk_nameraw + ".txt"
 		chunk.importReference(points_file, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
 		chunk.updateTransform()
-		Metashape.app.update()
 		doc.save(netpath)
+		Metashape.app.update()
 	else:
 		projectOpenedCheck()
 
