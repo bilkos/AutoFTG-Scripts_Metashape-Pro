@@ -1,5 +1,15 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/template_stopnica-rdeca.png</file>
+    <file>icons/template_kalota-rdeca.png</file>
+    <file>icons/template_stopnica-oranzna.png</file>
+    <file>icons/template_kalota-oranzna.png</file>
+    <file>icons/template_stopnica-vijola.png</file>
+    <file>icons/template_kalota-vijola.png</file>
+    <file>icons/template_stopnica-zelena.png</file>
+    <file>icons/template_kalota-zelena.png</file>
+    <file>icons/template_stopnica-modra.png</file>
+    <file>icons/template_kalota-modra.png</file>
     <file>icons/icons8-xbox-cross-96.png</file>
     <file>icons/icons8-camera-automation-96.png</file>
     <file>icons/icons8-reset-96.png</file>

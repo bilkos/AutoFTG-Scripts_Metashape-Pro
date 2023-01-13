@@ -30,25 +30,20 @@ import sys
 import time
 import shutil
 from os import path
-import textwrap
 
 import Metashape
 
-from AutoFTG import qtresources
-
-import easygui
-from easygui import EgStore
-
 from PySide2 import QtCore, QtGui, QtWidgets
-from PySide2.QtCore import *  # type: ignore
-from PySide2.QtGui import *  # type: ignore
-from PySide2.QtWidgets import *  # type: ignore
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
 from configparser import ConfigParser
 
+from AutoFTG import qtresources
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.4.7-RC"
+app_ver = "2.5.0"
 appsettings_ver = "5"
 app_author = "Author: Boris Bilc\n\n"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
@@ -64,38 +59,6 @@ if found_major_version != compatible_major_version:
 	raise Exception("Incompatible Metashape version: {} != {}".format(found_major_version, compatible_major_version))
 
 
-# Create About message dialog
-def appAbout():
-	app_aboutmsg = app_name + "\n\nVersion: " + app_ver + "\n" + app_author + "\n" + app_about + "\n\n" + app_repo + "\n\nReferences:\n" + ref_repo + "\n\n" + ref_scripts + "\n"
-	message_box = QMessageBox()
-	message_box.setMinimumSize(600,500)
-	message_box.setTextFormat(Qt.PlainText)
-	message_box.setText(app_aboutmsg)
-
-	message_box.exec_()
-
-
-
-# Class for program and project settings initialization
-class Settings(EgStore):
-	def __init__(self, filename):  # filename is required
-		self.settingsVersion = appsettings_ver
-		self.folderProject = ''
-		self.foldeData = ''
-		self.defaultCamera = 'NULL - Frame (Default)'
-		self.chunkNameKlPre = ''
-		self.chunkNameKlSuf = ''
-		self.chunkNameStIzPre = ''
-		self.chunkNameStBbPre = ''
-		self.chunkNameStIzSuf = '_IZ'
-		self.chunkNameStBbSuf = '_ST_BB'
-		self.filename = filename  # this is required - init settings
-		self.restore()
-
-
-# settingsFilename = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\AutoFTG\AutoFTG_settings.txt').replace("\\", "/")
-# settingsFilenameExists = os.path.isfile(settingsFilename)	# Check if settings file exists
-# settings = Settings(settingsFilename)	# Init settings
 projectOpened = False
 settingsRebuild = False
 selected_data_folder = ''
@@ -111,28 +74,6 @@ appCfgFilePath =  appCfgPath + appCfgFile
 appCfgFileExists = os.path.isfile(appCfgFilePath)	# Check if settings file exists
 
 
-def appCfgLoad():
-	global selected_data_folder
-	global selected_camera
-	if appCfgFileExists == False:
-		print("\nSettings initialization...\nPlease choose data folder, and default camera.")
-		Metashape.app.messageBox("Settings initialization...\nPlease choose data folder, and default camera.")
-		foldeData = str(Metashape.app.getExistingDirectory("Working data folder"))
-		#selectCamDefault()
-		diaSelectCamera()
-		appCfg.add_section('SETTINGS')
-		appCfg.set('SETTINGS', 'settings_version', appsettings_ver)
-		appCfg.set('SETTINGS', 'folder_data', foldeData)
-		appCfg.set('SETTINGS', 'default_camera', selected_camera)
-
-		# Writing our configuration file to 'example.cfg'
-		with open(appCfgFilePath, 'w') as configfile:
-			appCfg.write(configfile)
-
-	appCfg.read(appCfgFilePath)
-	selected_data_folder = appCfg.get('SETTINGS', 'folder_data')
-	selected_camera = appCfg.get('SETTINGS', 'default_camera')
-
 # Load custom menu settings
 menuCfg = ConfigParser()
 menuCfgFile = "settings_newchunk.ini"
@@ -140,24 +81,6 @@ menuCfgPath = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\
 menuCfgFilePath =  menuCfgPath + "/" + menuCfgFile
 menuCfgFilePathExists = os.path.isfile(menuCfgFilePath)
 chunk_sections = []
-
-
-def menuCfgLoad():
-	global chunk_sections
-	if menuCfgFilePathExists == False:
-		menu_section_m = "GENERAL"
-		menuCfg.add_section(menu_section_m)
-		menuCfg.set(menu_section_m, "menu_category", "")
-		menuCfg.set(menu_section_m, "menu_icon", ":/icons/icons8-add-50.png")
-		menuCfg.set(menu_section_m, "chunk_name_prefix", "")
-		menuCfg.set(menu_section_m, "chunk_name_suffix", "")
-	
-		with open(menuCfgFilePath, 'w') as menuconfig:
-			menuCfg.write(menuconfig)
-
-	menuCfg.read(menuCfgFilePath)
-	chunk_sections = menuCfg.sections()
-	print("Custom chunk settings loaded...\nFile: " + menuCfgFile)
 
 
 # Init configparser for camera settings. Set empty camera variables for global use.
@@ -177,6 +100,70 @@ camCfgPath = os.path.expanduser('~\AppData\Local\Agisoft\Metashape Pro\scripts\A
 camCfgFilePath =  camCfgPath + camCfgFile
 camCfgFilePathExists = os.path.isfile(camCfgFilePath)
 cam_list = []
+
+
+# Check settings version
+def checkSettingsVer():
+	global settingsRebuild
+	if appCfg.get("SETTINGS", "settings_version") != appsettings_ver:
+		settingsReset(True)
+		
+
+# Routine to check if project exists before initializing settings
+def projectOpenedCheck():
+	global projectOpened
+	doc = Metashape.app.document
+	#fileDoc = str(doc).replace("<Document '", "").replace("'>", "")
+
+	if doc == "<Document ''>" or doc == None:
+		projectOpened = False
+		Metashape.app.messageBox("Empty project?\n\nSave project first, or open an existing project. (*.psx).")
+		appCfgLoad()
+	else:
+		projectOpened = True
+		projCfgLoad()
+
+
+def appCfgLoad():
+	global selected_data_folder
+	global selected_camera
+	appCfgFileExists = os.path.isfile(appCfgFilePath)	# Check if settings file exists
+	if appCfgFileExists == False:
+		print("\nSettings initialization...\nPlease choose data folder, and default camera.")
+		Metashape.app.messageBox("Settings initialization...\nPlease choose data folder, and default camera.")
+		foldeData = str(Metashape.app.getExistingDirectory("Working data folder"))
+		#selectCamDefault()
+		diaSelectCamera()
+		appCfg.add_section('SETTINGS')
+		appCfg.set('SETTINGS', 'settings_version', appsettings_ver)
+		appCfg.set('SETTINGS', 'folder_data', foldeData)
+		appCfg.set('SETTINGS', 'default_camera', selected_camera)
+
+		# Writing our configuration file to 'example.cfg'
+		with open(appCfgFilePath, 'w') as configfile:
+			appCfg.write(configfile)
+
+	appCfg.read(appCfgFilePath)
+	selected_data_folder = appCfg.get('SETTINGS', 'folder_data')
+	selected_camera = appCfg.get('SETTINGS', 'default_camera')
+
+
+def menuCfgLoad():
+	global chunk_sections
+	if menuCfgFilePathExists == False:
+		menu_section_m = "GENERAL"
+		menuCfg.add_section(menu_section_m)
+		menuCfg.set(menu_section_m, "menu_category", "")
+		menuCfg.set(menu_section_m, "menu_icon", ":/icons/icons8-add-50.png")
+		menuCfg.set(menu_section_m, "chunk_name_prefix", "")
+		menuCfg.set(menu_section_m, "chunk_name_suffix", "")
+	
+		with open(menuCfgFilePath, 'w') as menuconfig:
+			menuCfg.write(menuconfig)
+
+	menuCfg.read(menuCfgFilePath)
+	chunk_sections = menuCfg.sections()
+	print("Custom chunk settings loaded...\nFile: " + menuCfgFile)
 
 
 def camCfgLoad():
@@ -216,20 +203,6 @@ def camCfgLoad():
 	camCfg.read(camCfgFilePath)
 	cam_list = camCfg.sections()
 	print("Camera settings loaded...\nFile: " + camCfgFile)
-
-
-# Main settings file initialization (used when no project is loaded)
-def initAutoFtg():
-	global projectOpened
-	projectOpened = False
-	camCfgLoad()
-	appCfgLoad()
-	checkSettingsVer()
-	menuCfgLoad()
-	projectOpenedCheck()
-	print("\n\nAutoFTG Settings loaded...\nSettings version: " + str(appCfg.get('SETTINGS', 'settings_version')))
-	print("Data Folder: " + str(appCfg.get('SETTINGS', 'folder_data')))
-	print("Default Camera: " + str(appCfg.get('SETTINGS', 'default_camera')))
 
 
 # Project settings initialization (used when .psx project is loaded)
@@ -285,53 +258,7 @@ def settingsReset(settingsRebuild):
 		else:
 			os.remove(appCfgFilePath)
 			settingsRebuild = False
-			initAutoFtg()
-
-
-# Check settings version
-def checkSettingsVer():
-	global settingsRebuild
-	if appCfg.get("SETTINGS", "settings_version") != appsettings_ver:
-		settingsReset(True)
-		
-
-# Routine to check if project exists before initializing settings
-def projectOpenedCheck():
-	global projectOpened
-	doc = Metashape.app.document
-	#fileDoc = str(doc).replace("<Document '", "").replace("'>", "")
-
-	if doc == '' or doc == None:
-		projectOpened = False
-		Metashape.app.messageBox("Empty project?\n\nSave project first, or open an existing project. (*.psx).")
-		appCfgLoad()
-	else:
-		projectOpened = True
-		projCfgLoad()
-
-
-# # Change project data folder
-# def dataFolderChange():
-# 	settings.foldeData = Metashape.app.getExistingDirectory("Working data folder")
-# 	settings.store()
-# 	print("Working Folder: " + str(settings.foldeData))
-
-
-# # Create new project routine - used when no project is present when user tries to add new chunk
-# def novProjekt():
-# 	global projectOpened
-# 	doc = Metashape.app.document
-# 	docPath = Metashape.app.getSaveFileName("Save new project", "",  "Metashape Project (*.psx)")
-# 	try:
-# 		doc.save(docPath)
-# 		Metashape.app.messageBox("New project saved.\n")
-# 		projCfgLoad()
-# 		projectOpened = True
-# 	except RuntimeError:
-# 		Metashape.app.messageBox("Process canceled...")
-# 		projectOpened = False
-# 	
-# 	Metashape.app.update()
+			appCfgLoad()
 
 
 # Read camera settings from INI config file
@@ -469,6 +396,30 @@ def removeCamConfig(camname):
 		Metashape.app.messageBox(cam_secmsg)
 	else:
 		Metashape.app.messageBox("Error! No camera named (" + str(camname) + ") was found.\n\nDid you manualy edit comaera configuration?")
+
+
+# # Change project data folder
+# def dataFolderChange():
+# 	settings.foldeData = Metashape.app.getExistingDirectory("Working data folder")
+# 	settings.store()
+# 	print("Working Folder: " + str(settings.foldeData))
+
+
+# # Create new project routine - used when no project is present when user tries to add new chunk
+# def novProjekt():
+# 	global projectOpened
+# 	doc = Metashape.app.document
+# 	docPath = Metashape.app.getSaveFileName("Save new project", "",  "Metashape Project (*.psx)")
+# 	try:
+# 		doc.save(docPath)
+# 		Metashape.app.messageBox("New project saved.\n")
+# 		projCfgLoad()
+# 		projectOpened = True
+# 	except RuntimeError:
+# 		Metashape.app.messageBox("Process canceled...")
+# 		projectOpened = False
+# 	
+# 	Metashape.app.update()
 
 
 # Class for settings editing UI
@@ -1246,7 +1197,7 @@ class Ui_dialogChooseCamera(QtWidgets.QDialog):
 			icon_subtype = camCfg.get(cam, "SubType")
 			self.listwidget = QListWidgetItem(self.listWidget)
 			self.listwidget.setText(cam)
-			if icon_subtype == "Smartphone":
+			if icon_subtype == "SmartPhone":
 				self.listwidget.setIcon(icon4)
 			elif icon_subtype == "Drone":
 				self.listwidget.setIcon(icon5)
@@ -1604,6 +1555,685 @@ def diaAddChunkQuick():
 	dia = Ui_DialogAddChunkQuick(parent)
 
 
+class Ui_DialogBatchChunk(QtWidgets.QDialog):
+	def __init__(self, parent):
+		QtWidgets.QDialog.__init__(self, parent)
+		self.sel_items = []
+		self.setObjectName(u"DialogBatchChunk")
+		self.setWindowTitle(u"Batch Chunk Creator")
+		self.resize(680, 520)
+		self.verticalLayoutWidget = QWidget(self)
+		self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
+		self.verticalLayoutWidget.setGeometry(QRect(10, 0, 661, 511))
+		self.verticalLayout_2 = QVBoxLayout(self.verticalLayoutWidget)
+		self.verticalLayout_2.setSpacing(5)
+		self.verticalLayout_2.setContentsMargins(10, 10, 10, 10)
+		self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+		self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+		self.horizontalLayout_9 = QHBoxLayout()
+		self.horizontalLayout_9.setSpacing(5)
+		self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+		self.label_15 = QLabel(self.verticalLayoutWidget)
+		self.label_15.setObjectName(u"label_15")
+		sizePolicy = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Preferred)
+		sizePolicy.setHorizontalStretch(0)
+		sizePolicy.setVerticalStretch(0)
+		sizePolicy.setHeightForWidth(self.label_15.sizePolicy().hasHeightForWidth())
+		self.label_15.setSizePolicy(sizePolicy)
+		self.label_15.setMaximumSize(QSize(32, 32))
+		self.label_15.setPixmap(QPixmap(u":/icons/icons8-apps-tab-50.png"))
+		self.label_15.setScaledContents(True)
+
+		self.horizontalLayout_9.addWidget(self.label_15)
+
+		self.label_3 = QLabel(self.verticalLayoutWidget)
+		self.label_3.setObjectName(u"label_3")
+		sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+		sizePolicy1.setHorizontalStretch(0)
+		sizePolicy1.setVerticalStretch(0)
+		sizePolicy1.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
+		self.label_3.setSizePolicy(sizePolicy1)
+		font = QFont()
+		font.setFamily(u"Segoe UI")
+		font.setPointSize(16)
+		self.label_3.setFont(font)
+		self.label_3.setText(u"Batch Chunk Creator")
+
+		self.horizontalLayout_9.addWidget(self.label_3)
+
+
+		self.verticalLayout_2.addLayout(self.horizontalLayout_9)
+
+		self.line_4 = QFrame(self.verticalLayoutWidget)
+		self.line_4.setObjectName(u"line_4")
+		self.line_4.setFrameShape(QFrame.HLine)
+		self.line_4.setFrameShadow(QFrame.Sunken)
+
+		self.verticalLayout_2.addWidget(self.line_4)
+
+		self.gridLayout = QGridLayout()
+		self.gridLayout.setSpacing(5)
+		self.gridLayout.setObjectName(u"gridLayout")
+		self.horizontalLayout_2 = QHBoxLayout()
+		self.horizontalLayout_2.setSpacing(5)
+		self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+		self.label_2 = QLabel(self.verticalLayoutWidget)
+		self.label_2.setObjectName(u"label_2")
+		sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+		sizePolicy2.setHorizontalStretch(0)
+		sizePolicy2.setVerticalStretch(0)
+		sizePolicy2.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
+		self.label_2.setSizePolicy(sizePolicy2)
+		font1 = QFont()
+		font1.setFamily(u"Segoe UI")
+		font1.setPointSize(11)
+		font1.setBold(True)
+		font1.setWeight(75)
+		self.label_2.setFont(font1)
+		self.label_2.setText(u"Data location")
+
+		self.horizontalLayout_2.addWidget(self.label_2)
+
+		self.checkBox_4 = QCheckBox(self.verticalLayoutWidget)
+		self.checkBox_4.setObjectName(u"checkBox_4")
+		sizePolicy3 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
+		sizePolicy3.setHorizontalStretch(0)
+		sizePolicy3.setVerticalStretch(0)
+		sizePolicy3.setHeightForWidth(self.checkBox_4.sizePolicy().hasHeightForWidth())
+		self.checkBox_4.setSizePolicy(sizePolicy3)
+#if QT_CONFIG(statustip)
+		self.checkBox_4.setToolTip(u"Disable to set custom location for data. Enable to use project default data location settings.")
+#endif // QT_CONFIG(statustip)
+		self.checkBox_4.setText(u"Use Project Data Location")
+		icon = QIcon()
+		icon.addFile(u":/icons/icons8-copy-to-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.checkBox_4.setIcon(icon)
+		self.checkBox_4.setIconSize(QSize(20, 20))
+		self.checkBox_4.setChecked(True)
+
+		self.horizontalLayout_2.addWidget(self.checkBox_4)
+
+
+		self.gridLayout.addLayout(self.horizontalLayout_2, 0, 0, 1, 1)
+
+		self.gridLayout_3 = QGridLayout()
+		self.gridLayout_3.setSpacing(5)
+		self.gridLayout_3.setObjectName(u"gridLayout_3")
+		self.horizontalLayout_3 = QHBoxLayout()
+		self.horizontalLayout_3.setSpacing(5)
+		self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+		self.label_10 = QLabel(self.verticalLayoutWidget)
+		self.label_10.setObjectName(u"label_10")
+		sizePolicy4 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+		sizePolicy4.setHorizontalStretch(0)
+		sizePolicy4.setVerticalStretch(0)
+		sizePolicy4.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
+		self.label_10.setSizePolicy(sizePolicy4)
+		font2 = QFont()
+		font2.setFamily(u"Segoe UI")
+		font2.setPointSize(9)
+		font2.setBold(True)
+		font2.setWeight(75)
+		self.label_10.setFont(font2)
+		self.label_10.setText(u"Suffix:")
+
+		self.horizontalLayout_3.addWidget(self.label_10)
+
+		self.label_7 = QLabel(self.verticalLayoutWidget)
+		self.label_7.setObjectName(u"label_7")
+		sizePolicy2.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
+		self.label_7.setSizePolicy(sizePolicy2)
+		self.label_7.setFrameShape(QFrame.StyledPanel)
+		self.label_7.setText(u"Suffix...")
+
+		self.horizontalLayout_3.addWidget(self.label_7)
+
+
+		self.gridLayout_3.addLayout(self.horizontalLayout_3, 3, 0, 1, 1)
+
+		self.horizontalLayout_6 = QHBoxLayout()
+		self.horizontalLayout_6.setSpacing(5)
+		self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+		self.label_9 = QLabel(self.verticalLayoutWidget)
+		self.label_9.setObjectName(u"label_9")
+		sizePolicy4.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
+		self.label_9.setSizePolicy(sizePolicy4)
+		self.label_9.setFont(font2)
+		self.label_9.setFrameShape(QFrame.NoFrame)
+		self.label_9.setText(u"Type:	  ")
+
+		self.horizontalLayout_6.addWidget(self.label_9)
+
+		self.label_12 = QLabel(self.verticalLayoutWidget)
+		self.label_12.setObjectName(u"label_12")
+		sizePolicy2.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
+		self.label_12.setSizePolicy(sizePolicy2)
+		self.label_12.setFrameShape(QFrame.StyledPanel)
+		self.label_12.setText(u"TextLabel")
+
+		self.horizontalLayout_6.addWidget(self.label_12)
+
+
+		self.gridLayout_3.addLayout(self.horizontalLayout_6, 7, 0, 1, 1)
+
+		self.horizontalLayout_5 = QHBoxLayout()
+		self.horizontalLayout_5.setSpacing(5)
+		self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+		self.label_11 = QLabel(self.verticalLayoutWidget)
+		self.label_11.setObjectName(u"label_11")
+		sizePolicy4.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
+		self.label_11.setSizePolicy(sizePolicy4)
+		self.label_11.setFont(font2)
+		self.label_11.setText(u"Prefix:")
+
+		self.horizontalLayout_5.addWidget(self.label_11)
+
+		self.label_6 = QLabel(self.verticalLayoutWidget)
+		self.label_6.setObjectName(u"label_6")
+		sizePolicy2.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
+		self.label_6.setSizePolicy(sizePolicy2)
+		self.label_6.setFrameShape(QFrame.StyledPanel)
+		
+		self.horizontalLayout_5.addWidget(self.label_6)
+
+
+		self.gridLayout_3.addLayout(self.horizontalLayout_5, 2, 0, 1, 1)
+
+		self.comboBox_2 = QComboBox(self.verticalLayoutWidget)
+		self.comboBox_2.setObjectName(u"comboBox_2")
+		
+		icon = QIcon()
+		icon.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon1 = QIcon()
+		icon1.addFile(u":/icons/icons8-panorama-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon2 = QIcon()
+		icon2.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon3 = QIcon()
+		icon3.addFile(u":/icons/icons8-video-stabilization-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon4 = QIcon()
+		icon4.addFile(u":/icons/icons8-touchscreen-48.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon5 = QIcon()
+		icon5.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon5a = QIcon()
+		icon5a.addFile(u":/icons/icons8-ios-application-placeholder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		for cam in cam_list:
+			icon_type = camCfg.get(cam, "Type")
+			icon_subtype = camCfg.get(cam, "SubType")
+			#self.listwidget = QListWidgetItem(self.listWidget)
+			#self.listwidget.setText(cam)
+			if icon_subtype == "SmartPhone":
+				self.comboBox_2.addItem(icon4, cam)
+			elif icon_subtype == "Drone":
+				self.comboBox_2.addItem(icon5, cam)
+			else:
+				if icon_type == "Fisheye":
+					self.comboBox_2.addItem(icon1, cam)
+				elif icon_type == "Spherical":
+					self.comboBox_2.addItem(icon3, cam)
+				elif icon_type == "Cylindrical":
+					self.comboBox_2.addItem(icon2, cam)
+				elif icon_type == "RPC":
+					self.comboBox_2.addItem(icon5a, cam)
+				else:
+					self.comboBox_2.addItem(icon, cam)
+
+		self.comboBox_2.setCurrentText(selected_camera)
+		sizePolicy2.setHeightForWidth(self.comboBox_2.sizePolicy().hasHeightForWidth())
+		self.comboBox_2.setSizePolicy(sizePolicy2)
+		font3 = QFont()
+		font3.setFamily(u"Segoe UI")
+		font3.setPointSize(11)
+		self.comboBox_2.setFont(font3)
+		self.comboBox_2.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(statustip)
+		self.comboBox_2.setToolTip(u"Choose camera settings to be applied when creating new chunk...")
+#endif // QT_CONFIG(statustip)
+		self.comboBox_2.setIconSize(QSize(20, 20))
+
+		self.gridLayout_3.addWidget(self.comboBox_2, 6, 0, 1, 1)
+
+		self.checkBox = QCheckBox(self.verticalLayoutWidget)
+		self.checkBox.setObjectName(u"checkBox")
+		sizePolicy2.setHeightForWidth(self.checkBox.sizePolicy().hasHeightForWidth())
+		self.checkBox.setSizePolicy(sizePolicy2)
+		font4 = QFont()
+		font4.setFamily(u"Segoe UI")
+		font4.setPointSize(9)
+		self.checkBox.setFont(font4)
+		self.checkBox.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(tooltip)
+		self.checkBox.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Marker coordinates will be imported after target detection. <span style=\" font-weight:600;\">*</span></p><p><span style=\" font-weight:600;\">Disabled:</span> Coordinates are not imported. User must manually import coordinates.</p><p><span style=\" font-weight:600;\">*</span> Automatic importing of marker coordinates only works if point file name is the same as it's parent folder name, and contains a header with metadata. Point coordinates should start at row #7.</p></body></html>")
+#endif // QT_CONFIG(tooltip)
+		self.checkBox.setText(u"Import Marker Coordinates")
+		icon7 = QIcon()
+		icon7.addFile(u":/icons/icons8-map-marker-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.checkBox.setIcon(icon7)
+		self.checkBox.setIconSize(QSize(20, 20))
+		self.checkBox.setChecked(True)
+
+		self.gridLayout_3.addWidget(self.checkBox, 12, 0, 1, 1)
+
+		self.checkBox_2 = QCheckBox(self.verticalLayoutWidget)
+		self.checkBox_2.setObjectName(u"checkBox_2")
+		sizePolicy2.setHeightForWidth(self.checkBox_2.sizePolicy().hasHeightForWidth())
+		self.checkBox_2.setSizePolicy(sizePolicy2)
+		self.checkBox_2.setFont(font4)
+		self.checkBox_2.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(tooltip)
+		self.checkBox_2.setToolTip(u"<html><head/><body><p>Enable automatic target detection when new chunk is created...</p></body></html>")
+#endif // QT_CONFIG(tooltip)
+		self.checkBox_2.setText(u"Automatic Target Detection")
+		icon8 = QIcon()
+		icon8.addFile(u":/icons/icons8-my-location-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.checkBox_2.setIcon(icon8)
+		self.checkBox_2.setIconSize(QSize(20, 20))
+		self.checkBox_2.setChecked(True)
+
+		self.gridLayout_3.addWidget(self.checkBox_2, 11, 0, 1, 1)
+
+		self.cbChunkSettings = QComboBox(self.verticalLayoutWidget)
+		for section in chunk_sections:
+			menu_icon = menuCfg.get(section, "menu_icon")
+			seticon = QIcon()
+			seticon.addFile(menu_icon, QSize(), QIcon.Normal, QIcon.Off)
+			self.cbChunkSettings.addItem(seticon, section)
+		# icon9 = QIcon()
+		# icon9.addFile(u":/icons/icons8-add-tab-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		# self.cbChunkSettings.addItem(icon9, u"Default")
+		# icon10 = QIcon()
+		# icon10.addFile(u":/icons/kalota_m.png", QSize(), QIcon.Normal, QIcon.Off)
+		# self.cbChunkSettings.addItem(icon10, u"T8 GC - KALOTA")
+		# icon11 = QIcon()
+		# icon11.addFile(u":/icons/stopnca_o.png", QSize(), QIcon.Normal, QIcon.Off)
+		# self.cbChunkSettings.addItem(icon11, u"STOPNICA - IZKOP")
+		# icon12 = QIcon()
+		# icon12.addFile(u":/icons/stopnca_s.png", QSize(), QIcon.Normal, QIcon.Off)
+		# self.cbChunkSettings.addItem(icon12, u"STOPNICA - B.BET.")
+		self.cbChunkSettings.setObjectName(u"cbChunkSettings")
+		sizePolicy2.setHeightForWidth(self.cbChunkSettings.sizePolicy().hasHeightForWidth())
+		self.cbChunkSettings.setSizePolicy(sizePolicy2)
+		self.cbChunkSettings.setFont(font3)
+		self.cbChunkSettings.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(statustip)
+		self.cbChunkSettings.setToolTip(u"Choose settings used for chunk creation...")
+#endif // QT_CONFIG(statustip)
+		self.cbChunkSettings.setIconSize(QSize(20, 20))
+		self.cbChunkSettings.setCurrentIndex(0)
+
+		self.gridLayout_3.addWidget(self.cbChunkSettings, 1, 0, 1, 1)
+
+		self.label_4 = QLabel(self.verticalLayoutWidget)
+		self.label_4.setObjectName(u"label_4")
+		sizePolicy2.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
+		self.label_4.setSizePolicy(sizePolicy2)
+		self.label_4.setMaximumSize(QSize(16777215, 25))
+		self.label_4.setFont(font1)
+		self.label_4.setText(u"Camera")
+		self.label_4.setAlignment(Qt.AlignCenter)
+
+		self.gridLayout_3.addWidget(self.label_4, 5, 0, 1, 1)
+
+		self.line_6 = QFrame(self.verticalLayoutWidget)
+		self.line_6.setObjectName(u"line_6")
+		self.line_6.setFrameShape(QFrame.HLine)
+		self.line_6.setFrameShadow(QFrame.Sunken)
+
+		self.gridLayout_3.addWidget(self.line_6, 4, 0, 1, 1)
+
+		self.checkBox_3 = QCheckBox(self.verticalLayoutWidget)
+		self.checkBox_3.setObjectName(u"checkBox_3")
+		font5 = QFont()
+		font5.setFamily(u"Segoe UI")
+		font5.setPointSize(10)
+		self.checkBox_3.setFont(font5)
+		self.checkBox_3.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(tooltip)
+		self.checkBox_3.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Automatic chunk creation with predefined settings</p><p><span style=\" font-weight:600;\">Disabled:</span> Manual confirmation of intermediate steps</p></body></html>")
+#endif // QT_CONFIG(tooltip)
+		self.checkBox_3.setText(u"Automatic Processing")
+		icon13 = QIcon()
+		icon13.addFile(u":/icons/icons8-in-progress-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.checkBox_3.setIcon(icon13)
+		self.checkBox_3.setIconSize(QSize(20, 20))
+		self.checkBox_3.setCheckable(True)
+		self.checkBox_3.setChecked(True)
+
+		self.gridLayout_3.addWidget(self.checkBox_3, 14, 0, 1, 1)
+
+		self.label_5 = QLabel(self.verticalLayoutWidget)
+		self.label_5.setObjectName(u"label_5")
+		sizePolicy2.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
+		self.label_5.setSizePolicy(sizePolicy2)
+		self.label_5.setMaximumSize(QSize(16777215, 25))
+		self.label_5.setFont(font1)
+		self.label_5.setText(u"Markers")
+		self.label_5.setAlignment(Qt.AlignCenter)
+
+		self.gridLayout_3.addWidget(self.label_5, 10, 0, 1, 1)
+
+		self.horizontalLayout_7 = QHBoxLayout()
+		self.horizontalLayout_7.setSpacing(5)
+		self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+		self.label_13 = QLabel(self.verticalLayoutWidget)
+		self.label_13.setObjectName(u"label_13")
+		sizePolicy4.setHeightForWidth(self.label_13.sizePolicy().hasHeightForWidth())
+		self.label_13.setSizePolicy(sizePolicy4)
+		self.label_13.setFont(font2)
+		self.label_13.setText(u"SubType:")
+
+		self.horizontalLayout_7.addWidget(self.label_13)
+
+		self.label_14 = QLabel(self.verticalLayoutWidget)
+		self.label_14.setObjectName(u"label_14")
+		sizePolicy2.setHeightForWidth(self.label_14.sizePolicy().hasHeightForWidth())
+		self.label_14.setSizePolicy(sizePolicy2)
+		self.label_14.setFrameShape(QFrame.StyledPanel)
+		self.label_14.setText(u"TextLabel")
+		
+		self.horizontalLayout_7.addWidget(self.label_14)
+
+
+		self.gridLayout_3.addLayout(self.horizontalLayout_7, 8, 0, 1, 1)
+
+		self.label = QLabel(self.verticalLayoutWidget)
+		self.label.setObjectName(u"label")
+		sizePolicy2.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+		self.label.setSizePolicy(sizePolicy2)
+		self.label.setMaximumSize(QSize(16777215, 25))
+		self.label.setFont(font1)
+		self.label.setText(u"Chunk Creation")
+		self.label.setAlignment(Qt.AlignCenter)
+
+		self.gridLayout_3.addWidget(self.label, 0, 0, 1, 1)
+
+		self.line = QFrame(self.verticalLayoutWidget)
+		self.line.setObjectName(u"line")
+		self.line.setFrameShape(QFrame.HLine)
+		self.line.setFrameShadow(QFrame.Sunken)
+
+		self.gridLayout_3.addWidget(self.line, 9, 0, 1, 1)
+
+		self.line_3 = QFrame(self.verticalLayoutWidget)
+		self.line_3.setObjectName(u"line_3")
+		self.line_3.setFrameShape(QFrame.HLine)
+		self.line_3.setFrameShadow(QFrame.Sunken)
+
+		self.gridLayout_3.addWidget(self.line_3, 13, 0, 1, 1)
+
+
+		self.gridLayout.addLayout(self.gridLayout_3, 0, 2, 3, 1)
+
+		self.horizontalLayout = QHBoxLayout()
+		self.horizontalLayout.setSpacing(5)
+		self.horizontalLayout.setObjectName(u"horizontalLayout")
+		self.lineEdit = QLineEdit(self.verticalLayoutWidget)
+		self.lineEdit.setObjectName(u"lineEdit")
+		self.lineEdit.setEnabled(False)
+		sizePolicy5 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+		sizePolicy5.setHorizontalStretch(0)
+		sizePolicy5.setVerticalStretch(0)
+		sizePolicy5.setHeightForWidth(self.lineEdit.sizePolicy().hasHeightForWidth())
+		self.lineEdit.setSizePolicy(sizePolicy5)
+		self.lineEdit.setFont(font5)
+		self.lineEdit.setToolTip(u"Path to main folder with data sub-folders...")
+		self.lineEdit.setWhatsThis(u"Path to main folder with data sub-folders...")
+		self.lineEdit.setPlaceholderText(u"Data location...")
+
+		self.horizontalLayout.addWidget(self.lineEdit)
+
+		self.pushButton = QPushButton(self.verticalLayoutWidget)
+		self.pushButton.setObjectName(u"pushButton")
+		self.pushButton.setEnabled(False)
+		sizePolicy3.setHeightForWidth(self.pushButton.sizePolicy().hasHeightForWidth())
+		self.pushButton.setSizePolicy(sizePolicy3)
+		self.pushButton.setCursor(QCursor(Qt.PointingHandCursor))
+		self.pushButton.setToolTip(u"Data location (root folder with sub-folders containing data)")
+		self.pushButton.setText(u"Browse")
+		icon14 = QIcon()
+		icon14.addFile(u":/icons/icons8-images-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton.setIcon(icon14)
+		self.pushButton.setIconSize(QSize(20, 20))
+
+		self.horizontalLayout.addWidget(self.pushButton)
+
+
+		self.gridLayout.addLayout(self.horizontalLayout, 1, 0, 1, 1)
+
+		self.horizontalLayout_4 = QHBoxLayout()
+		self.horizontalLayout_4.setSpacing(5)
+		self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+		self.pushButton_3 = QPushButton(self.verticalLayoutWidget)
+		self.pushButton_3.setObjectName(u"pushButton_3")
+		self.pushButton_3.setCursor(QCursor(Qt.PointingHandCursor))
+		self.pushButton_3.setToolTip(u"Press [Ctrl+P] to start processing")
+		self.pushButton_3.setToolTip(u"Process selected folders, and create new chunks...")
+		self.pushButton_3.setText(u"Process")
+		icon15 = QIcon()
+		icon15.addFile(u":/icons/icons8-synchronize-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton_3.setIcon(icon15)
+		self.pushButton_3.setIconSize(QSize(24, 24))
+		self.pushButton_3.setShortcut(u"P")
+		self.pushButton_3.setChecked(False)
+
+		self.horizontalLayout_4.addWidget(self.pushButton_3)
+
+		self.pushButton_2 = QPushButton(self.verticalLayoutWidget)
+		self.pushButton_2.setObjectName(u"pushButton_2")
+		self.pushButton_2.setToolTip(u"Exit chunk creator...")
+		self.pushButton_2.setText(u"Exit")
+		icon16 = QIcon()
+		icon16.addFile(u":/icons/icons8-enter-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton_2.setIcon(icon16)
+		self.pushButton_2.setIconSize(QSize(24, 24))
+		self.pushButton_2.setShortcut(u"X")
+
+		self.horizontalLayout_4.addWidget(self.pushButton_2)
+
+
+		self.gridLayout.addLayout(self.horizontalLayout_4, 3, 2, 1, 1)
+
+		self.line_5 = QFrame(self.verticalLayoutWidget)
+		self.line_5.setObjectName(u"line_5")
+		self.line_5.setFrameShape(QFrame.VLine)
+		self.line_5.setFrameShadow(QFrame.Sunken)
+
+		self.gridLayout.addWidget(self.line_5, 0, 1, 4, 1)
+
+		self.label_8 = QLabel(self.verticalLayoutWidget)
+		self.label_8.setObjectName(u"label_8")
+		self.label_8.setFrameShape(QFrame.StyledPanel)
+		self.label_8.setText(u"Selected: ")
+		self.label_8.setIndent(5)
+
+		self.gridLayout.addWidget(self.label_8, 3, 0, 1, 1)
+
+		self.treeWidget = QTreeWidget(self.verticalLayoutWidget)
+		icon17 = QIcon()
+		icon17.addFile(u":/icons/icons8-folder-tree-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		font6 = QFont()
+		font6.setBold(True)
+		font6.setWeight(75)
+		__qtreewidgetitem = QTreeWidgetItem()
+		__qtreewidgetitem.setText(0, u"Folders");
+		__qtreewidgetitem.setFont(0, font6);
+		__qtreewidgetitem.setIcon(0, icon17);
+		self.treeWidget.setHeaderItem(__qtreewidgetitem)
+		icon18 = QIcon()
+		icon18.addFile(u":/icons/icons8-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		font7 = QFont()
+		font7.setFamily(u"Segoe UI")
+		self.treeWidget.setObjectName(u"treeWidget")
+		sizePolicy6 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+		sizePolicy6.setHorizontalStretch(0)
+		sizePolicy6.setVerticalStretch(0)
+		#sizePolicy6.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
+		self.treeWidget.setSizePolicy(sizePolicy6)
+		self.treeWidget.setMinimumSize(QSize(380, 0))
+		#self.treeWidget.setMaximumSize(QSize(400, 16777215))
+		self.treeWidget.setAutoScrollMargin(20)
+		self.treeWidget.setEditTriggers(QAbstractItemView.DoubleClicked|QAbstractItemView.EditKeyPressed|QAbstractItemView.SelectedClicked)
+		self.treeWidget.setTabKeyNavigation(True)
+		self.treeWidget.setProperty("showDropIndicator", False)
+		self.treeWidget.setAlternatingRowColors(True)
+		self.treeWidget.setSelectionMode(QAbstractItemView.MultiSelection)
+		self.treeWidget.setSelectionBehavior(QAbstractItemView.SelectItems)
+		self.treeWidget.setUniformRowHeights(True)
+		self.treeWidget.setSortingEnabled(True)
+		self.treeWidget.setAllColumnsShowFocus(True)
+		self.treeWidget.header().setVisible(True)
+		self.treeWidget.header().setDefaultSectionSize(200)
+
+		self.gridLayout.addWidget(self.treeWidget, 2, 0, 1, 1)
+
+		self.verticalLayout_2.addLayout(self.gridLayout)
+		
+		defChk = self.cbChunkSettings.currentText()
+		self.label_6.setText(menuCfg.get(defChk, "chunk_name_prefix"))
+		self.label_7.setText(menuCfg.get(defChk, "chunk_name_suffix"))
+
+		defCam = self.comboBox_2.currentText()
+		self.label_12.setText(camCfg.get(defCam, "type"))
+		self.label_14.setText(camCfg.get(defCam, "subtype"))
+		
+		self.checkBox_4.toggled.connect(self.pushButton.setDisabled)
+		self.checkBox_4.toggled.connect(self.lineEdit.setDisabled)
+		self.checkBox_2.toggled.connect(self.checkBox.toggle)
+		self.cbChunkSettings.currentTextChanged.connect(self.setCurrentSettings)
+		self.comboBox_2.currentTextChanged.connect(self.setCurrentCamera)
+		self.lineEdit.textChanged.connect(self.updateFolders)
+		self.pushButton_2.clicked.connect(self.quitChunkBatch)
+		self.pushButton_3.clicked.connect(self.processBatch)
+		self.pushButton.clicked.connect(self.browseFolder)
+		self.treeWidget.itemSelectionChanged.connect(self.updateSelected)
+
+		# QtCore.QObject.connect(self.cbChunkSettings, QtCore.SIGNAL("currentTextChanged()"), self.lineEdit, QtCore.SLOT("setText()"))
+		# QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("clicked()"), self.startProcess)
+		# QtCore.QObject.connect(self.pushButton_3, QtCore.SIGNAL("clicked()"), self.startProcess)
+		# QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("reject()"))			
+		
+		self.exec()
+
+	def browseFolder(self):
+		defFolder = Metashape.app.getExistingDirectory("Data folder")
+		self.lineEdit.setText(defFolder)
+
+
+	def setCurrentSettings(self):
+		chunkSet = self.cbChunkSettings.currentText()
+		if chunkSet == "Default":
+			self.lineEdit.clear()
+			self.pushButton.setEnabled
+			self.lineEdit.setEnabled
+			self.checkBox_4.setChecked(False)
+			self.label_6.setText(menuCfg.get(chunkSet, "chunk_name_prefix"))
+			self.label_7.setText(menuCfg.get(chunkSet, "chunk_name_suffix"))
+		else:
+			self.lineEdit.setText(str(menuCfg.get(chunkSet, "work_folder")))
+			self.pushButton.setDisabled
+			self.lineEdit.setDisabled
+			self.checkBox_4.setChecked(True)
+			self.label_6.setText(menuCfg.get(chunkSet, "chunk_name_prefix"))
+			self.label_7.setText(menuCfg.get(chunkSet, "chunk_name_suffix"))
+
+
+	def setCurrentCamera(self):
+		chunkCam = self.comboBox_2.currentText()
+		self.label_12.setText(camCfg.get(chunkCam, "type"))
+		self.label_14.setText(camCfg.get(chunkCam, "subtype"))
+		
+
+	def updateFolders(self):
+		self.treeWidget.clear()
+		open_folder = self.lineEdit.text()
+		if open_folder != "":
+			open_folder = self.lineEdit.text().replace("\\", "/") + "/"
+			icon17 = QIcon()
+			icon17.addFile(u":/icons/icons8-folder-tree-50.png", QSize(), QIcon.Normal, QIcon.Off)
+			icon18 = QIcon()
+			icon18.addFile(u":/icons/icons8-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+			font6 = QFont()
+			font6.setBold(True)
+			font6.setWeight(75)
+			__qtreewidgetitem = QTreeWidgetItem()
+			__qtreewidgetitem.setText(0, u"Folders");
+			__qtreewidgetitem.setFont(0, font6);
+			__qtreewidgetitem.setIcon(0, icon17);
+			self.treeWidget.setHeaderItem(__qtreewidgetitem)
+			folder_list = next(os.walk(open_folder))[1]
+			
+			for folder in folder_list:
+				__qtreewidgetitem1 = QTreeWidgetItem(self.treeWidget)
+				__qtreewidgetitem1.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
+				__qtreewidgetitem1.setText(0, folder);
+				__qtreewidgetitem1.setIcon(0, icon18);
+
+		else:
+			icon17 = QIcon()
+			icon17.addFile(u":/icons/icons8-folder-tree-50.png", QSize(), QIcon.Normal, QIcon.Off)
+			font6 = QFont()
+			font6.setBold(True)
+			font6.setWeight(75)
+			__qtreewidgetitem = QTreeWidgetItem()
+			__qtreewidgetitem.setText(0, u"Folders");
+			__qtreewidgetitem.setFont(0, font6);
+			__qtreewidgetitem.setIcon(0, icon17);
+			self.treeWidget.setHeaderItem(__qtreewidgetitem)
+		
+
+	def updateSelected(self):
+		sel_items = self.treeWidget.selectedItems()
+		sel_count = len(sel_items)
+		self.label_8.setText(u"Selected: " + str(sel_count))
+
+
+	def processBatch(self):
+		self.sel_items = self.treeWidget.selectedItems()
+		sel_count = len(self.sel_items)
+		item_menu = self.cbChunkSettings.currentText()
+		item_pre = menuCfg.get(item_menu, "chunk_name_prefix")
+		item_suf = menuCfg.get(item_menu, "chunk_name_suffix")
+		item_cam = self.comboBox_2.currentText()
+		if sel_count > 0:
+			i_cnt = 1
+			for item in self.sel_items:
+				print("Processing item: " + str(i_cnt) + "/" + str(sel_count) + " - " + str(item.text(0)))
+				doc = Metashape.app.document
+				netpath = Metashape.app.document.path
+				netroot = self.lineEdit.text()
+				image_folder = str(netroot).replace("\\", "/") + "/" + item.text(0)
+				photos = find_files(image_folder, [".jpg", ".jpeg", ".png", ".tif", ".tiff"])
+				chunk = doc.addChunk()
+				chunk.addPhotos(photos)
+				chunk_name = item_pre + item.text(0) + item_suf
+				# chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+				chunk.label = chunk_name
+				doc.chunk = chunk
+				doc.save(netpath)
+				Metashape.app.update()
+				# Metashape.app.messageBox("Nalaganje slik...")
+				time.sleep(3)
+				readCameraSettings(item_cam)
+				useCameraSettings()
+				chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+				# path_ref = Metashape.app.getOpenFileName("Import marker coordinates", image_folder, "Text file (*.txt)")
+				points_file = image_folder + "/" + item.text(0) + ".txt"
+				chunk.importReference(points_file, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+				chunk.updateTransform()
+				doc.save(netpath)
+				Metashape.app.update()
+				i_cnt = i_cnt + 1
+
+
+	def quitChunkBatch(self):
+		self.reject()
+
+
+def diaAddChunkBatch():
+	app = QtWidgets.QApplication.instance()
+	parent = app.activeWindow()
+	dia2 = Ui_DialogBatchChunk(parent)
+
+
 def newchunk_manual(name_prefix, name_suffix):
 	global projectOpened
 	if projectOpened == True:
@@ -1676,6 +2306,17 @@ def newchunk_auto(name_prefix, name_suffix):
 		projectOpenedCheck()
 
 
+# Create About message dialog
+def appAbout():
+	app_aboutmsg = app_name + "\n\nVersion: " + app_ver + "\n" + app_author + "\n" + app_about + "\n\n" + app_repo + "\n\nReferences:\n" + ref_repo + "\n\n" + ref_scripts + "\n"
+	message_box = QMessageBox()
+	message_box.setMinimumSize(600,500)
+	message_box.setTextFormat(Qt.PlainText)
+	message_box.setText(app_aboutmsg)
+
+	message_box.exec_()
+
+
 def prazno():
 	print("Prazna vrstica")
 
@@ -1735,6 +2376,9 @@ Metashape.app.addMenuItem(labelmenu, appAbout, icon=icon_app)
 
 labelAddChQuick = "AutoFTG/Add New Chunk"
 Metashape.app.addMenuItem(label=labelAddChQuick, func=diaAddChunkQuick, icon=iconadd)
+
+labelAddChBatch = "AutoFTG/Add New Chunk (Batch)"
+Metashape.app.addMenuItem(label=labelAddChBatch, func=diaAddChunkBatch, icon=iconaddc)
 
 labelset2 = "AutoFTG/Load Project Settings"
 Metashape.app.addMenuItem(labelset2, projectOpenedCheck, icon=icon40)
@@ -1802,4 +2446,20 @@ Metashape.app.addMenuItem(labelset2i, projectOpenedCheck, icon=icon40)
 # Metashape.app.addMenuItem(labelsep5, prazno)
 
 # Initialize setting for AutoFTG
-initAutoFtg()
+
+
+# Main settings file initialization (used when no project is loaded)
+class main():
+	global projectOpened
+	projectOpened = False
+	camCfgLoad()
+	projectOpenedCheck()
+	# appCfgLoad()
+	checkSettingsVer()
+	menuCfgLoad()
+	#print("\n\nAutoFTG Settings loaded...\nSettings version: " + str(appCfg.get('SETTINGS', 'settings_version')))
+	#print("Data Folder: " + str(appCfg.get('SETTINGS', 'folder_data')))
+	#print("Default Camera: " + str(appCfg.get('SETTINGS', 'default_camera')))
+
+
+# initAutoFtg()

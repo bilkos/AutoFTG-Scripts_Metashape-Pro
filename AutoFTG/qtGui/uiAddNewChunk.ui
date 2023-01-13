@@ -6,23 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>670</width>
+    <width>680</width>
     <height>560</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
   <property name="minimumSize">
-   <size>
-    <width>670</width>
-    <height>560</height>
-   </size>
-  </property>
-  <property name="maximumSize">
    <size>
     <width>670</width>
     <height>560</height>
@@ -35,17 +23,11 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Create New Chunk</string>
+   <string notr="true">Batch Chunk Creator</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../qtresources.qrc">
+   <iconset resource="qtresources.qrc">
     <normaloff>:/icons/AutoFTG-appicon.png</normaloff>:/icons/AutoFTG-appicon.png</iconset>
-  </property>
-  <property name="toolButtonStyle">
-   <enum>Qt::ToolButtonTextBesideIcon</enum>
-  </property>
-  <property name="tabShape">
-   <enum>QTabWidget::Triangular</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="verticalLayoutWidget">
@@ -53,31 +35,62 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>651</width>
+      <width>661</width>
       <height>511</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <property name="spacing">
+      <number>5</number>
+     </property>
      <item>
-      <widget class="QLabel" name="label_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Segoe UI</family>
-         <pointsize>18</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>New Chunk Creator</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <item>
+        <widget class="QLabel" name="label_15">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="qtresources.qrc">:/icons/icons8-apps-tab-50.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+           <underline>false</underline>
+          </font>
+         </property>
+         <property name="text">
+          <string notr="true">Batch Chunk Creator</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="Line" name="line_4">
@@ -107,7 +120,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Data location</string>
+            <string notr="true">Data location</string>
            </property>
           </widget>
          </item>
@@ -120,13 +133,13 @@
             </sizepolicy>
            </property>
            <property name="statusTip">
-            <string>Disable to set custom location for data. Enable to use project default data location settings.</string>
+            <string notr="true">Disable to set custom location for data. Enable to use project default data location settings.</string>
            </property>
            <property name="text">
-            <string>Use Project Data Location</string>
+            <string notr="true">Use Project Data Location</string>
            </property>
            <property name="icon">
-            <iconset resource="../qtresources.qrc">
+            <iconset resource="qtresources.qrc">
              <normaloff>:/icons/icons8-copy-to-folder-50.png</normaloff>:/icons/icons8-copy-to-folder-50.png</iconset>
            </property>
            <property name="iconSize">
@@ -163,7 +176,7 @@
               </font>
              </property>
              <property name="text">
-              <string>Suffix:</string>
+              <string notr="true">Suffix:</string>
              </property>
             </widget>
            </item>
@@ -179,7 +192,7 @@
               <enum>QFrame::StyledPanel</enum>
              </property>
              <property name="text">
-              <string>Suffix...</string>
+              <string notr="true">Suffix...</string>
              </property>
              <property name="buddy">
               <cstring>cbChunkSettings</cstring>
@@ -210,7 +223,7 @@
               <enum>QFrame::NoFrame</enum>
              </property>
              <property name="text">
-              <string>Type:      </string>
+              <string notr="true">Type:      </string>
              </property>
             </widget>
            </item>
@@ -226,7 +239,7 @@
               <enum>QFrame::StyledPanel</enum>
              </property>
              <property name="text">
-              <string>TextLabel</string>
+              <string notr="true">TextLabel</string>
              </property>
             </widget>
            </item>
@@ -251,7 +264,7 @@
               </font>
              </property>
              <property name="text">
-              <string>Prefix:</string>
+              <string notr="true">Prefix:</string>
              </property>
             </widget>
            </item>
@@ -267,7 +280,7 @@
               <enum>QFrame::StyledPanel</enum>
              </property>
              <property name="text">
-              <string>Prefix...</string>
+              <string notr="true">Prefix...</string>
              </property>
              <property name="buddy">
               <cstring>cbChunkSettings</cstring>
@@ -294,7 +307,7 @@
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="statusTip">
-            <string>Choose camera settings to be applied when creating new chunk...</string>
+            <string notr="true">Choose camera settings to be applied when creating new chunk...</string>
            </property>
            <property name="iconSize">
             <size>
@@ -307,7 +320,7 @@
              <string notr="true">Cam 1</string>
             </property>
             <property name="icon">
-             <iconset resource="../qtresources.qrc">
+             <iconset resource="qtresources.qrc">
               <normaloff>:/icons/icons8-full-page-view-50.png</normaloff>:/icons/icons8-full-page-view-50.png</iconset>
             </property>
            </item>
@@ -316,7 +329,7 @@
              <string notr="true">Cam 2</string>
             </property>
             <property name="icon">
-             <iconset resource="../qtresources.qrc">
+             <iconset resource="qtresources.qrc">
               <normaloff>:/icons/icons8-video-wall-50.png</normaloff>:/icons/icons8-video-wall-50.png</iconset>
             </property>
            </item>
@@ -325,7 +338,7 @@
              <string notr="true">Cam 3</string>
             </property>
             <property name="icon">
-             <iconset resource="../qtresources.qrc">
+             <iconset resource="qtresources.qrc">
               <normaloff>:/icons/icons8-live-photos-96.png</normaloff>:/icons/icons8-live-photos-96.png</iconset>
             </property>
            </item>
@@ -334,7 +347,7 @@
              <string notr="true">Cam 4</string>
             </property>
             <property name="icon">
-             <iconset resource="../qtresources.qrc">
+             <iconset resource="qtresources.qrc">
               <normaloff>:/icons/icons8-aperture-50.png</normaloff>:/icons/icons8-aperture-50.png</iconset>
             </property>
            </item>
@@ -343,16 +356,16 @@
              <string notr="true">Cam 5</string>
             </property>
             <property name="icon">
-             <iconset resource="../qtresources.qrc">
+             <iconset resource="qtresources.qrc">
               <normaloff>:/icons/icons8-video-stabilization-50.png</normaloff>:/icons/icons8-video-stabilization-50.png</iconset>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Cam 6</string>
+             <string notr="true">Cam 6</string>
             </property>
             <property name="icon">
-             <iconset resource="../qtresources.qrc">
+             <iconset resource="qtresources.qrc">
               <normaloff>:/icons/icons8-quadcopter-50.png</normaloff>:/icons/icons8-quadcopter-50.png</iconset>
             </property>
            </item>
@@ -376,16 +389,16 @@
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;*Automatic importing of marker coordinates only works if point file name is the same as it's parent folder name, and has a header with metadata.&lt;/p&gt;&lt;p&gt;Point coordinates should start at row #7.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;*Automatic importing of marker coordinates only works if point file name is the same as it's parent folder name, and has a header with metadata.&lt;/p&gt;&lt;p&gt;Point coordinates should start at row #7.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="statusTip">
-            <string>Import marker coordinates after automatic target detection...</string>
+            <string notr="true">Import marker coordinates after automatic target detection...</string>
            </property>
            <property name="text">
-            <string>Import Marker Coordinates</string>
+            <string notr="true">Import Marker Coordinates</string>
            </property>
            <property name="icon">
-            <iconset resource="../qtresources.qrc">
+            <iconset resource="qtresources.qrc">
              <normaloff>:/icons/icons8-map-marker-50.png</normaloff>:/icons/icons8-map-marker-50.png</iconset>
            </property>
            <property name="iconSize">
@@ -417,13 +430,13 @@
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="statusTip">
-            <string>Enable automatic target detection after creating new chunk...</string>
+            <string notr="true">Enable automatic target detection after creating new chunk...</string>
            </property>
            <property name="text">
-            <string>Automatic Target Detection</string>
+            <string notr="true">Automatic Target Detection</string>
            </property>
            <property name="icon">
-            <iconset resource="../qtresources.qrc">
+            <iconset resource="qtresources.qrc">
              <normaloff>:/icons/icons8-my-location-50.png</normaloff>:/icons/icons8-my-location-50.png</iconset>
            </property>
            <property name="iconSize">
@@ -455,7 +468,7 @@
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="statusTip">
-            <string>Choose settings used for chunk creation...</string>
+            <string notr="true">Choose settings used for chunk creation...</string>
            </property>
            <property name="iconSize">
             <size>
@@ -468,7 +481,7 @@
              <string notr="true">Default</string>
             </property>
             <property name="icon">
-             <iconset resource="../qtresources.qrc">
+             <iconset resource="qtresources.qrc">
               <normaloff>:/icons/icons8-add-tab-50.png</normaloff>:/icons/icons8-add-tab-50.png</iconset>
             </property>
            </item>
@@ -477,7 +490,7 @@
              <string notr="true">KALOTA</string>
             </property>
             <property name="icon">
-             <iconset resource="../qtresources.qrc">
+             <iconset resource="qtresources.qrc">
               <normaloff>:/icons/kalota_m.png</normaloff>:/icons/kalota_m.png</iconset>
             </property>
            </item>
@@ -486,7 +499,7 @@
              <string notr="true">STOPNICA - IZKOP</string>
             </property>
             <property name="icon">
-             <iconset resource="../qtresources.qrc">
+             <iconset resource="qtresources.qrc">
               <normaloff>:/icons/stopnca_o.png</normaloff>:/icons/stopnca_o.png</iconset>
             </property>
            </item>
@@ -495,7 +508,7 @@
              <string notr="true">STOPNICA - B.BET.</string>
             </property>
             <property name="icon">
-             <iconset resource="../qtresources.qrc">
+             <iconset resource="qtresources.qrc">
               <normaloff>:/icons/stopnca_s.png</normaloff>:/icons/stopnca_s.png</iconset>
             </property>
            </item>
@@ -524,7 +537,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Camera</string>
+            <string notr="true">Camera</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -550,16 +563,16 @@
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Automatic processing of new chunks if enabled.&lt;br/&gt;Otherwise user needs to confirm each step before continuing.&lt;br/&gt;Usefull when creating multiple chunks.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Automatic processing of new chunks if enabled.&lt;br/&gt;Otherwise user needs to confirm each step before continuing.&lt;br/&gt;Usefull when creating multiple chunks.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="statusTip">
-            <string>Enable automatic processing without user interaction when creating new chunks...</string>
+            <string notr="true">Enable automatic processing without user interaction when creating new chunks...</string>
            </property>
            <property name="text">
-            <string>Automatic Processing</string>
+            <string notr="true">Automatic Processing</string>
            </property>
            <property name="icon">
-            <iconset resource="../qtresources.qrc">
+            <iconset resource="qtresources.qrc">
              <normaloff>:/icons/icons8-in-progress-96.png</normaloff>:/icons/icons8-in-progress-96.png</iconset>
            </property>
            <property name="iconSize">
@@ -599,7 +612,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Markers</string>
+            <string notr="true">Markers</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -625,7 +638,7 @@
               </font>
              </property>
              <property name="text">
-              <string>SubType:</string>
+              <string notr="true">SubType:</string>
              </property>
             </widget>
            </item>
@@ -641,7 +654,7 @@
               <enum>QFrame::StyledPanel</enum>
              </property>
              <property name="text">
-              <string>TextLabel</string>
+              <string notr="true">TextLabel</string>
              </property>
             </widget>
            </item>
@@ -670,7 +683,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Chunk Creation</string>
+            <string notr="true">Chunk Creation</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -715,8 +728,14 @@
              <pointsize>10</pointsize>
             </font>
            </property>
+           <property name="statusTip">
+            <string notr="true">Path to main folder with data sub-folders...</string>
+           </property>
+           <property name="whatsThis">
+            <string notr="true">Path to main folder with data sub-folders...</string>
+           </property>
            <property name="placeholderText">
-            <string>Select folder where sub-folders with data are located...</string>
+            <string notr="true">Data location...</string>
            </property>
           </widget>
          </item>
@@ -738,10 +757,10 @@
             <string notr="true">Data location (root folder with sub-folders containing data)</string>
            </property>
            <property name="text">
-            <string>Browse</string>
+            <string notr="true">Browse</string>
            </property>
            <property name="icon">
-            <iconset resource="../qtresources.qrc">
+            <iconset resource="qtresources.qrc">
              <normaloff>:/icons/icons8-images-folder-50.png</normaloff>:/icons/icons8-images-folder-50.png</iconset>
            </property>
            <property name="iconSize">
@@ -761,47 +780,56 @@
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
+           <property name="toolTip">
+            <string notr="true">Press [Ctrl+P] to start processing</string>
+           </property>
            <property name="statusTip">
             <string notr="true">Process selected folders, and create new chunks...</string>
            </property>
            <property name="text">
-            <string>Process</string>
+            <string notr="true">Process</string>
            </property>
            <property name="icon">
-            <iconset resource="../qtresources.qrc">
+            <iconset resource="qtresources.qrc">
              <normaloff>:/icons/icons8-synchronize-50.png</normaloff>:/icons/icons8-synchronize-50.png</iconset>
            </property>
            <property name="iconSize">
             <size>
-             <width>20</width>
-             <height>20</height>
+             <width>24</width>
+             <height>24</height>
             </size>
            </property>
            <property name="shortcut">
-            <string>Return</string>
+            <string notr="true">P</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+           <property name="default">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="pushButton_2">
            <property name="statusTip">
-            <string>Exit chunk creator...</string>
+            <string notr="true">Exit chunk creator...</string>
            </property>
            <property name="text">
-            <string>Exit</string>
+            <string notr="true">Exit</string>
            </property>
            <property name="icon">
-            <iconset resource="../qtresources.qrc">
+            <iconset resource="qtresources.qrc">
              <normaloff>:/icons/icons8-enter-50.png</normaloff>:/icons/icons8-enter-50.png</iconset>
            </property>
            <property name="iconSize">
             <size>
-             <width>20</width>
-             <height>20</height>
+             <width>24</width>
+             <height>24</height>
             </size>
            </property>
            <property name="shortcut">
-            <string>Return</string>
+            <string notr="true">X</string>
            </property>
           </widget>
          </item>
@@ -811,6 +839,19 @@
         <widget class="Line" name="line_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="text">
+          <string notr="true">Selected: 2</string>
+         </property>
+         <property name="indent">
+          <number>5</number>
          </property>
         </widget>
        </item>
@@ -828,27 +869,42 @@
            <height>0</height>
           </size>
          </property>
+         <property name="autoScrollMargin">
+          <number>20</number>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+         </property>
          <property name="tabKeyNavigation">
           <bool>true</bool>
+         </property>
+         <property name="showDropIndicator" stdset="0">
+          <bool>false</bool>
          </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>
          <property name="selectionMode">
-          <enum>QAbstractItemView::NoSelection</enum>
+          <enum>QAbstractItemView::MultiSelection</enum>
          </property>
-         <property name="indentation">
-          <number>10</number>
+         <property name="uniformRowHeights">
+          <bool>true</bool>
          </property>
-         <property name="itemsExpandable">
-          <bool>false</bool>
+         <property name="sortingEnabled">
+          <bool>true</bool>
          </property>
+         <property name="allColumnsShowFocus">
+          <bool>true</bool>
+         </property>
+         <attribute name="headerVisible">
+          <bool>true</bool>
+         </attribute>
          <attribute name="headerDefaultSectionSize">
           <number>200</number>
          </attribute>
          <column>
           <property name="text">
-           <string>Folder Name</string>
+           <string notr="true">Folders</string>
           </property>
           <property name="font">
            <font>
@@ -857,13 +913,42 @@
            </font>
           </property>
           <property name="icon">
-           <iconset resource="../qtresources.qrc">
+           <iconset resource="qtresources.qrc">
             <normaloff>:/icons/icons8-folder-tree-50.png</normaloff>:/icons/icons8-folder-tree-50.png</iconset>
           </property>
          </column>
          <item>
           <property name="text">
-           <string>Folder-1</string>
+           <string notr="true">20230109-0530</string>
+          </property>
+          <property name="icon">
+           <iconset resource="qtresources.qrc">
+            <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
+          </property>
+          <property name="flags">
+           <set>ItemIsSelectable|ItemIsEnabled</set>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string notr="true">20230109-0030</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+           </font>
+          </property>
+          <property name="icon">
+           <iconset resource="qtresources.qrc">
+            <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
+          </property>
+          <property name="flags">
+           <set>ItemIsSelectable|ItemIsEnabled</set>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string notr="true">20230109-0010</string>
           </property>
           <property name="font">
            <font>
@@ -871,67 +956,14 @@
             <pointsize>9</pointsize>
            </font>
           </property>
-          <property name="checkState">
-           <enum>Checked</enum>
-          </property>
           <property name="icon">
-           <iconset resource="../qtresources.qrc">
+           <iconset resource="qtresources.qrc">
             <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
           </property>
           <property name="flags">
-           <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
+           <set>ItemIsSelectable|ItemIsEnabled</set>
           </property>
          </item>
-         <item>
-          <property name="text">
-           <string>Folder-2</string>
-          </property>
-          <property name="font">
-           <font>
-            <family>Segoe UI</family>
-           </font>
-          </property>
-          <property name="checkState">
-           <enum>Unchecked</enum>
-          </property>
-          <property name="icon">
-           <iconset resource="../qtresources.qrc">
-            <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
-          </property>
-          <property name="flags">
-           <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Folder-3</string>
-          </property>
-          <property name="font">
-           <font>
-            <family>Segoe UI</family>
-           </font>
-          </property>
-          <property name="checkState">
-           <enum>Checked</enum>
-          </property>
-          <property name="icon">
-           <iconset resource="../qtresources.qrc">
-            <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
-          </property>
-          <property name="flags">
-           <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_8">
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="text">
-          <string>Selected: 2</string>
-         </property>
         </widget>
        </item>
       </layout>
@@ -944,16 +976,16 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>670</width>
+     <width>680</width>
      <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
-     <string>Settings</string>
+     <string notr="true">Settings</string>
     </property>
-    <addaction name="actionEditPrefixSuffix"/>
-    <addaction name="actionCamerasEditor"/>
+    <addaction name="actionChunkEditor"/>
+    <addaction name="actionCameraEditor"/>
    </widget>
    <addaction name="menuSettings"/>
   </widget>
@@ -974,45 +1006,65 @@
     <bool>false</bool>
    </property>
   </widget>
-  <action name="actionEditPrefixSuffix">
+  <action name="actionChunkEditor">
    <property name="icon">
-    <iconset resource="../qtresources.qrc">
+    <iconset resource="qtresources.qrc">
      <normaloff>:/icons/icons8-product-documents-50.png</normaloff>:/icons/icons8-product-documents-50.png</iconset>
    </property>
    <property name="text">
-    <string>Chunk Settings</string>
+    <string notr="true">Chunk Settings</string>
+   </property>
+   <property name="iconText">
+    <string notr="true">Chunk Settings</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true">Chunk Settings</string>
+   </property>
+   <property name="statusTip">
+    <string notr="true">Open chunk setting editor..</string>
    </property>
    <property name="font">
-    <font>
-     <family>Segoe UI</family>
-     <pointsize>9</pointsize>
-    </font>
+    <font/>
    </property>
   </action>
-  <action name="actionCamerasEditor">
+  <action name="actionCameraEditor">
    <property name="icon">
-    <iconset resource="../qtresources.qrc">
+    <iconset resource="qtresources.qrc">
      <normaloff>:/icons/icons8-cameras-50.png</normaloff>:/icons/icons8-cameras-50.png</iconset>
    </property>
    <property name="text">
-    <string>Cameras Editor</string>
+    <string notr="true">Cameras Editor</string>
+   </property>
+   <property name="iconText">
+    <string notr="true">Cameras Editor</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true">Cameras Editor</string>
+   </property>
+   <property name="statusTip">
+    <string notr="true">Open camera editor...</string>
    </property>
    <property name="font">
-    <font>
-     <family>Segoe UI</family>
-     <pointsize>9</pointsize>
-    </font>
-   </property>
-  </action>
-  <action name="actionPrefix">
-   <property name="text">
-    <string>Prefix: </string>
+    <font/>
    </property>
   </action>
  </widget>
- <layoutdefault spacing="10" margin="10"/>
+ <layoutdefault spacing="5" margin="10"/>
+ <tabstops>
+  <tabstop>checkBox_4</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>treeWidget</tabstop>
+  <tabstop>cbChunkSettings</tabstop>
+  <tabstop>comboBox_2</tabstop>
+  <tabstop>checkBox_2</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>checkBox_3</tabstop>
+  <tabstop>pushButton_3</tabstop>
+  <tabstop>pushButton_2</tabstop>
+ </tabstops>
  <resources>
-  <include location="../qtresources.qrc"/>
+  <include location="qtresources.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -1042,8 +1094,8 @@
      <y>122</y>
     </hint>
     <hint type="destinationlabel">
-     <x>736</x>
-     <y>195</y>
+     <x>666</x>
+     <y>196</y>
     </hint>
    </hints>
   </connection>
@@ -1054,11 +1106,11 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>737</x>
+     <x>667</x>
      <y>423</y>
     </hint>
     <hint type="destinationlabel">
-     <x>737</x>
+     <x>667</x>
      <y>453</y>
     </hint>
    </hints>
@@ -1070,11 +1122,11 @@
    <slot>setChecked(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>737</x>
+     <x>667</x>
      <y>423</y>
     </hint>
     <hint type="destinationlabel">
-     <x>737</x>
+     <x>667</x>
      <y>453</y>
     </hint>
    </hints>
@@ -1090,8 +1142,8 @@
      <y>82</y>
     </hint>
     <hint type="destinationlabel">
-     <x>359</x>
-     <y>116</y>
+     <x>330</x>
+     <y>127</y>
     </hint>
    </hints>
   </connection>
@@ -1102,12 +1154,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>429</x>
-     <y>81</y>
+     <x>410</x>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
-     <x>455</x>
-     <y>119</y>
+     <x>410</x>
+     <y>130</y>
     </hint>
    </hints>
   </connection>
@@ -1118,28 +1170,12 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>680</x>
-     <y>512</y>
+     <x>667</x>
+     <y>528</y>
     </hint>
     <hint type="destinationlabel">
      <x>751</x>
      <y>475</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>treeWidget</sender>
-   <signal>itemActivated(QTreeWidgetItem*,int)</signal>
-   <receiver>label_8</receiver>
-   <slot>update()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>251</x>
-     <y>315</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>251</x>
-     <y>514</y>
     </hint>
    </hints>
   </connection>

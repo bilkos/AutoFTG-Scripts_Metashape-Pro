@@ -131,29 +131,101 @@
       </item>
       <item>
        <property name="text">
-        <string notr="true">KALOTA</string>
+        <string notr="true">KALOTA-1</string>
        </property>
        <property name="icon">
         <iconset resource="../qtresources.qrc">
-         <normaloff>:/icons/kalota_m.png</normaloff>:/icons/kalota_m.png</iconset>
+         <normaloff>:/icons/template_kalota-modra.png</normaloff>:/icons/template_kalota-modra.png</iconset>
        </property>
       </item>
       <item>
        <property name="text">
-        <string notr="true">STOPNICA - IZKOP</string>
+        <string>KALOTA-2</string>
        </property>
        <property name="icon">
         <iconset resource="../qtresources.qrc">
-         <normaloff>:/icons/stopnca_o.png</normaloff>:/icons/stopnca_o.png</iconset>
+         <normaloff>:/icons/template_kalota-oranzna.png</normaloff>:/icons/template_kalota-oranzna.png</iconset>
        </property>
       </item>
       <item>
        <property name="text">
-        <string notr="true">STOPNICA - B.BET.</string>
+        <string>KALOTA-3</string>
        </property>
        <property name="icon">
         <iconset resource="../qtresources.qrc">
-         <normaloff>:/icons/stopnca_s.png</normaloff>:/icons/stopnca_s.png</iconset>
+         <normaloff>:/icons/template_kalota-rdeca.png</normaloff>:/icons/template_kalota-rdeca.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>KALOTA-4</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/template_kalota-vijola.png</normaloff>:/icons/template_kalota-vijola.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>KALOTA-5</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/template_kalota-zelena.png</normaloff>:/icons/template_kalota-zelena.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">STOPNICA-1</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/template_stopnica-modra.png</normaloff>:/icons/template_stopnica-modra.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">STOPNICA-2</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/template_stopnica-oranzna.png</normaloff>:/icons/template_stopnica-oranzna.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>STOPNICA-3</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/template_stopnica-rdeca.png</normaloff>:/icons/template_stopnica-rdeca.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>STOPNICA-4</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/template_stopnica-vijola.png</normaloff>:/icons/template_stopnica-vijola.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>STOPNICA-5</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/template_stopnica-zelena.png</normaloff>:/icons/template_stopnica-zelena.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>PREDOR-VLAK</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-subway-50.png</normaloff>:/icons/icons8-subway-50.png</iconset>
        </property>
       </item>
      </widget>
@@ -180,7 +252,7 @@
         </property>
         <property name="icon">
          <iconset resource="../qtresources.qrc">
-          <normaloff>:/icons/icons8-add-50.png</normaloff>:/icons/icons8-add-50.png</iconset>
+          <normaloff>:/icons/icons8-add-tab-50.png</normaloff>:/icons/icons8-add-tab-50.png</iconset>
         </property>
         <property name="iconSize">
          <size>
