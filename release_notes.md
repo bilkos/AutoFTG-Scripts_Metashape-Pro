@@ -212,3 +212,21 @@ Release notes for AutoFTG python script
 1. Reworked settings storage for all settings files to use *.ini file strusture.
 2. Minor improvements for Camera Editer, Camera Add/Edit, and Edit Settings dialogs.
 
+---
+
+## `2023/01/13`
+
+### 2.5.0
+
+1. Added new Batch Chunk Creator
+2. Minor bug-fixes and improvements
+
+---
+
+## `2023/01/14`
+
+### 2.5.1
+
+1. Added check for point file and image number in Batch Chunk Creator
+2. Fixed chunk prefix-suffix handling
+

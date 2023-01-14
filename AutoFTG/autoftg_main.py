@@ -43,7 +43,7 @@ from AutoFTG import qtresources
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.5.0"
+app_ver = "2.5.1"
 appsettings_ver = "5"
 app_author = "Author: Boris Bilc\n\n"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
@@ -400,30 +400,6 @@ def removeCamConfig(camname):
 		Metashape.app.messageBox("Error! No camera named (" + str(camname) + ") was found.\n\nDid you manualy edit comaera configuration?")
 
 
-# # Change project data folder
-# def dataFolderChange():
-# 	settings.foldeData = Metashape.app.getExistingDirectory("Working data folder")
-# 	settings.store()
-# 	print("Working Folder: " + str(settings.foldeData))
-
-
-# # Create new project routine - used when no project is present when user tries to add new chunk
-# def novProjekt():
-# 	global projectOpened
-# 	doc = Metashape.app.document
-# 	docPath = Metashape.app.getSaveFileName("Save new project", "",  "Metashape Project (*.psx)")
-# 	try:
-# 		doc.save(docPath)
-# 		Metashape.app.messageBox("New project saved.\n")
-# 		projCfgLoad()
-# 		projectOpened = True
-# 	except RuntimeError:
-# 		Metashape.app.messageBox("Process canceled...")
-# 		projectOpened = False
-# 	
-# 	Metashape.app.update()
-
-
 # Class for settings editing UI
 class Ui_settingsDialog(QtWidgets.QDialog):
 	def __init__(self, parent):
@@ -435,22 +411,6 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		icon = QIcon()
 		icon.addFile(u":/icons/icons8-opened-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
 
-		# self.label = QtWidgets.QLabel()
-		# self.label.setObjectName(u"label")
-		# self.label.setGeometry(QRect(10, 10, 80, 16))
-		# self.label.setText("Project Folder:")
-		# self.lineProjFolder = QtWidgets.QLineEdit()
-		# self.lineProjFolder.setObjectName(u"lineProjFolder")
-		# self.lineProjFolder.setGeometry(QRect(10, 10, 280, 24))
-		# self.lineProjFolder.setText(str(selected_data_folder))
-		# self.lineProjFolder.setClearButtonEnabled(True)
-		# self.btnProjFolder = QtWidgets.QPushButton()
-		# self.btnProjFolder.setObjectName(u"btnProjFolder")
-		# self.btnProjFolder.setGeometry(QRect(300, 10, 80, 24))
-		# self.btnProjFolder.setText(u" Browse")
-		# self.btnProjFolder.setIcon(icon)
-		# self.btnProjFolder.setIconSize(QSize(21, 21))
-		
 		self.label_2 = QtWidgets.QLabel()
 		self.label_2.setObjectName(u"label_2")
 		self.label_2.setGeometry(QRect(10, 40, 80, 16))
@@ -499,15 +459,10 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		layout.setRowMinimumHeight(0, 24)
 		layout.setRowMinimumHeight(1, 24)
 		layout.setRowMinimumHeight(2, 24)
-		# layout.setRowMinimumHeight(3, 24)
 		layout.setVerticalSpacing(1)
 
 		layout.setColumnMinimumWidth(1, 250) # minimum column width
 		layout.setColumnMinimumWidth(2, 80) # minimum column width
-
-		# layout.addWidget(self.label, 0, 0)
-		# layout.addWidget(self.lineProjFolder, 0, 1)
-		# layout.addWidget(self.btnProjFolder, 0, 2)
 
 		layout.addWidget(self.label_2, 0, 0)
 		layout.addWidget(self.lineDataFolder, 0, 1)
@@ -526,10 +481,6 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		QtCore.QObject.connect(self.btnClose, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("reject()"))
 
 		self.exec()
-
-	# def projFolderChange(self):
-	# 	folderExport = Metashape.app.getExistingDirectory("Export folder")
-	# 	self.lineProjFolder.setText(folderExport)
 
 	def dataFolderChange(self):
 		foldeData = Metashape.app.getExistingDirectory("Data folder")
@@ -1644,9 +1595,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		sizePolicy3.setVerticalStretch(0)
 		sizePolicy3.setHeightForWidth(self.checkBox_4.sizePolicy().hasHeightForWidth())
 		self.checkBox_4.setSizePolicy(sizePolicy3)
-#if QT_CONFIG(statustip)
 		self.checkBox_4.setToolTip(u"Disable to set custom location for data. Enable to use project default data location settings.")
-#endif // QT_CONFIG(statustip)
 		self.checkBox_4.setText(u"Use Project Data Location")
 		icon = QIcon()
 		icon.addFile(u":/icons/icons8-copy-to-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
@@ -1762,8 +1711,6 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		for cam in cam_list:
 			icon_type = camCfg.get(cam, "Type")
 			icon_subtype = camCfg.get(cam, "SubType")
-			#self.listwidget = QListWidgetItem(self.listWidget)
-			#self.listwidget.setText(cam)
 			if icon_subtype == "SmartPhone":
 				self.comboBox_2.addItem(icon4, cam)
 			elif icon_subtype == "Drone":
@@ -1788,9 +1735,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		font3.setPointSize(11)
 		self.comboBox_2.setFont(font3)
 		self.comboBox_2.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(statustip)
 		self.comboBox_2.setToolTip(u"Choose camera settings to be applied when creating new chunk...")
-#endif // QT_CONFIG(statustip)
 		self.comboBox_2.setIconSize(QSize(20, 20))
 
 		self.gridLayout_3.addWidget(self.comboBox_2, 6, 0, 1, 1)
@@ -1804,9 +1749,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		font4.setPointSize(9)
 		self.checkBox.setFont(font4)
 		self.checkBox.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
 		self.checkBox.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Marker coordinates will be imported after target detection. <span style=\" font-weight:600;\">*</span></p><p><span style=\" font-weight:600;\">Disabled:</span> Coordinates are not imported. User must manually import coordinates.</p><p><span style=\" font-weight:600;\">*</span> Automatic importing of marker coordinates only works if point file name is the same as it's parent folder name, and contains a header with metadata. Point coordinates should start at row #7.</p></body></html>")
-#endif // QT_CONFIG(tooltip)
 		self.checkBox.setText(u"Import Marker Coordinates")
 		icon7 = QIcon()
 		icon7.addFile(u":/icons/icons8-map-marker-50.png", QSize(), QIcon.Normal, QIcon.Off)
@@ -1822,9 +1765,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.checkBox_2.setSizePolicy(sizePolicy2)
 		self.checkBox_2.setFont(font4)
 		self.checkBox_2.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
 		self.checkBox_2.setToolTip(u"<html><head/><body><p>Enable automatic target detection when new chunk is created...</p></body></html>")
-#endif // QT_CONFIG(tooltip)
 		self.checkBox_2.setText(u"Automatic Target Detection")
 		icon8 = QIcon()
 		icon8.addFile(u":/icons/icons8-my-location-50.png", QSize(), QIcon.Normal, QIcon.Off)
@@ -1840,26 +1781,12 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			seticon = QIcon()
 			seticon.addFile(menu_icon, QSize(), QIcon.Normal, QIcon.Off)
 			self.cbChunkSettings.addItem(seticon, section)
-		# icon9 = QIcon()
-		# icon9.addFile(u":/icons/icons8-add-tab-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		# self.cbChunkSettings.addItem(icon9, u"Default")
-		# icon10 = QIcon()
-		# icon10.addFile(u":/icons/kalota_m.png", QSize(), QIcon.Normal, QIcon.Off)
-		# self.cbChunkSettings.addItem(icon10, u"T8 GC - KALOTA")
-		# icon11 = QIcon()
-		# icon11.addFile(u":/icons/stopnca_o.png", QSize(), QIcon.Normal, QIcon.Off)
-		# self.cbChunkSettings.addItem(icon11, u"STOPNICA - IZKOP")
-		# icon12 = QIcon()
-		# icon12.addFile(u":/icons/stopnca_s.png", QSize(), QIcon.Normal, QIcon.Off)
-		# self.cbChunkSettings.addItem(icon12, u"STOPNICA - B.BET.")
 		self.cbChunkSettings.setObjectName(u"cbChunkSettings")
 		sizePolicy2.setHeightForWidth(self.cbChunkSettings.sizePolicy().hasHeightForWidth())
 		self.cbChunkSettings.setSizePolicy(sizePolicy2)
 		self.cbChunkSettings.setFont(font3)
 		self.cbChunkSettings.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(statustip)
 		self.cbChunkSettings.setToolTip(u"Choose settings used for chunk creation...")
-#endif // QT_CONFIG(statustip)
 		self.cbChunkSettings.setIconSize(QSize(20, 20))
 		self.cbChunkSettings.setCurrentIndex(0)
 
@@ -1890,9 +1817,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		font5.setPointSize(10)
 		self.checkBox_3.setFont(font5)
 		self.checkBox_3.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
 		self.checkBox_3.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Automatic chunk creation with predefined settings</p><p><span style=\" font-weight:600;\">Disabled:</span> Manual confirmation of intermediate steps</p></body></html>")
-#endif // QT_CONFIG(tooltip)
 		self.checkBox_3.setText(u"Automatic Processing")
 		icon13 = QIcon()
 		icon13.addFile(u":/icons/icons8-in-progress-96.png", QSize(), QIcon.Normal, QIcon.Off)
@@ -2069,10 +1994,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		sizePolicy6 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
 		sizePolicy6.setHorizontalStretch(0)
 		sizePolicy6.setVerticalStretch(0)
-		#sizePolicy6.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
 		self.treeWidget.setSizePolicy(sizePolicy6)
 		self.treeWidget.setMinimumSize(QSize(380, 0))
-		#self.treeWidget.setMaximumSize(QSize(400, 16777215))
 		self.treeWidget.setAutoScrollMargin(20)
 		self.treeWidget.setEditTriggers(QAbstractItemView.DoubleClicked|QAbstractItemView.EditKeyPressed|QAbstractItemView.SelectedClicked)
 		self.treeWidget.setTabKeyNavigation(True)
@@ -2109,11 +2032,6 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.pushButton.clicked.connect(self.browseFolder)
 		self.treeWidget.itemSelectionChanged.connect(self.updateSelected)
 
-		# QtCore.QObject.connect(self.cbChunkSettings, QtCore.SIGNAL("currentTextChanged()"), self.lineEdit, QtCore.SLOT("setText()"))
-		# QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("clicked()"), self.startProcess)
-		# QtCore.QObject.connect(self.pushButton_3, QtCore.SIGNAL("clicked()"), self.startProcess)
-		# QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("reject()"))			
-		
 		self.exec()
 
 	def browseFolder(self):
@@ -2243,10 +2161,10 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.sel_items = []
 		self.setObjectName(u"DialogBatchChunk")
 		self.setWindowTitle(u"Batch Chunk Creator")
-		self.resize(680, 520)
+		self.resize(800, 520)
 		self.verticalLayoutWidget = QWidget(self)
 		self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
-		self.verticalLayoutWidget.setGeometry(QRect(10, 0, 661, 511))
+		self.verticalLayoutWidget.setGeometry(QRect(10, 0, 786, 511))
 		self.verticalLayout_2 = QVBoxLayout(self.verticalLayoutWidget)
 		self.verticalLayout_2.setSpacing(5)
 		self.verticalLayout_2.setContentsMargins(10, 10, 10, 10)
@@ -2323,9 +2241,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		sizePolicy3.setVerticalStretch(0)
 		sizePolicy3.setHeightForWidth(self.checkBox_4.sizePolicy().hasHeightForWidth())
 		self.checkBox_4.setSizePolicy(sizePolicy3)
-#if QT_CONFIG(statustip)
 		self.checkBox_4.setToolTip(u"Disable to set custom location for data. Enable to use project default data location settings.")
-#endif // QT_CONFIG(statustip)
 		self.checkBox_4.setText(u"Use Project Data Location")
 		icon = QIcon()
 		icon.addFile(u":/icons/icons8-copy-to-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
@@ -2441,8 +2357,6 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		for cam in cam_list:
 			icon_type = camCfg.get(cam, "Type")
 			icon_subtype = camCfg.get(cam, "SubType")
-			#self.listwidget = QListWidgetItem(self.listWidget)
-			#self.listwidget.setText(cam)
 			if icon_subtype == "SmartPhone":
 				self.comboBox_2.addItem(icon4, cam)
 			elif icon_subtype == "Drone":
@@ -2467,9 +2381,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		font3.setPointSize(11)
 		self.comboBox_2.setFont(font3)
 		self.comboBox_2.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(statustip)
 		self.comboBox_2.setToolTip(u"Choose camera settings to be applied when creating new chunk...")
-#endif // QT_CONFIG(statustip)
 		self.comboBox_2.setIconSize(QSize(20, 20))
 
 		self.gridLayout_3.addWidget(self.comboBox_2, 6, 0, 1, 1)
@@ -2483,9 +2395,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		font4.setPointSize(9)
 		self.checkBox.setFont(font4)
 		self.checkBox.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
 		self.checkBox.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Marker coordinates will be imported after target detection. <span style=\" font-weight:600;\">*</span></p><p><span style=\" font-weight:600;\">Disabled:</span> Coordinates are not imported. User must manually import coordinates.</p><p><span style=\" font-weight:600;\">*</span> Automatic importing of marker coordinates only works if point file name is the same as it's parent folder name, and contains a header with metadata. Point coordinates should start at row #7.</p></body></html>")
-#endif // QT_CONFIG(tooltip)
 		self.checkBox.setText(u"Import Marker Coordinates")
 		icon7 = QIcon()
 		icon7.addFile(u":/icons/icons8-map-marker-50.png", QSize(), QIcon.Normal, QIcon.Off)
@@ -2501,9 +2411,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.checkBox_2.setSizePolicy(sizePolicy2)
 		self.checkBox_2.setFont(font4)
 		self.checkBox_2.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
 		self.checkBox_2.setToolTip(u"<html><head/><body><p>Enable automatic target detection when new chunk is created...</p></body></html>")
-#endif // QT_CONFIG(tooltip)
 		self.checkBox_2.setText(u"Automatic Target Detection")
 		icon8 = QIcon()
 		icon8.addFile(u":/icons/icons8-my-location-50.png", QSize(), QIcon.Normal, QIcon.Off)
@@ -2519,26 +2427,13 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			seticon = QIcon()
 			seticon.addFile(menu_icon, QSize(), QIcon.Normal, QIcon.Off)
 			self.cbChunkSettings.addItem(seticon, section)
-		# icon9 = QIcon()
-		# icon9.addFile(u":/icons/icons8-add-tab-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		# self.cbChunkSettings.addItem(icon9, u"Default")
-		# icon10 = QIcon()
-		# icon10.addFile(u":/icons/kalota_m.png", QSize(), QIcon.Normal, QIcon.Off)
-		# self.cbChunkSettings.addItem(icon10, u"T8 GC - KALOTA")
-		# icon11 = QIcon()
-		# icon11.addFile(u":/icons/stopnca_o.png", QSize(), QIcon.Normal, QIcon.Off)
-		# self.cbChunkSettings.addItem(icon11, u"STOPNICA - IZKOP")
-		# icon12 = QIcon()
-		# icon12.addFile(u":/icons/stopnca_s.png", QSize(), QIcon.Normal, QIcon.Off)
-		# self.cbChunkSettings.addItem(icon12, u"STOPNICA - B.BET.")
+
 		self.cbChunkSettings.setObjectName(u"cbChunkSettings")
 		sizePolicy2.setHeightForWidth(self.cbChunkSettings.sizePolicy().hasHeightForWidth())
 		self.cbChunkSettings.setSizePolicy(sizePolicy2)
 		self.cbChunkSettings.setFont(font3)
 		self.cbChunkSettings.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(statustip)
 		self.cbChunkSettings.setToolTip(u"Choose settings used for chunk creation...")
-#endif // QT_CONFIG(statustip)
 		self.cbChunkSettings.setIconSize(QSize(20, 20))
 		self.cbChunkSettings.setCurrentIndex(0)
 
@@ -2569,9 +2464,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		font5.setPointSize(10)
 		self.checkBox_3.setFont(font5)
 		self.checkBox_3.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
 		self.checkBox_3.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Automatic chunk creation with predefined settings</p><p><span style=\" font-weight:600;\">Disabled:</span> Manual confirmation of intermediate steps</p></body></html>")
-#endif // QT_CONFIG(tooltip)
 		self.checkBox_3.setText(u"Automatic Processing")
 		icon13 = QIcon()
 		icon13.addFile(u":/icons/icons8-in-progress-96.png", QSize(), QIcon.Normal, QIcon.Off)
@@ -2736,6 +2629,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		font6.setBold(True)
 		font6.setWeight(75)
 		__qtreewidgetitem = QTreeWidgetItem()
+		__qtreewidgetitem.setText(2, u"Images");
+		__qtreewidgetitem.setText(1, u"Point File");
 		__qtreewidgetitem.setText(0, u"Folders");
 		__qtreewidgetitem.setFont(0, font6);
 		__qtreewidgetitem.setIcon(0, icon17);
@@ -2745,13 +2640,13 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		font7 = QFont()
 		font7.setFamily(u"Segoe UI")
 		self.treeWidget.setObjectName(u"treeWidget")
-		sizePolicy6 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-		sizePolicy6.setHorizontalStretch(0)
-		sizePolicy6.setVerticalStretch(0)
-		#sizePolicy6.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
-		self.treeWidget.setSizePolicy(sizePolicy6)
-		self.treeWidget.setMinimumSize(QSize(380, 0))
-		#self.treeWidget.setMaximumSize(QSize(400, 16777215))
+		sizePolicy7 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+		sizePolicy7.setHorizontalStretch(0)
+		sizePolicy7.setVerticalStretch(0)
+		sizePolicy7.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
+		self.treeWidget.setSizePolicy(sizePolicy7)
+		self.treeWidget.setMinimumSize(QSize(510, 0))
+		self.treeWidget.setMaximumSize(QSize(510, 16777215))
 		self.treeWidget.setAutoScrollMargin(20)
 		self.treeWidget.setEditTriggers(QAbstractItemView.DoubleClicked|QAbstractItemView.EditKeyPressed|QAbstractItemView.SelectedClicked)
 		self.treeWidget.setTabKeyNavigation(True)
@@ -2759,11 +2654,12 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.treeWidget.setAlternatingRowColors(True)
 		self.treeWidget.setSelectionMode(QAbstractItemView.MultiSelection)
 		self.treeWidget.setSelectionBehavior(QAbstractItemView.SelectItems)
+		self.treeWidget.setIconSize(QSize(20, 20))
 		self.treeWidget.setUniformRowHeights(True)
 		self.treeWidget.setSortingEnabled(True)
 		self.treeWidget.setAllColumnsShowFocus(True)
 		self.treeWidget.header().setVisible(True)
-		self.treeWidget.header().setDefaultSectionSize(200)
+		self.treeWidget.header().setDefaultSectionSize(165)
 
 		self.gridLayout.addWidget(self.treeWidget, 2, 0, 1, 1)
 
@@ -2788,11 +2684,6 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.pushButton.clicked.connect(self.browseFolder)
 		self.treeWidget.itemSelectionChanged.connect(self.updateSelected)
 
-		# QtCore.QObject.connect(self.cbChunkSettings, QtCore.SIGNAL("currentTextChanged()"), self.lineEdit, QtCore.SLOT("setText()"))
-		# QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("clicked()"), self.startProcess)
-		# QtCore.QObject.connect(self.pushButton_3, QtCore.SIGNAL("clicked()"), self.startProcess)
-		# QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("reject()"))			
-		
 		self.exec()
 
 	def browseFolder(self):
@@ -2833,22 +2724,53 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			icon17.addFile(u":/icons/icons8-folder-tree-50.png", QSize(), QIcon.Normal, QIcon.Off)
 			icon18 = QIcon()
 			icon18.addFile(u":/icons/icons8-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+			icon19 = QIcon()
+			icon19.addFile(u":/icons/icons8-done-50.png", QSize(), QIcon.Normal, QIcon.Off)
+			icon20 = QIcon()
+			icon20.addFile(u":/icons/icons8-no-camera-96.png", QSize(), QIcon.Normal, QIcon.Off)
+			font7 = QFont()
+			font7.setFamily(u"Segoe UI")
+			icon21 = QIcon()
+			icon21.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
+			icon22 = QIcon()
+			icon22.addFile(u":/icons/icons8-add-camera-50.png", QSize(), QIcon.Normal, QIcon.Off)
 			font6 = QFont()
 			font6.setBold(True)
 			font6.setWeight(75)
 			__qtreewidgetitem = QTreeWidgetItem()
+			__qtreewidgetitem.setText(2, u"Images");
+			__qtreewidgetitem.setText(1, u"Point File");
 			__qtreewidgetitem.setText(0, u"Folders");
 			__qtreewidgetitem.setFont(0, font6);
 			__qtreewidgetitem.setIcon(0, icon17);
 			self.treeWidget.setHeaderItem(__qtreewidgetitem)
+		
+			netroot = self.lineEdit.text()
 			folder_list = next(os.walk(open_folder))[1]
-			
 			for folder in folder_list:
+				image_folder = str(netroot).replace("\\", "/") + "/" + folder
+				photos_count = len(find_files(image_folder, [".jpg", ".jpeg", ".png", ".tif", ".tiff"]))
+				points_file = image_folder + "/" + folder + ".txt"
+				points_file_exists = os.path.isfile(points_file)
 				__qtreewidgetitem1 = QTreeWidgetItem(self.treeWidget)
-				__qtreewidgetitem1.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
+				__qtreewidgetitem1.setText(2, str(photos_count));
+				
+				if photos_count > 0:
+					__qtreewidgetitem1.setIcon(2, icon22);
+					__qtreewidgetitem1.setFlags(Qt.ItemIsSelectable()|Qt.ItemIsEnabled);
+				else:
+					__qtreewidgetitem1.setIcon(2, icon20);
+									
+				if points_file_exists == True:
+					__qtreewidgetitem1.setIcon(1, icon19);
+				else:
+					__qtreewidgetitem1.setFlags(Qt.ItemIsSelectable()|Qt.ItemIsEnabled);
+					__qtreewidgetitem1.setIcon(1, icon21);
+
+
 				__qtreewidgetitem1.setText(0, folder);
 				__qtreewidgetitem1.setIcon(0, icon18);
-
+				
 		else:
 			icon17 = QIcon()
 			icon17.addFile(u":/icons/icons8-folder-tree-50.png", QSize(), QIcon.Normal, QIcon.Off)
@@ -3092,11 +3014,14 @@ Metashape.app.addMenuItem(labelsep55, prazno)
 labelset4 = "AutoFTG/Edit Settings"
 Metashape.app.addMenuItem(labelset4, editSettings, icon=icon32)
 
+labelset2i = "Load Project Settings"
+Metashape.app.addMenuItem(labelset2i, projectOpenedCheck, icon=icon40)
+
 labelAddChQuicki = "Add New Chunk"
 Metashape.app.addMenuItem(label=labelAddChQuicki, func=diaAddChunkQuick, icon=iconadd)
 
-labelset2i = "Load Project Settings"
-Metashape.app.addMenuItem(labelset2i, projectOpenedCheck, icon=icon40)
+labelAddChBat = "Batch Chunk Creator"
+Metashape.app.addMenuItem(label=labelAddChBat, func=diaAddChunkBatch, icon=iconaddc)
 
 # labelsep3 = "AutoFTG/New Chunk (2TIR)/--------------------"
 # Metashape.app.addMenuItem(labelsep3, prazno)

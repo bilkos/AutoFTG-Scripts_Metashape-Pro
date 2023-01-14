@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>680</width>
+    <width>800</width>
     <height>520</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>661</width>
+     <width>786</width>
      <height>511</height>
     </rect>
    </property>
@@ -861,13 +861,13 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>400</width>
+          <width>525</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>400</width>
+          <width>525</width>
           <height>16777215</height>
          </size>
         </property>
@@ -892,6 +892,12 @@
         <property name="selectionBehavior">
          <enum>QAbstractItemView::SelectItems</enum>
         </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
         <property name="uniformRowHeights">
          <bool>true</bool>
         </property>
@@ -905,7 +911,7 @@
          <bool>true</bool>
         </attribute>
         <attribute name="headerDefaultSectionSize">
-         <number>200</number>
+         <number>175</number>
         </attribute>
         <column>
          <property name="text">
@@ -922,6 +928,16 @@
            <normaloff>:/icons/icons8-folder-tree-50.png</normaloff>:/icons/icons8-folder-tree-50.png</iconset>
          </property>
         </column>
+        <column>
+         <property name="text">
+          <string notr="true">Point File</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string notr="true">Images</string>
+         </property>
+        </column>
         <item>
          <property name="text">
           <string notr="true">20230109-0530</string>
@@ -929,6 +945,20 @@
          <property name="icon">
           <iconset resource="qtresources.qrc">
            <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="qtresources.qrc">
+           <normaloff>:/icons/icons8-done-50.png</normaloff>:/icons/icons8-done-50.png</iconset>
+         </property>
+         <property name="text">
+          <string notr="true">No images</string>
+         </property>
+         <property name="icon">
+          <iconset resource="qtresources.qrc">
+           <normaloff>:/icons/icons8-no-camera-96.png</normaloff>:/icons/icons8-no-camera-96.png</iconset>
          </property>
          <property name="flags">
           <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -947,8 +977,22 @@
           <iconset resource="qtresources.qrc">
            <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
          </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="qtresources.qrc">
+           <normaloff>:/icons/icons8-close-50.png</normaloff>:/icons/icons8-close-50.png</iconset>
+         </property>
+         <property name="text">
+          <string notr="true">20</string>
+         </property>
+         <property name="icon">
+          <iconset resource="qtresources.qrc">
+           <normaloff>:/icons/icons8-add-camera-50.png</normaloff>:/icons/icons8-add-camera-50.png</iconset>
+         </property>
          <property name="flags">
-          <set>ItemIsSelectable|ItemIsEnabled</set>
+          <set>NoItemFlags</set>
          </property>
         </item>
         <item>
@@ -964,6 +1008,20 @@
          <property name="icon">
           <iconset resource="qtresources.qrc">
            <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="qtresources.qrc">
+           <normaloff>:/icons/icons8-done-50.png</normaloff>:/icons/icons8-done-50.png</iconset>
+         </property>
+         <property name="text">
+          <string notr="true">27</string>
+         </property>
+         <property name="icon">
+          <iconset resource="qtresources.qrc">
+           <normaloff>:/icons/icons8-add-camera-50.png</normaloff>:/icons/icons8-add-camera-50.png</iconset>
          </property>
          <property name="flags">
           <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -992,8 +1050,8 @@
      <y>68</y>
     </hint>
     <hint type="destinationlabel">
-     <x>372</x>
-     <y>95</y>
+     <x>535</x>
+     <y>108</y>
     </hint>
    </hints>
   </connection>
@@ -1004,8 +1062,8 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>294</x>
-     <y>59</y>
+     <x>535</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>264</x>
@@ -1024,8 +1082,8 @@
      <y>387</y>
     </hint>
     <hint type="destinationlabel">
-     <x>550</x>
-     <y>419</y>
+     <x>792</x>
+     <y>429</y>
     </hint>
    </hints>
   </connection>
@@ -1036,8 +1094,8 @@
    <slot>setText(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>543</x>
-     <y>94</y>
+     <x>792</x>
+     <y>108</y>
     </hint>
     <hint type="destinationlabel">
      <x>190</x>
@@ -1074,6 +1132,22 @@
     <hint type="destinationlabel">
      <x>171</x>
      <y>497</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogBatchChunk</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>712</x>
+     <y>487</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>801</x>
+     <y>515</y>
     </hint>
    </hints>
   </connection>
