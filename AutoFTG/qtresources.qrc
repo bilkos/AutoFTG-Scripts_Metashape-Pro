@@ -1,5 +1,29 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/icons8-advance-48.png</file>
+    <file>icons/icons8-rotate-48.png</file>
+    <file>icons/icons8-circular-arrows-48.png</file>
+    <file>icons/icons8-sort-up-48.png</file>
+    <file>icons/icons8-sort-right-48.png</file>
+    <file>icons/icons8-sort-left-48.png</file>
+    <file>icons/icons8-sort-down-48.png</file>
+    <file>icons/icons8-sort-48.png</file>
+    <file>icons/icons8-forward-48.png</file>
+    <file>icons/icons8-expand-arrow-48.png</file>
+    <file>icons/icons8-collapse-arrow-48.png</file>
+    <file>icons/icons8-back-48.png</file>
+    <file>icons/icons8-left-arrow-48.png</file>
+    <file>icons/icons8-right-arrow-48.png</file>
+    <file>icons/icons8-up-48.png</file>
+    <file>icons/icons8-down-48.png</file>
+    <file>icons/icons8-right-48.png</file>
+    <file>icons/icons8-left-48.png</file>
+    <file>icons/icons8-arrow-48.png</file>
+    <file>icons/icons8-undo-48.png</file>
+    <file>icons/icons8-down-arrow-48.png</file>
+    <file>icons/icons8-up-arrow-48.png</file>
+    <file>icons/icons8-thick-arrow-pointing-down-48.png</file>
+    <file>icons/icons8-thick-arrow-pointing-up-48.png</file>
     <file>icons/template_stopnica-rdeca.png</file>
     <file>icons/template_kalota-rdeca.png</file>
     <file>icons/template_stopnica-oranzna.png</file>

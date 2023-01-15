@@ -8,11 +8,15 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>520</height>
+    <height>570</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Batch Chunk Creator</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="qtresources.qrc">
+    <normaloff>:/icons/AutoFTG-appicon.png</normaloff>:/icons/AutoFTG-appicon.png</iconset>
   </property>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
@@ -20,7 +24,7 @@
      <x>10</x>
      <y>0</y>
      <width>786</width>
-     <height>511</height>
+     <height>561</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -702,74 +706,14 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <property name="spacing">
-         <number>5</number>
+      <item row="0" column="1" rowspan="5">
+       <widget class="Line" name="line_5">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
         </property>
-        <item>
-         <widget class="QLineEdit" name="lineEdit">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <family>Segoe UI</family>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="statusTip">
-           <string notr="true">Path to main folder with data sub-folders...</string>
-          </property>
-          <property name="whatsThis">
-           <string notr="true">Path to main folder with data sub-folders...</string>
-          </property>
-          <property name="placeholderText">
-           <string notr="true">Data location...</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="statusTip">
-           <string notr="true">Data location (root folder with sub-folders containing data)</string>
-          </property>
-          <property name="text">
-           <string notr="true">Browse</string>
-          </property>
-          <property name="icon">
-           <iconset resource="qtresources.qrc">
-            <normaloff>:/icons/icons8-images-folder-50.png</normaloff>:/icons/icons8-images-folder-50.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       </widget>
       </item>
-      <item row="3" column="2">
+      <item row="4" column="2">
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
          <widget class="QPushButton" name="pushButton_3">
@@ -831,26 +775,6 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="1" rowspan="4">
-       <widget class="Line" name="line_5">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_8">
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="text">
-         <string notr="true">Selected: 2</string>
-        </property>
-        <property name="indent">
-         <number>5</number>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QTreeWidget" name="treeWidget">
         <property name="sizePolicy">
@@ -911,7 +835,7 @@
          <bool>true</bool>
         </attribute>
         <attribute name="headerDefaultSectionSize">
-         <number>175</number>
+         <number>170</number>
         </attribute>
         <column>
          <property name="text">
@@ -1029,6 +953,148 @@
         </item>
        </widget>
       </item>
+      <item row="1" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="spacing">
+         <number>5</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="lineEdit">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="statusTip">
+           <string notr="true">Path to main folder with data sub-folders...</string>
+          </property>
+          <property name="whatsThis">
+           <string notr="true">Path to main folder with data sub-folders...</string>
+          </property>
+          <property name="placeholderText">
+           <string notr="true">Data location...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="statusTip">
+           <string notr="true">Data location (root folder with sub-folders containing data)</string>
+          </property>
+          <property name="text">
+           <string notr="true">Browse</string>
+          </property>
+          <property name="icon">
+           <iconset resource="qtresources.qrc">
+            <normaloff>:/icons/icons8-loading-96.png</normaloff>:/icons/icons8-loading-96.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_4">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string notr="true">Reload</string>
+          </property>
+          <property name="icon">
+           <iconset resource="qtresources.qrc">
+            <normaloff>:/icons/icons8-reset-96.png</normaloff>:/icons/icons8-reset-96.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string notr="true">Selected: 2</string>
+        </property>
+        <property name="indent">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QProgressBar" name="progressBar">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>10</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+        <property name="format">
+         <string notr="true">Processing chunk: %v/%m</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
@@ -1063,7 +1129,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>535</x>
-     <y>74</y>
+     <y>73</y>
     </hint>
     <hint type="destinationlabel">
      <x>264</x>
@@ -1078,12 +1144,12 @@
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>572</x>
-     <y>387</y>
+     <x>792</x>
+     <y>380</y>
     </hint>
     <hint type="destinationlabel">
      <x>792</x>
-     <y>429</y>
+     <y>410</y>
     </hint>
    </hints>
   </connection>
@@ -1095,7 +1161,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>792</x>
-     <y>108</y>
+     <y>106</y>
     </hint>
     <hint type="destinationlabel">
      <x>190</x>
@@ -1130,8 +1196,8 @@
      <y>358</y>
     </hint>
     <hint type="destinationlabel">
-     <x>171</x>
-     <y>497</y>
+     <x>174</x>
+     <y>476</y>
     </hint>
    </hints>
   </connection>
@@ -1148,6 +1214,22 @@
     <hint type="destinationlabel">
      <x>801</x>
      <y>515</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>progressBar</receiver>
+   <slot>reset()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>641</x>
+     <y>490</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>449</x>
+     <y>493</y>
     </hint>
    </hints>
   </connection>

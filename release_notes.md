@@ -230,3 +230,11 @@ Release notes for AutoFTG python script
 1. Added check for point file and image number in Batch Chunk Creator
 2. Fixed chunk prefix-suffix handling
 
+---
+
+## `2023/01/14`
+
+### 2.5.2
+
+1. Added processing progres indicators.
+
