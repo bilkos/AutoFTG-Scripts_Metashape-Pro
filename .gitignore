@@ -1,12 +1,9 @@
-AutoFTG/__pycache__/auto_cal_mark_coord.cpython-38.pyc
-AutoFTG/__pycache__/auto_cal_mark_coord.cpython-39.pyc
-AutoFTG/__pycache__/qtresources_rc.cpython-38.pyc
-AutoFTG/__pycache__/resource.cpython-39.pyc
+.vs/
+.vscode/
+__pycache__/
+AutoFTG/__pycache__/
 AutoFTG/templates
 AutoFTG_*.zip
-__pycache__
-/.vs
-/.vscode
 AutoFTG/qtGui/autoftg_camedit
 AutoFTG/qtGui/ProcessedDatalog
 AutoFTG/qtGui/uiChooseCamera

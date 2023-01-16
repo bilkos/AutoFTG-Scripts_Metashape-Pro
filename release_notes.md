@@ -240,7 +240,7 @@ Release notes for AutoFTG python script
 
 ---
 
-## `2023/01/14`
+## `2023/01/16`
 
 ### 2.5.3
 
