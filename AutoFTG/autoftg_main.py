@@ -42,7 +42,7 @@ from .qtresources import *
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.5.2"
+app_ver = "2.5.3"
 appsettings_ver = "5"
 app_author = "Author: Boris Bilc\n\n"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
@@ -1839,9 +1839,9 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.checkBox_3.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Automatic chunk creation with predefined settings</p><p><span style=\" font-weight:600;\">Disabled:</span> Manual confirmation of intermediate steps</p></body></html>")
 #endif // QT_CONFIG(tooltip)
 		self.checkBox_3.setText(u"Automatic Processing")
-		icon14 = QIcon()
-		icon14.addFile(u":/icons/icons8-in-progress-96.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.checkBox_3.setIcon(icon14)
+		iconInProgress = QIcon()
+		iconInProgress.addFile(u":/icons/icons8-in-progress-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.checkBox_3.setIcon(iconInProgress)
 		self.checkBox_3.setIconSize(QSize(20, 20))
 		self.checkBox_3.setCheckable(True)
 		self.checkBox_3.setChecked(True)
@@ -1964,8 +1964,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.gridLayout.addLayout(self.horizontalLayout_4, 4, 2, 1, 1)
 
 		self.treeWidget = QTreeWidget(self.verticalLayoutWidget)
-		icon17 = QIcon()
-		icon17.addFile(u":/icons/icons8-folder-tree-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconFolderTree = QIcon()
+		iconFolderTree.addFile(u":/icons/icons8-folder-tree-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		font6 = QFont()
 		font6.setBold(True)
 		font6.setWeight(75)
@@ -1974,20 +1974,20 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		__qtreewidgetitem.setText(1, u"Point File");
 		__qtreewidgetitem.setText(0, u"Folders");
 		__qtreewidgetitem.setFont(0, font6);
-		__qtreewidgetitem.setIcon(0, icon17);
+		__qtreewidgetitem.setIcon(0, iconFolderTree);
 		self.treeWidget.setHeaderItem(__qtreewidgetitem)
-		icon18 = QIcon()
-		icon18.addFile(u":/icons/icons8-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		icon19 = QIcon()
-		icon19.addFile(u":/icons/icons8-done-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		icon20 = QIcon()
-		icon20.addFile(u":/icons/icons8-no-camera-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconFolder = QIcon()
+		iconFolder.addFile(u":/icons/icons8-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconDone = QIcon()
+		iconDone.addFile(u":/icons/icons8-done-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconNoCam = QIcon()
+		iconNoCam.addFile(u":/icons/icons8-no-camera-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		font7 = QFont()
 		font7.setFamily(u"Segoe UI")
-		icon21 = QIcon()
-		icon21.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		icon22 = QIcon()
-		icon22.addFile(u":/icons/icons8-add-camera-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconClose = QIcon()
+		iconClose.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconAddCam = QIcon()
+		iconAddCam.addFile(u":/icons/icons8-add-camera-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.treeWidget.setObjectName(u"treeWidget")
 		sizePolicy6 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
 		sizePolicy6.setHorizontalStretch(0)
@@ -2009,6 +2009,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.treeWidget.setAllColumnsShowFocus(True)
 		self.treeWidget.header().setVisible(True)
 		self.treeWidget.header().setDefaultSectionSize(165)
+		self.treeWidget.header().setMinimumWidth(100)
 
 		self.gridLayout.addWidget(self.treeWidget, 2, 0, 1, 1)
 
@@ -2044,24 +2045,26 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.pushButton.setStatusTip(u"Data location (root folder with sub-folders containing data)")
 #endif // QT_CONFIG(statustip)
 		self.pushButton.setText(u"Browse")
-		icon23 = QIcon()
-		icon23.addFile(u":/icons/icons8-loading-96.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.pushButton.setIcon(icon23)
+		iconMoveToFolder = QIcon()
+		iconMoveToFolder.addFile(u":/icons/icons8-move-to-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton.setIcon(iconMoveToFolder)
 		self.pushButton.setIconSize(QSize(20, 20))
 
 		self.horizontalLayout.addWidget(self.pushButton)
 
-		self.pushButton_4 = QPushButton(self.verticalLayoutWidget)
-		self.pushButton_4.setObjectName(u"pushButton_4")
-		sizePolicy3.setHeightForWidth(self.pushButton_4.sizePolicy().hasHeightForWidth())
-		self.pushButton_4.setSizePolicy(sizePolicy3)
-		self.pushButton_4.setText(u"Reload")
-		icon24 = QIcon()
-		icon24.addFile(u":/icons/icons8-reset-96.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.pushButton_4.setIcon(icon24)
-		self.pushButton_4.setIconSize(QSize(20, 20))
+		self.pushButton_reload = QPushButton(self.verticalLayoutWidget)
+		self.pushButton_reload.setObjectName(u"pushButton_reload")
+		sizePolicy3.setHeightForWidth(self.pushButton_reload.sizePolicy().hasHeightForWidth())
+		self.pushButton_reload.setSizePolicy(sizePolicy3)
+		self.pushButton_reload.setText(u"Reload")
+		iconReload = QIcon()
+		iconReload.addFile(u":/icons/icons8-reset-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconLoading = QIcon()
+		iconLoading.addFile(u":/icons/icons8-loading-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton_reload.setIcon(iconReload)
+		self.pushButton_reload.setIconSize(QSize(20, 20))
 
-		self.horizontalLayout.addWidget(self.pushButton_4)
+		self.horizontalLayout.addWidget(self.pushButton_reload)
 
 
 		self.gridLayout.addLayout(self.horizontalLayout, 1, 0, 1, 1)
@@ -2080,13 +2083,14 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 
 		self.progressBar = QProgressBar(self.verticalLayoutWidget)
 		self.progressBar.setObjectName(u"progressBar")
-		self.progressBar.setEnabled(False)
 		sizePolicy7.setHeightForWidth(self.progressBar.sizePolicy().hasHeightForWidth())
 		self.progressBar.setSizePolicy(sizePolicy7)
 		self.progressBar.setFont(font5)
-		self.progressBar.setMinimum(0)
-		self.progressBar.setMaximum(0)
+		self.progressBar.setMinimum(1)
+		self.progressBar.setMaximum(1)
 		self.progressBar.setValue(0)
+		self.progressBar.setDisabled
+		self.progressBar.setTextVisible(False)
 		
 		self.gridLayout.addWidget(self.progressBar, 4, 0, 1, 1)
 
@@ -2098,17 +2102,6 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.label_6.setBuddy(self.cbChunkSettings)
 #endif // QT_CONFIG(shortcut)
 
-		self.checkBox_4.toggled.connect(self.pushButton.setDisabled)
-		self.checkBox_4.toggled.connect(self.lineEdit.setDisabled)
-		self.checkBox_2.toggled.connect(self.checkBox.toggle)
-		self.cbChunkSettings.currentTextChanged.connect(self.lineEdit.setText)
-		self.lineEdit.textChanged.connect(self.treeWidget.doItemsLayout)
-		self.treeWidget.itemSelectionChanged.connect(self.label_8.clear)
-		self.pushButton_2.clicked.connect(self.reject)
-
-		self.pushButton_3.setDefault(False)
-
-		
 		__sortingEnabled = self.treeWidget.isSortingEnabled()
 		self.treeWidget.setSortingEnabled(False)
 		self.treeWidget.setSortingEnabled(__sortingEnabled)
@@ -2131,6 +2124,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.pushButton_2.clicked.connect(self.quitChunkBatch)
 		self.pushButton_3.clicked.connect(self.progressBar.reset)
 		self.pushButton_3.clicked.connect(self.processBatch)
+		self.pushButton_reload.clicked.connect(self.updateFolders)
 		self.pushButton.clicked.connect(self.browseFolder)
 		self.treeWidget.itemSelectionChanged.connect(self.updateSelected)
 
@@ -2139,6 +2133,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 	def browseFolder(self):
 		defFolder = Metashape.app.getExistingDirectory("Data folder")
 		self.lineEdit.setText(defFolder)
+		self.updateFolders()
 
 
 	def setCurrentSettings(self):
@@ -2167,66 +2162,71 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		
 
 	def updateFolders(self):
-		self.treeWidget.clear()
-		open_folder = self.lineEdit.text()
+		iconReload = QIcon()
+		iconReload.addFile(u":/icons/icons8-reset-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconLoading = QIcon()
+		iconLoading.addFile(u":/icons/icons8-loading-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		font6 = QFont()
 		font6.setBold(True)
 		font6.setWeight(75)
-		icon17 = QIcon()
-		icon17.addFile(u":/icons/icons8-folder-tree-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconFolderTree = QIcon()
+		iconFolderTree.addFile(u":/icons/icons8-folder-tree-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconFolder = QIcon()
+		iconFolder.addFile(u":/icons/icons8-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconDone = QIcon()
+		iconDone.addFile(u":/icons/icons8-done-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconNoCam = QIcon()
+		iconNoCam.addFile(u":/icons/icons8-no-camera-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		font7 = QFont()
+		font7.setFamily(u"Segoe UI")
+		iconClose = QIcon()
+		iconClose.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconAddCam = QIcon()
+		iconAddCam.addFile(u":/icons/icons8-add-camera-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		
+		self.pushButton_reload.setIcon(iconLoading)
+		self.treeWidget.clear()
+		open_folder = self.lineEdit.text()
 		__qtreewidgetitem = QTreeWidgetItem()
 		__qtreewidgetitem.setText(2, u"Images");
 		__qtreewidgetitem.setText(1, u"Point File");
 		__qtreewidgetitem.setText(0, u"Folders");
 		__qtreewidgetitem.setFont(0, font6);
-		__qtreewidgetitem.setIcon(0, icon17);
+		__qtreewidgetitem.setIcon(0, iconFolderTree);
 		self.treeWidget.setHeaderItem(__qtreewidgetitem)
-		icon18 = QIcon()
-		icon18.addFile(u":/icons/icons8-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		icon19 = QIcon()
-		icon19.addFile(u":/icons/icons8-done-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		icon20 = QIcon()
-		icon20.addFile(u":/icons/icons8-no-camera-96.png", QSize(), QIcon.Normal, QIcon.Off)
-		font7 = QFont()
-		font7.setFamily(u"Segoe UI")
-		icon21 = QIcon()
-		icon21.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		icon22 = QIcon()
-		icon22.addFile(u":/icons/icons8-add-camera-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		font6 = QFont()
-		font6.setBold(True)
-		font6.setWeight(75)
-			
 		open_folder = self.lineEdit.text() + "\\"
 		folder_list = []
 		folder_list = next(os.walk(open_folder))[1];
 		
 		for folder in folder_list:
+			__qtreewidgetitem1 = QTreeWidgetItem(self.treeWidget);
 			image_folder = str(open_folder).replace("\\", "/") + "/" + folder
 			photos_count = len(find_files(image_folder, [".jpg", ".jpeg", ".png", ".tif", ".tiff"]));
-			points_file = image_folder + "/" + folder + ".txt"
-			points_file_exists = os.path.isfile(points_file);
-			__qtreewidgetitem1 = QTreeWidgetItem(self.treeWidget);
-			
 			if photos_count > 0:
 				__qtreewidgetitem1.setText(2, str(photos_count) + " image(s)");
-				__qtreewidgetitem1.setIcon(2, icon22);
+				__qtreewidgetitem1.setIcon(2, iconAddCam);
 				__qtreewidgetitem1.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
+				__qtreewidgetitem1.setSizeHint(2, QSize(120, 0))
 			else:
 				__qtreewidgetitem1.setText(2, "No images");
-				__qtreewidgetitem1.setIcon(2, icon20);
-				__qtreewidgetitem1.isDisabled
+				__qtreewidgetitem1.setIcon(2, iconNoCam);
+				__qtreewidgetitem1.setFlags(Qt.ItemIsEnabled);
 								
+			points_file = image_folder + "/" + folder + ".txt"
+			points_file_exists = os.path.isfile(points_file);
 			if points_file_exists == True:
-				__qtreewidgetitem1.setIcon(1, icon19);
+				__qtreewidgetitem1.setIcon(1, iconDone);
 				__qtreewidgetitem1.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
 				__qtreewidgetitem1.setText(1, u"Found");
 			else:
-				__qtreewidgetitem1.setIcon(1, icon21);
+				__qtreewidgetitem1.setIcon(1, iconClose);
 				__qtreewidgetitem1.setText(1, u"Not Found");
-				__qtreewidgetitem1.isDisabled
+				__qtreewidgetitem1.setFlags(Qt.ItemIsEnabled);
+
 			__qtreewidgetitem1.setText(0, folder);
-			__qtreewidgetitem1.setIcon(0, icon18);
+			__qtreewidgetitem1.setIcon(0, iconFolder);
+		
+		self.pushButton_reload.setIcon(iconReload)
 
 
 	def updateSelected(self):
@@ -2234,22 +2234,25 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		sel_count = len(sel_items)
 		self.label_8.setText(u"Selected: " + str(sel_count))
 
-
-	def processBatch(self):
+	# Process selected folders automatically (no user interaction)
+	def processBatchAuto(self):
 		self.sel_items = self.treeWidget.selectedItems()
 		sel_count = len(self.sel_items)
 		item_menu = self.cbChunkSettings.currentText()
 		item_pre = menuCfg.get(item_menu, "chunk_name_prefix")
 		item_suf = menuCfg.get(item_menu, "chunk_name_suffix")
 		item_cam = self.comboBox_2.currentText()
+		
 		if sel_count > 0:
 			i_cnt = 0
-			self.progressBar.setEnabled(True)
+			self.progressBar.setEnabled
 			self.progressBar.setMaximum(sel_count)
 			self.progressBar.setValue(i_cnt)
+			self.progressBar.setTextVisible(True)
+			
 			for item in self.sel_items:
 				i_cnt = i_cnt + 1
-				self.progressBar.setFormat(u"%v/%m (%p%)")
+				self.progressBar.setFormat(u"%v/%m")
 				self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " / Current: <b>" + str(item.text(0)) + "</b>")
 				doc = Metashape.app.document
 				netpath = Metashape.app.document.path
@@ -2259,29 +2262,106 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 				chunk = doc.addChunk()
 				chunk.addPhotos(photos)
 				chunk_name = item_pre + item.text(0) + item_suf
-				# chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
 				chunk.label = chunk_name
 				doc.chunk = chunk
 				doc.save(netpath)
 				Metashape.app.update()
-				# Metashape.app.messageBox("Nalaganje slik...")
 				time.sleep(3)
 				readCameraSettings(item_cam)
 				useCameraSettings()
-				chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
-				# path_ref = Metashape.app.getOpenFileName("Import marker coordinates", image_folder, "Text file (*.txt)")
-				points_file = image_folder + "/" + item.text(0) + ".txt"
-				chunk.importReference(points_file, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
-				chunk.updateTransform()
+				if self.checkBox_2.isChecked() == True:
+					chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+				if self.checkBox.isChecked() == True:
+					points_file = image_folder + "/" + item.text(0) + ".txt"
+					points_file_exists = os.path.isfile(points_file)
+					if points_file_exists == True:
+						chunk.importReference(points_file, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+						chunk.updateTransform()
+				
+				self.progressBar.setValue(i_cnt)
+
+			if i_cnt < sel_count:
+				self.label_8.setText(u"<html><head/><body><p><span style='font-weight:600;'>Processing error!</span> / Imported " + str(i_cnt) + " of " + str(sel_count) + " / Could not import <span style=' font-weight:600;'>" + str(item.text(0)) + "</span></p></body></html>")
+			else:
+				self.label_8.setText(u"<html><head/><body><p><span style='font-weight:600;'>Processing done!</span> / Imported " + str(i_cnt) + " of " + str(sel_count) + "</p></body></html>")
+
+			Metashape.app.update()
+			doc.save(netpath)
+
+
+	# Process selected folders manually (user must confirm chunk name, camera settings, marker detection, and show point file)
+	def processBatchManual(self):
+		self.sel_items = self.treeWidget.selectedItems()
+		sel_count = len(self.sel_items)
+		item_menu = self.cbChunkSettings.currentText()
+		item_pre = menuCfg.get(item_menu, "chunk_name_prefix")
+		item_suf = menuCfg.get(item_menu, "chunk_name_suffix")
+		item_cam = self.comboBox_2.currentText()
+		
+		if sel_count > 0:
+			i_cnt = 0
+			self.progressBar.setEnabled
+			self.progressBar.setMaximum(sel_count)
+			self.progressBar.setValue(i_cnt)
+			self.progressBar.setTextVisible(True)
+			
+			for item in self.sel_items:
+				i_cnt = i_cnt + 1
+				self.progressBar.setFormat(u"%v/%m")
+				self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " / Current: <b>" + str(item.text(0)) + "</b>")
+				doc = Metashape.app.document
+				netpath = Metashape.app.document.path
+				netroot = self.lineEdit.text()
+				image_folder = str(netroot).replace("\\", "/") + "/" + item.text(0)
+				photos = find_files(image_folder, [".jpg", ".jpeg", ".png", ".tif", ".tiff"])
+				chunk = doc.addChunk()
+				chunk.addPhotos(photos)
+				chunk_name = item_pre + item.text(0) + item_suf
+				chunk.label = Metashape.app.getString("Chunk Name", chunk_name)
+				chunk.label = chunk_name
+				doc.chunk = chunk
 				doc.save(netpath)
-				Metashape.app.update()
+				readCameraSettings(item_cam)
+				useCameraSettings()
+				if self.checkBox_2.isChecked() == True:
+					chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=97)
+				
+				if self.checkBox.isChecked() == True:
+					points_file = image_folder + "/" + item.text(0) + ".txt"
+					points_file_exists = os.path.isfile(points_file)
+					if points_file_exists == True:
+						chunk.importReference(points_file, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+						chunk.updateTransform()
+				else:
+					points_file = Metashape.app.getOpenFileName("Import marker coordinates", image_folder, "Text file (*.txt)")
+					chunk.importReference(points_file, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
+					chunk.updateTransform()
+				
 				self.progressBar.setValue(i_cnt)
 				
-			self.label_8.setText(u"Processed: " + str(i_cnt) + " of " + str(sel_count) + " / Last: " + str(item.text(0)))
+			if i_cnt < sel_count:
+				self.label_8.setText(u"<html><head/><body><p><span style='font-weight:600;'>Processing error!</span> / Imported " + str(i_cnt) + " of " + str(sel_count) + " / Could not import <span style=' font-weight:600;'>" + str(item.text(0)) + "</span></p></body></html>")
+			else:
+				self.label_8.setText(u"<html><head/><body><p><span style='font-weight:600;'>Processing done!</span> / Imported " + str(i_cnt) + " of " + str(sel_count) + "</p></body></html>")
+			
+			Metashape.app.update()
+			doc.save(netpath)
+				
+
+	def processBatch(self):
+		if self.checkBox_3.isChecked() == True:
+			self.progressBar.setMinimum(0)
+			self.progressBar.setMaximum(0)
+			self.processBatchAuto()
+		else:
+			self.progressBar.setMinimum(0)
+			self.progressBar.setMaximum(0)
+			self.processBatchManual()
 
 
 	def quitChunkBatch(self):
 		self.reject()
+
 
 def diaAddChunkBatch():
 	app = QtWidgets.QApplication.instance()

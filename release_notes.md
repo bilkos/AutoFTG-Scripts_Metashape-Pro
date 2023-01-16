@@ -238,3 +238,15 @@ Release notes for AutoFTG python script
 
 1. Added processing progres indicators.
 
+---
+
+## `2023/01/14`
+
+### 2.5.3
+
+1. Updates and improvements for processing progres indicators.
+2. Added check for options:
+  - Automatic Processing
+  - Automatic Target Detection
+  - Import Marker Coordinates
+
