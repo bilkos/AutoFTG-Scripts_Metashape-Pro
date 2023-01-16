@@ -1,7 +1,5 @@
 {
 	"pyside2-vsc.rcc.compile.filepath": "${qrc_name}.py",
 	"pyside2-vsc.uic.compile.filepath": "${ui_name}.py",
-	"python.linting.pylintEnabled": false,
-	"python.linting.enabled": false,
-	"python.linting.flake8Enabled": true
+	"python.linting.enabled": false
 }
