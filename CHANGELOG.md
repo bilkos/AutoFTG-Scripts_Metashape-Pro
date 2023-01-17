@@ -7,6 +7,12 @@ Release notes for AutoFTG python script
 
 ## `2023/01/17`
 
+### 2.5.5
+
+1. Added process log file for projects. (Logs imported chunks)
+2. New logo icon for AutoFTG
+
+
 ### 2.5.4
 
 1. Cleanup

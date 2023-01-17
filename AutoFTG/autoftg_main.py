@@ -28,6 +28,7 @@
 import os
 import sys
 import time
+from datetime import datetime
 import shutil
 from os import path
 
@@ -44,7 +45,7 @@ from .qtresources import *
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.5.3"
+app_ver = "2.5.5"
 appsettings_ver = "5"
 app_author = "Author: Boris Bilc\n\n"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
@@ -567,7 +568,7 @@ class Ui_DialogAddEditCam(QtWidgets.QDialog):
 		self.setFont(font)
 		self.setWindowTitle(u"Add/Edit Camera")
 		icon = QIcon()
-		icon.addFile(u":/icons/AutoFTG-appicon.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon.addFile(u":/icons/AUTOFTG-V2.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.setWindowIcon(icon)
 		self.gridLayoutWidget = QWidget(self)
 		self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
@@ -1574,7 +1575,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.setWindowTitle(u"Batch Chunk Creator")
 		self.resize(800, 570)
 		icon = QIcon()
-		icon.addFile(u":/icons/AutoFTG-appicon.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon.addFile(u":/icons/AUTOFTG-V2.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.setWindowIcon(icon)
 		self.verticalLayoutWidget = QWidget(self)
 		self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
@@ -2121,7 +2122,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.pushButton_reload.setSizePolicy(sizePolicy3)
 		self.pushButton_reload.setText(u"Reload")
 		iconReload = QIcon()
-		iconReload.addFile(u":/icons/icons8-reset-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconReload.addFile(u":/icons/icons8-rotate-48.png", QSize(), QIcon.Normal, QIcon.Off)
 		iconLoading = QIcon()
 		iconLoading.addFile(u":/icons/icons8-loading-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.pushButton_reload.setIcon(iconReload)
@@ -2229,7 +2230,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 
 	def updateFolders(self):
 		iconReload = QIcon()
-		iconReload.addFile(u":/icons/icons8-reset-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconReload.addFile(u":/icons/icons8-update-left-rotation-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		iconLoading = QIcon()
 		iconLoading.addFile(u":/icons/icons8-loading-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		font6 = QFont()
@@ -2310,7 +2311,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		item_cam = self.comboBox_2.currentText()
 		
 		iconStart = QIcon()
-		iconStart.addFile(u":/icons/icons8-loading-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconStart.addFile(u":/icons/icons8-update-left-rotation-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		iconProcess = QIcon()
 		iconProcess.addFile(u":/icons/icons8-in-progress-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		iconError = QIcon()
@@ -2323,6 +2324,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			self.progressBar.setValue(i_cnt)
 			self.progressBar.setTextVisible(True)
 			self.pushButton_3.setIcon(iconStart)
+			ms_header = "Nr, Date/Time, Chunk Name, Photos Nr, Point File, Path, Camera\n"
+			appLogBatch(ms_header)
    
 			for item in self.sel_items:
 				i_cnt = i_cnt + 1
@@ -2345,21 +2348,34 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 				useCameraSettings()
 				if self.checkBox_2.isChecked() == True:
 					chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+
 				if self.checkBox.isChecked() == True:
 					points_file = image_folder + "/" + item.text(0) + ".txt"
 					points_file_exists = os.path.isfile(points_file)
 					if points_file_exists == True:
 						chunk.importReference(points_file, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
 						chunk.updateTransform()
+						ms_pntfile = item.text(0) + ".txt"
+					else:
+						ms_pntfile = "None"
+				
+				now = datetime.now()
+				dt_string = now.strftime("%d/%m/%Y %H:%M")
+				ms_data = str(i_cnt) + ", " + dt_string + ", " + chunk_name + ", " + str(len(photos)) + ", " + ms_pntfile + ", " + image_folder + ", " + item_cam + "\n"
+				appLogBatch(ms_data)
 				
 				self.progressBar.setValue(i_cnt)
 
 			if i_cnt < sel_count:
 				self.pushButton_3.setIcon(iconError)
 				self.label_8.setText(u"<html><head/><body><p><span style='font-weight:600;'>Processing error!</span> / Imported " + str(i_cnt) + " of " + str(sel_count) + " / Could not import <span style=' font-weight:600;'>" + str(item.text(0)) + "</span></p></body></html>")
+				#ms_procend = dt_string + "Processing failed!" + str(item.text(0))
+				#appLogBatch(ms_procend)
 			else:
 				self.pushButton_3.setIcon(iconProcess)
 				self.label_8.setText(u"<html><head/><body><p><span style='font-weight:600;'>Processing done!</span> / Imported " + str(i_cnt) + " of " + str(sel_count) + "</p></body></html>")
+				#ms_procend = dt_string + "Processing successfull!"
+				#appLogBatch(ms_procend)
 
 			doc.save(netpath)
 			Metashape.app.update()
@@ -2374,7 +2390,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		item_suf = menuCfg.get(item_menu, "chunk_name_suffix")
 		item_cam = self.comboBox_2.currentText()
 		iconStart = QIcon()
-		iconStart.addFile(u":/icons/icons8-loading-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconStart.addFile(u":/icons/icons8-update-left-rotation-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		iconProcess = QIcon()
 		iconProcess.addFile(u":/icons/icons8-in-progress-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		iconError = QIcon()
@@ -2536,11 +2552,30 @@ def appAbout():
 	message_box.exec_()
 
 
+def appLogBatch(data):
+	projDoc = Metashape.app.document
+	projDocFile = str(projDoc).replace("<Document '", "").replace("'>", "")
+	logFilenamePath = projDocFile.replace(".psx", "_log.csv")	# Datoteka z nastavitvami projekta
+	logFilenameExists = os.path.isfile(logFilenamePath)	# Preveri, če datoteka z projektom obstaja
+		
+	if logFilenameExists == False:
+		print(str(data))
+		with open(logFilenamePath, "w") as f:
+			f.write(data)
+	else:
+		print(str(data))
+		with open(logFilenamePath, "a") as f:
+			f.write(data)
+	
+	print("\nOpened log: " + logFilenamePath + "\n")
+
+
 def prazno():
 	print("Prazna vrstica")
 
 
 icon_app = ":/icons/AutoFTG-appicon.png"
+icon_app2 = ":/icons/AUTOFTG-V2.png"
 icon0 = ":/icons/icons8-about-50.png"
 iconadd = ":/icons/icons8-add-50.png"
 icon2 = ":/icons/icons8-add-camera-50.png"
@@ -2591,7 +2626,7 @@ iconimg60 = ":/icons/stopnca_s.png"
 
 # Add Main Menu to start with
 labelmenu= "About Auto FTG"
-Metashape.app.addMenuItem(labelmenu, appAbout, icon=icon_app)
+Metashape.app.addMenuItem(labelmenu, appAbout, icon=icon_app2)
 
 labelAddChQuick = "AutoFTG/Add New Chunk"
 Metashape.app.addMenuItem(label=labelAddChQuick, func=diaAddChunkQuick, icon=iconadd)

@@ -14,7 +14,7 @@
    <string notr="true">Chunk Settings Editor</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="qtresources.qrc">
+   <iconset resource="../qtresources.qrc">
     <normaloff>:/icons/icons8-stationery-50.png</normaloff>:/icons/icons8-stationery-50.png</iconset>
   </property>
   <widget class="QWidget" name="gridLayoutWidget">
@@ -142,7 +142,7 @@
           <string>None</string>
          </property>
          <property name="icon">
-          <iconset resource="qtresources.qrc">
+          <iconset resource="../qtresources.qrc">
            <normaloff>:/icons/icons8-camera-50.png</normaloff>:/icons/icons8-camera-50.png</iconset>
          </property>
         </item>
@@ -179,7 +179,7 @@
            <string notr="true"/>
           </property>
           <property name="icon">
-           <iconset resource="qtresources.qrc">
+           <iconset resource="../qtresources.qrc">
             <normaloff>:/icons/icons8-opened-folder-50.png</normaloff>:/icons/icons8-opened-folder-50.png</iconset>
           </property>
           <property name="iconSize">
@@ -286,7 +286,7 @@
            <string notr="true">Remove</string>
           </property>
           <property name="icon">
-           <iconset resource="qtresources.qrc">
+           <iconset resource="../qtresources.qrc">
             <normaloff>:/icons/icons8-full-recycle-bin-50.png</normaloff>:/icons/icons8-full-recycle-bin-50.png</iconset>
           </property>
           <property name="iconSize">
@@ -312,7 +312,7 @@
            <string notr="true">Update</string>
           </property>
           <property name="icon">
-           <iconset resource="qtresources.qrc">
+           <iconset resource="../qtresources.qrc">
             <normaloff>:/icons/icons8-save-as-50.png</normaloff>:/icons/icons8-save-as-50.png</iconset>
           </property>
           <property name="iconSize">
@@ -338,7 +338,7 @@
            <string notr="true">Add New</string>
           </property>
           <property name="icon">
-           <iconset resource="qtresources.qrc">
+           <iconset resource="../qtresources.qrc">
             <normaloff>:/icons/icons8-save-close-50.png</normaloff>:/icons/icons8-save-close-50.png</iconset>
           </property>
           <property name="iconSize">
@@ -384,7 +384,7 @@
            <string notr="true">Close</string>
           </property>
           <property name="icon">
-           <iconset resource="qtresources.qrc">
+           <iconset resource="../qtresources.qrc">
             <normaloff>:/icons/icons8-enter-50.png</normaloff>:/icons/icons8-enter-50.png</iconset>
           </property>
           <property name="iconSize">
@@ -442,7 +442,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="qtresources.qrc">
+         <iconset resource="../qtresources.qrc">
           <normaloff>:/icons/icons8-collapse-arrow-48.png</normaloff>:/icons/icons8-collapse-arrow-48.png</iconset>
         </property>
        </widget>
@@ -456,7 +456,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="qtresources.qrc">
+         <iconset resource="../qtresources.qrc">
           <normaloff>:/icons/icons8-expand-arrow-48.png</normaloff>:/icons/icons8-expand-arrow-48.png</iconset>
         </property>
        </widget>
@@ -509,7 +509,7 @@
         <string notr="true">Default</string>
        </property>
        <property name="icon">
-        <iconset resource="qtresources.qrc">
+        <iconset resource="../qtresources.qrc">
          <normaloff>:/icons/icons8-add-tab-50.png</normaloff>:/icons/icons8-add-tab-50.png</iconset>
        </property>
       </item>
@@ -518,7 +518,7 @@
         <string notr="true">T8 GC - KALOTA</string>
        </property>
        <property name="icon">
-        <iconset resource="qtresources.qrc">
+        <iconset resource="../qtresources.qrc">
          <normaloff>:/icons/template_kalota-zelena.png</normaloff>:/icons/template_kalota-zelena.png</iconset>
        </property>
       </item>
@@ -527,7 +527,7 @@
         <string notr="true">T8 GC - STOPNICA - IZKOP</string>
        </property>
        <property name="icon">
-        <iconset resource="qtresources.qrc">
+        <iconset resource="../qtresources.qrc">
          <normaloff>:/icons/template_stopnica-zelena.png</normaloff>:/icons/template_stopnica-zelena.png</iconset>
        </property>
       </item>
@@ -536,7 +536,7 @@
         <string notr="true">T8 SC - KALOTA</string>
        </property>
        <property name="icon">
-        <iconset resource="qtresources.qrc">
+        <iconset resource="../qtresources.qrc">
          <normaloff>:/icons/template_kalota-modra.png</normaloff>:/icons/template_kalota-modra.png</iconset>
        </property>
       </item>
@@ -545,7 +545,7 @@
         <string notr="true">T8 SC - STOPNICA - IZKOP</string>
        </property>
        <property name="icon">
-        <iconset resource="qtresources.qrc">
+        <iconset resource="../qtresources.qrc">
          <normaloff>:/icons/template_stopnica-modra.png</normaloff>:/icons/template_stopnica-modra.png</iconset>
        </property>
       </item>
@@ -554,7 +554,7 @@
         <string notr="true">T8 PRECNIK-4</string>
        </property>
        <property name="icon">
-        <iconset resource="qtresources.qrc">
+        <iconset resource="../qtresources.qrc">
          <normaloff>:/icons/template_kalota-oranzna.png</normaloff>:/icons/template_kalota-oranzna.png</iconset>
        </property>
       </item>
@@ -575,7 +575,7 @@
  </widget>
  <layoutdefault spacing="5" margin="10"/>
  <resources>
-  <include location="qtresources.qrc"/>
+  <include location="../qtresources.qrc"/>
  </resources>
  <connections>
   <connection>

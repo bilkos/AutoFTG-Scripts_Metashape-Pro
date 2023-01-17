@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/AUTOFTG-V2.png</file>
     <file>icons/icons8-error-48.png</file>
     <file>icons/icons8-in-progress.gif</file>
     <file>icons/icons8-circular-arrows.gif</file>
