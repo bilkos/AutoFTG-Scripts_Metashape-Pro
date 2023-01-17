@@ -26,18 +26,20 @@
 
 
 import os
+import sys
 import time
 import shutil
 from os import path
 
 import Metashape
-import PySide2
+
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
-import configparser
+
 from configparser import ConfigParser
+
 from .qtresources import *
 
 # App info
@@ -147,7 +149,7 @@ def camCfgLoad():
 
 	camCfg.read(camCfgFilePath)
 	cam_list = camCfg.sections()
-	print("Camera settings loaded...\nFile: " + camCfgFile)
+	print("Camera settings loaded...")
 
 
 def appCfgLoad():
@@ -359,7 +361,7 @@ def saveCamConfig(camorig, camname, camdesc, camtype, camsub, camres, camfile):
 		camCfg.set(camname, "SubType", camsub)
 		camCfg.set(camname, "Resolution", camres)
 		camCfg.set(camname, "File", camfile)
-		Metashape.app.messageBox("Camera added...\n" + "Name: " + camname + "\nDesc.: " + camdesc + "\nType: " + camtype + "\nSubType: " + camsub + "\nRes.:: " + camres + " MP\nFile: " + camfile)
+		Metashape.app.messageBox("Camera Updated\n\n" + "Name: " + camname + "\nDesc.: " + camdesc + "\nType: " + camtype + "\nSubType: " + camsub + "\nRes.:: " + camres + " MP\nFile: " + camfile)
 	else:
 		camCfg.add_section(camname)
 		camCfg.set(camname, "Description", camdesc)
@@ -367,7 +369,7 @@ def saveCamConfig(camorig, camname, camdesc, camtype, camsub, camres, camfile):
 		camCfg.set(camname, "SubType", camsub)
 		camCfg.set(camname, "Resolution", camres)
 		camCfg.set(camname, "File", camfile)
-		Metashape.app.messageBox("Camera added...\n" + "Name: " + camname + "\nDesc.: " + camdesc + "\nType: " + camtype + "\nSubType: " + camsub + "\nRes.:: " + camres + " MP\nFile: " + camfile)
+		Metashape.app.messageBox("Camera Created\n\n" + "Name: " + camname + "\nDesc.: " + camdesc + "\nType: " + camtype + "\nSubType: " + camsub + "\nRes.:: " + camres + " MP\nFile: " + camfile)
 
 	with open(camCfgFilePath, 'w') as configfile:
 		camCfg.write(configfile)
@@ -408,7 +410,22 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		
 		icon = QIcon()
 		icon.addFile(u":/icons/icons8-opened-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
-
+		icon0 = QIcon()
+		icon0.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon1 = QIcon()
+		icon1.addFile(u":/icons/icons8-panorama-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon2 = QIcon()
+		icon2.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon3 = QIcon()
+		icon3.addFile(u":/icons/icons8-video-stabilization-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon4 = QIcon()
+		icon4.addFile(u":/icons/icons8-touchscreen-48.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon5 = QIcon()
+		icon5.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon5a = QIcon()
+		icon5a.addFile(u":/icons/icons8-ios-application-placeholder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icoTripod = QIcon()
+		icoTripod.addFile(u":/icons/icons8-camera-on-tripod-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.label_2 = QtWidgets.QLabel()
 		self.label_2.setObjectName(u"label_2")
 		self.label_2.setGeometry(QRect(10, 40, 80, 16))
@@ -432,8 +449,27 @@ class Ui_settingsDialog(QtWidgets.QDialog):
 		self.comboBoxCamera = QtWidgets.QComboBox()
 		self.comboBoxCamera.setObjectName(u"comboBoxCamera")
 		self.comboBoxCamera.setGeometry(QRect(10, 70, 280, 24))
-		for camera in cam_list:
-			self.comboBoxCamera.addItem(camera)
+		for cam in cam_list:
+			icon_type = camCfg.get(cam, "Type")
+			icon_subtype = camCfg.get(cam, "SubType")
+			if icon_subtype == "SmartPhone":
+				self.comboBoxCamera.addItem(icon4, cam)
+			elif icon_subtype == "Drone":
+				self.comboBoxCamera.addItem(icon5, cam)
+			elif icon_subtype == "Special":
+				self.comboBoxCamera.addItem(icoTripod, cam)
+			else:
+				if icon_type == "Fisheye":
+					self.comboBoxCamera.addItem(icon1, cam)
+				elif icon_type == "Spherical":
+					self.comboBoxCamera.addItem(icon3, cam)
+				elif icon_type == "Cylindrical":
+					self.comboBoxCamera.addItem(icon2, cam)
+				elif icon_type == "RPC":
+					self.comboBoxCamera.addItem(icon5a, cam)
+				else:
+					self.comboBoxCamera.addItem(icon0, cam)
+
 		self.comboBoxCamera.setCurrentText(str(selected_camera))
 		
 		self.btnClose = QtWidgets.QPushButton()
@@ -815,6 +851,7 @@ class Ui_DialogAddEditCam(QtWidgets.QDialog):
 		global cameraXmlSource
 		global cameraXmlDest
 		cameraNameAdd = self.lineEdit_2.text()
+		camDesc = self.lineEdit_4.text()
 		cameraTypeAdd = self.comboBox.currentText()
 		cameraSubTypeAdd = self.comboBox_2.currentText()
 		cameraResAdd = self.lineEdit.text()
@@ -826,8 +863,7 @@ class Ui_DialogAddEditCam(QtWidgets.QDialog):
 				self.copyXml()
 			else:
 				cameraFileAdd = "None"
-			saveCamConfig(camOrigName, cameraNameAdd, cameraTypeAdd, cameraSubTypeAdd, cameraResAdd, cameraFileAdd)
-			Metashape.app.messageBox("Camera settings saved.\n" + "Name: " + cameraNameAdd + "\nType: " + cameraTypeAdd + "\nFile: " + cameraFileAdd)
+			saveCamConfig(camOrigName, cameraNameAdd, camDesc, cameraTypeAdd, cameraSubTypeAdd, cameraResAdd, cameraFileAdd)
 			camCfgLoad()
 			cameraXmlSource = ''
 			cameraXmlDest = ''
@@ -897,6 +933,8 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		menuico8.addFile(u":/icons/icons8-no-camera-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		menuico9 = QIcon()
 		menuico9.addFile(u":/icons/icons8-ios-application-placeholder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icoTripod = QIcon()
+		icoTripod.addFile(u":/icons/icons8-camera-on-tripod-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		font1 = QFont()
 		font1.setPointSize(10)
 		self.verticalLayoutWidget_2 = QWidget()
@@ -915,32 +953,37 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 		self.listWidgetCam.setDefaultDropAction(Qt.IgnoreAction)
 		self.listWidgetCam.setIconSize(QSize(20, 20))
 		for camera in cam_list:
-			cam_type = str(camCfg.get(camera, 'Type'))
-			cam_stype = str(camCfg.get(camera, "SubType"))
-			cam_res = str(camCfg.get(camera, 'Resolution'))
+			lcam_type = str(camCfg.get(camera, 'Type'))
+			lcam_stype = str(camCfg.get(camera, "SubType"))
+			lcam_res = str(camCfg.get(camera, 'Resolution'))
+			lcam_desc = str(camCfg.get(camera, 'Description'))
 			self.listWidgetCamItem = QListWidgetItem(camera, self.listWidgetCam)
 			self.listWidgetCamItem.setText(str(camera))
-			if cam_stype == "Drone":
+   #	<html><head/><body><p><span style='font-weight:600;'>Processing error!</span></p></body></html>
+			if lcam_stype == "Drone":
 				self.listWidgetCamItem.setIcon(menuico5)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
-			elif cam_stype == "SmartPhone":
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
+			elif lcam_stype == "SmartPhone":
 				self.listWidgetCamItem.setIcon(menuico4)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
-			elif cam_type == "Fisheye":
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
+			elif lcam_stype == "Special":
+				self.listWidgetCamItem.setIcon(icoTripod)
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
+			elif lcam_type == "Fisheye":
 				self.listWidgetCamItem.setIcon(menuico1)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
-			elif cam_type == "Cylindrical":
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
+			elif lcam_type == "Cylindrical":
 				self.listWidgetCamItem.setIcon(menuico2)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
-			elif cam_type == "Spherical":
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
+			elif lcam_type == "Spherical":
 				self.listWidgetCamItem.setIcon(menuico3)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
-			elif cam_type == "RPC":
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
+			elif lcam_type == "RPC":
 				self.listWidgetCamItem.setIcon(menuico9)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
 			else:
 				self.listWidgetCamItem.setIcon(menuico00)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
 
 		self.hLayoutCamEdit.addWidget(self.listWidgetCam)
 
@@ -1011,50 +1054,62 @@ class Ui_dialogCamGui(QtWidgets.QDialog):
 
 	def refreshCamList(self):
 		self.listWidgetCam.clear()
-		# # for camera in cam_list:
-		# # 	self.listWidgetCam.addItem(camera)
+		menuico00 = QIcon()
+		menuico00.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		menuico1 = QIcon()
+		menuico1.addFile(u":/icons/icons8-panorama-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		menuico2 = QIcon()
+		menuico2.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		menuico3 = QIcon()
+		menuico3.addFile(u":/icons/icons8-video-stabilization-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		menuico4 = QIcon()
+		menuico4.addFile(u":/icons/icons8-touchscreen-48.png", QSize(), QIcon.Normal, QIcon.Off)
+		menuico5 = QIcon()
+		menuico5.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		menuico6 = QIcon()
+		menuico6.addFile(u":/icons/icons8-add-camera-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		menuico7 = QIcon()
+		menuico7.addFile(u":/icons/icons8-design-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		menuico8 = QIcon()
+		menuico8.addFile(u":/icons/icons8-no-camera-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		menuico9 = QIcon()
+		menuico9.addFile(u":/icons/icons8-ios-application-placeholder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icoTripod = QIcon()
+		icoTripod.addFile(u":/icons/icons8-camera-on-tripod-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		for camera in cam_list:
-			cam_type = str(camCfg.get(camera, 'Type'))
-			cam_stype = str(camCfg.get(camera, "SubType"))
-			cam_res = str(camCfg.get(camera, 'Resolution'))
+			lcam_type = str(camCfg.get(camera, 'Type'))
+			lcam_stype = str(camCfg.get(camera, "SubType"))
+			lcam_res = str(camCfg.get(camera, 'Resolution'))
+			lcam_desc = str(camCfg.get(camera, 'Description'))
 			self.listWidgetCamItem = QListWidgetItem(camera, self.listWidgetCam)
 			self.listWidgetCamItem.setText(str(camera))
-			if cam_stype == "Drone":
-				menuico5 = QIcon()
-				menuico5.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
+   #	<html><head/><body><p><span style='font-weight:600;'>Processing error!</span></p></body></html>
+			if lcam_stype == "Drone":
 				self.listWidgetCamItem.setIcon(menuico5)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
-			elif cam_stype == "SmartPhone":
-				menuico4 = QIcon()
-				menuico4.addFile(u":/icons/icons8-touchscreen-48.png", QSize(), QIcon.Normal, QIcon.Off)
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
+			elif lcam_stype == "SmartPhone":
 				self.listWidgetCamItem.setIcon(menuico4)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
-			elif cam_type == "Fisheye":
-				menuico1 = QIcon()
-				menuico1.addFile(u":/icons/icons8-panorama-50.png", QSize(), QIcon.Normal, QIcon.Off)
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
+			elif lcam_stype == "Special":
+				self.listWidgetCamItem.setIcon(icoTripod)
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
+			elif lcam_type == "Fisheye":
 				self.listWidgetCamItem.setIcon(menuico1)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
-			elif cam_type == "Cylindrical":
-				menuico2 = QIcon()
-				menuico2.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
+			elif lcam_type == "Cylindrical":
 				self.listWidgetCamItem.setIcon(menuico2)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
-			elif cam_type == "Spherical":
-				menuico3 = QIcon()
-				menuico3.addFile(u":/icons/icons8-video-stabilization-50.png", QSize(), QIcon.Normal, QIcon.Off)
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
+			elif lcam_type == "Spherical":
 				self.listWidgetCamItem.setIcon(menuico3)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
-			elif cam_type == "RPC":
-				menuico9 = QIcon()
-				menuico9.addFile(u":/icons/icons8-ios-application-placeholder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
+			elif lcam_type == "RPC":
 				self.listWidgetCamItem.setIcon(menuico9)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
 			else:
-				menuico00 = QIcon()
-				menuico00.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
 				self.listWidgetCamItem.setIcon(menuico00)
-				self.listWidgetCamItem.setToolTip("Type: " + cam_type + "\nSubType: " + cam_stype + "\nRes.: " + cam_res + "MP")
+				self.listWidgetCamItem.setToolTip("<html><head/><body><p><span style='font-weight:600;'>Type: " + lcam_type + "</span><br>SubType: " + lcam_stype + "<br>Res.: " + lcam_res + "MP" + "<br>Desc.: " + lcam_desc)
 
+		
 
 	def addNewCam(self):
 		addCameraDialog(camnew=True, camname="")
@@ -1141,6 +1196,8 @@ class Ui_dialogChooseCamera(QtWidgets.QDialog):
 		icon5.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		icon5a = QIcon()
 		icon5a.addFile(u":/icons/icons8-ios-application-placeholder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icoTripod = QIcon()
+		icoTripod.addFile(u":/icons/icons8-camera-on-tripod-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		font1 = QFont()
 		font1.setPointSize(10)
 		for cam in cam_list:
@@ -1152,6 +1209,8 @@ class Ui_dialogChooseCamera(QtWidgets.QDialog):
 				self.listwidget.setIcon(icon4)
 			elif icon_subtype == "Drone":
 				self.listwidget.setIcon(icon5)
+			elif icon_subtype == "Special":
+				self.listwidget.setIcon(icoTripod)
 			else:
 				if icon_type == "Fisheye":
 					self.listwidget.setIcon(icon1)
@@ -1714,6 +1773,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		icon5.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		icon5a = QIcon()
 		icon5a.addFile(u":/icons/icons8-ios-application-placeholder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icoTripod = QIcon()
+		icoTripod.addFile(u":/icons/icons8-camera-on-tripod-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		for cam in cam_list:
 			icon_type = camCfg.get(cam, "Type")
 			icon_subtype = camCfg.get(cam, "SubType")
@@ -1721,6 +1782,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 				self.comboBox_2.addItem(icon4, cam)
 			elif icon_subtype == "Drone":
 				self.comboBox_2.addItem(icon5, cam)
+			elif icon_subtype == "Special":
+				self.comboBox_2.addItem(icoTripod, cam)
 			else:
 				if icon_type == "Fisheye":
 					self.comboBox_2.addItem(icon1, cam)
@@ -1791,9 +1854,9 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.cbChunkSettings = QComboBox(self.verticalLayoutWidget)
 		for section in chunk_sections:
 			menu_icon = menuCfg.get(section, "menu_icon")
-			seticon = QIcon()
-			seticon.addFile(menu_icon, QSize(), QIcon.Normal, QIcon.Off)
-			self.cbChunkSettings.addItem(seticon, section)
+			setticon = QIcon()
+			setticon.addFile(menu_icon, QSize(), QIcon.Normal, QIcon.Off)
+			self.cbChunkSettings.addItem(setticon, section)
 		self.cbChunkSettings.setObjectName(u"cbChunkSettings")
 		sizePolicy2.setHeightForWidth(self.cbChunkSettings.sizePolicy().hasHeightForWidth())
 		self.cbChunkSettings.setSizePolicy(sizePolicy2)
@@ -1933,9 +1996,9 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.pushButton_3.setStatusTip(u"Process selected folders, and create new chunks...")
 #endif // QT_CONFIG(statustip)
 		self.pushButton_3.setText(u"Process")
-		icon15 = QIcon()
-		icon15.addFile(u":/icons/icons8-synchronize-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.pushButton_3.setIcon(icon15)
+		iconStartProc = QIcon()
+		iconStartProc.addFile(u":/icons/icons8-circular-arrows-48.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton_3.setIcon(iconStartProc)
 		self.pushButton_3.setIconSize(QSize(24, 24))
 #if QT_CONFIG(shortcut)
 		self.pushButton_3.setShortcut(u"P")
@@ -2137,6 +2200,9 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 
 
 	def setCurrentSettings(self):
+		iconStartProc = QIcon()
+		iconStartProc.addFile(u":/icons/icons8-circular-arrows-48.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton_3.setIcon(iconStartProc)
 		chunkSet = self.cbChunkSettings.currentText()
 		if chunkSet == "Default":
 			self.lineEdit.clear()
@@ -2243,13 +2309,21 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		item_suf = menuCfg.get(item_menu, "chunk_name_suffix")
 		item_cam = self.comboBox_2.currentText()
 		
+		iconStart = QIcon()
+		iconStart.addFile(u":/icons/icons8-loading-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconProcess = QIcon()
+		iconProcess.addFile(u":/icons/icons8-in-progress-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconError = QIcon()
+		iconError.addFile(u":/icons/icons8-error-48.png", QSize(), QIcon.Normal, QIcon.Off)
+		
 		if sel_count > 0:
 			i_cnt = 0
 			self.progressBar.setEnabled
 			self.progressBar.setMaximum(sel_count)
 			self.progressBar.setValue(i_cnt)
 			self.progressBar.setTextVisible(True)
-			
+			self.pushButton_3.setIcon(iconStart)
+   
 			for item in self.sel_items:
 				i_cnt = i_cnt + 1
 				self.progressBar.setFormat(u"%v/%m")
@@ -2281,13 +2355,15 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 				self.progressBar.setValue(i_cnt)
 
 			if i_cnt < sel_count:
+				self.pushButton_3.setIcon(iconError)
 				self.label_8.setText(u"<html><head/><body><p><span style='font-weight:600;'>Processing error!</span> / Imported " + str(i_cnt) + " of " + str(sel_count) + " / Could not import <span style=' font-weight:600;'>" + str(item.text(0)) + "</span></p></body></html>")
 			else:
+				self.pushButton_3.setIcon(iconProcess)
 				self.label_8.setText(u"<html><head/><body><p><span style='font-weight:600;'>Processing done!</span> / Imported " + str(i_cnt) + " of " + str(sel_count) + "</p></body></html>")
 
-			Metashape.app.update()
 			doc.save(netpath)
-
+			Metashape.app.update()
+			
 
 	# Process selected folders manually (user must confirm chunk name, camera settings, marker detection, and show point file)
 	def processBatchManual(self):
@@ -2297,6 +2373,12 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		item_pre = menuCfg.get(item_menu, "chunk_name_prefix")
 		item_suf = menuCfg.get(item_menu, "chunk_name_suffix")
 		item_cam = self.comboBox_2.currentText()
+		iconStart = QIcon()
+		iconStart.addFile(u":/icons/icons8-loading-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconProcess = QIcon()
+		iconProcess.addFile(u":/icons/icons8-in-progress-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconError = QIcon()
+		iconError.addFile(u":/icons/icons8-error-48.png", QSize(), QIcon.Normal, QIcon.Off)
 		
 		if sel_count > 0:
 			i_cnt = 0
@@ -2304,7 +2386,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			self.progressBar.setMaximum(sel_count)
 			self.progressBar.setValue(i_cnt)
 			self.progressBar.setTextVisible(True)
-			
+			self.pushButton_3.setIcon(iconStart)
 			for item in self.sel_items:
 				i_cnt = i_cnt + 1
 				self.progressBar.setFormat(u"%v/%m")
@@ -2340,8 +2422,10 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 				self.progressBar.setValue(i_cnt)
 				
 			if i_cnt < sel_count:
+				self.pushButton_3.setIcon(iconError)
 				self.label_8.setText(u"<html><head/><body><p><span style='font-weight:600;'>Processing error!</span> / Imported " + str(i_cnt) + " of " + str(sel_count) + " / Could not import <span style=' font-weight:600;'>" + str(item.text(0)) + "</span></p></body></html>")
 			else:
+				self.pushButton_3.setIcon(iconProcess)
 				self.label_8.setText(u"<html><head/><body><p><span style='font-weight:600;'>Processing done!</span> / Imported " + str(i_cnt) + " of " + str(sel_count) + "</p></body></html>")
 			
 			Metashape.app.update()
@@ -2586,10 +2670,7 @@ Metashape.app.addMenuItem(labelCopyReg, copy_bbox, icon=icon15)
 # labelsep5 = "AutoFTG/--------------------"
 # Metashape.app.addMenuItem(labelsep5, prazno)
 
-# Initialize setting for AutoFTG
-
-
-# Main settings file initialization (used when no project is loaded)
+# Initialize AutoFTG
 def loadAutoftg():
 	global projectOpened
 	camCfgLoad()
@@ -2597,9 +2678,9 @@ def loadAutoftg():
 	checkSettingsVer()
 	menuCfgLoad()
 	projectOpenedCheck()
-	#print("\n\nAutoFTG Settings loaded...\nSettings version: " + str(appCfg.get('SETTINGS', 'settings_version')))
-	#print("Data Folder: " + str(appCfg.get('SETTINGS', 'folder_data')))
-	#print("Default Camera: " + str(appCfg.get('SETTINGS', 'default_camera')))
+	print("\n\nAutoFTG initialized...\nApp Version: " + str(app_ver) + "\nSettings Version: " + str(appCfg.get('SETTINGS', 'settings_version')))
+	print(str(app_author))
 
+# Run
 loadAutoftg()
 

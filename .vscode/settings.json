@@ -1,5 +1,6 @@
 {
 	"pyside2-vsc.rcc.compile.filepath": "${qrc_name}.py",
 	"pyside2-vsc.uic.compile.filepath": "${ui_name}.py",
-	"python.linting.enabled": false
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
 }

@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/icons8-error-48.png</file>
+    <file>icons/icons8-in-progress.gif</file>
+    <file>icons/icons8-circular-arrows.gif</file>
     <file>icons/icons8-advance-48.png</file>
     <file>icons/icons8-rotate-48.png</file>
     <file>icons/icons8-circular-arrows-48.png</file>
