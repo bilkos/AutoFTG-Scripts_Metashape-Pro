@@ -2034,9 +2034,10 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		font6.setBold(True)
 		font6.setWeight(75)
 		__qtreewidgetitem = QTreeWidgetItem()
+		__qtreewidgetitem.setText(3, u"Imported");
 		__qtreewidgetitem.setText(2, u"Images");
 		__qtreewidgetitem.setText(1, u"Point File");
-		__qtreewidgetitem.setText(0, u"Folders");
+		__qtreewidgetitem.setText(0, u"Folder Name");
 		__qtreewidgetitem.setFont(0, font6);
 		__qtreewidgetitem.setIcon(0, iconFolderTree);
 		self.treeWidget.setHeaderItem(__qtreewidgetitem)
@@ -2073,8 +2074,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.treeWidget.setAllColumnsShowFocus(True)
 		self.treeWidget.header().setVisible(True)
 		self.treeWidget.header().setDefaultSectionSize(165)
-		self.treeWidget.header().setMinimumWidth(100)
-
+		# self.treeWidget.header().setMinimumWidth(120)
+		
 		self.gridLayout.addWidget(self.treeWidget, 2, 0, 1, 1)
 
 		self.horizontalLayout = QHBoxLayout()
@@ -2167,7 +2168,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 #endif // QT_CONFIG(shortcut)
 
 		__sortingEnabled = self.treeWidget.isSortingEnabled()
-		self.treeWidget.setSortingEnabled(False)
+		self.treeWidget.setSortingEnabled(True)
 		self.treeWidget.setSortingEnabled(__sortingEnabled)
 
 		defChk = self.cbChunkSettings.currentText()
@@ -2192,12 +2193,11 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.pushButton.clicked.connect(self.browseFolder)
 		self.treeWidget.itemSelectionChanged.connect(self.updateSelected)
 
+		self.projDoc = Metashape.app.document
+		self.projDocFile = str(projDoc).replace("<Document '", "").replace("'>", "")
+		self.logFilenamePath = self.projDocFile.replace(".psx", "_log.csv")	# Datoteka z nastavitvami projekta
+		
 		self.exec()
-
-	def browseFolder(self):
-		defFolder = Metashape.app.getExistingDirectory("Data folder")
-		self.lineEdit.setText(defFolder)
-		self.updateFolders()
 
 
 	def setCurrentSettings(self):
@@ -2229,6 +2229,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		
 
 	def updateFolders(self):
+		global logArchive
+		self.logReadArchive()
 		iconReload = QIcon()
 		iconReload.addFile(u":/icons/icons8-update-left-rotation-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		iconLoading = QIcon()
@@ -2242,6 +2244,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		iconFolder.addFile(u":/icons/icons8-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		iconDone = QIcon()
 		iconDone.addFile(u":/icons/icons8-done-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconDoneFile = QIcon()
+		iconDoneFile.addFile(u":/icons/icons8-check-file-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		iconNoCam = QIcon()
 		iconNoCam.addFile(u":/icons/icons8-no-camera-96.png", QSize(), QIcon.Normal, QIcon.Off)
 		font7 = QFont()
@@ -2250,14 +2254,21 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		iconClose.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		iconAddCam = QIcon()
 		iconAddCam.addFile(u":/icons/icons8-add-camera-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconStart = QIcon()
+		iconStart.addFile(u":/icons/icons8-update-left-rotation-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconProcess = QIcon()
+		iconProcess.addFile(u":/icons/icons8-in-progress-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		iconError = QIcon()
+		iconError.addFile(u":/icons/icons8-error-48.png", QSize(), QIcon.Normal, QIcon.Off)
 		
 		self.pushButton_reload.setIcon(iconLoading)
 		self.treeWidget.clear()
 		open_folder = self.lineEdit.text()
 		__qtreewidgetitem = QTreeWidgetItem()
+		__qtreewidgetitem.setText(3, u"Imported");
 		__qtreewidgetitem.setText(2, u"Images");
 		__qtreewidgetitem.setText(1, u"Point File");
-		__qtreewidgetitem.setText(0, u"Folders");
+		__qtreewidgetitem.setText(0, u"Folder Name");
 		__qtreewidgetitem.setFont(0, font6);
 		__qtreewidgetitem.setIcon(0, iconFolderTree);
 		self.treeWidget.setHeaderItem(__qtreewidgetitem)
@@ -2269,11 +2280,13 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			__qtreewidgetitem1 = QTreeWidgetItem(self.treeWidget);
 			image_folder = str(open_folder).replace("\\", "/") + "/" + folder
 			photos_count = len(find_files(image_folder, [".jpg", ".jpeg", ".png", ".tif", ".tiff"]));
+			if folder in logArchive:
+				__qtreewidgetitem1.setIcon(3, iconDone);
 			if photos_count > 0:
 				__qtreewidgetitem1.setText(2, str(photos_count) + " image(s)");
 				__qtreewidgetitem1.setIcon(2, iconAddCam);
 				__qtreewidgetitem1.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
-				__qtreewidgetitem1.setSizeHint(2, QSize(120, 0))
+				
 			else:
 				__qtreewidgetitem1.setText(2, "No images");
 				__qtreewidgetitem1.setIcon(2, iconNoCam);
@@ -2282,7 +2295,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			points_file = image_folder + "/" + folder + ".txt"
 			points_file_exists = os.path.isfile(points_file);
 			if points_file_exists == True:
-				__qtreewidgetitem1.setIcon(1, iconDone);
+				__qtreewidgetitem1.setIcon(1, iconDoneFile);
 				__qtreewidgetitem1.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
 				__qtreewidgetitem1.setText(1, u"Found");
 			else:
@@ -2292,14 +2305,60 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 
 			__qtreewidgetitem1.setText(0, folder);
 			__qtreewidgetitem1.setIcon(0, iconFolder);
-		
+			__qtreewidgetitem1.setSizeHint(0, QSize(165, 0))
+
 		self.pushButton_reload.setIcon(iconReload)
+		self.pushButton_3.setIcon(iconStart)
+		self.label_8.setText(u"<html><head/><body><p>Folder contents reloaded...</p></body></html>")
+		self.progressBar.setMinimum(1)
+		self.progressBar.setMaximum(1)
+		self.progressBar.setValue(0)
+		self.progressBar.setTextVisible(False)			
+		self.treeWidget.resizeColumnToContents(True)
+		self.treeWidget.sortItems(0, Qt.AscendingOrder)
+		self.treeWidget.scrollToBottom()
+		
+
+	def browseFolder(self):
+		defFolder = Metashape.app.getExistingDirectory("Data folder")
+		self.lineEdit.setText(defFolder)
+		self.updateFolders()
+
+
+	def logReadArchive(self):
+		global logArchive
+		logFilenameExists = os.path.isfile(self.logFilenamePath)	# Preveri, če datoteka z projektom obstaja
+		if logFilenameExists == False:
+			ms_header = "Date, Time, Chunk Name, Photos, Point File, Path, Camera\n"
+			print(str(ms_header))
+			with open(self.logFilenamePath, "w") as f:
+				f.write(ms_header)
+				f.close()
+
+		readlog = open(self.logFilenamePath, "r")
+		logArchive = readlog.read()
+		readlog.close()
+
+
+	def logWriteBatch(self, data):
+		logFilenameExists = os.path.isfile(self.logFilenamePath)	# Preveri, če datoteka z projektom obstaja
+
+		if logFilenameExists == False:
+			ms_header = "Date, Time, Chunk Name, Photos, Point File, Path, Camera\n" + data
+			print(str(ms_header))
+			with open(self.logFilenamePath, "w") as f:
+				f.write(ms_header)
+		else:
+			print(str(data))
+			with open(self.logFilenamePath, "a") as f:
+				f.write(data)
 
 
 	def updateSelected(self):
 		sel_items = self.treeWidget.selectedItems()
 		sel_count = len(sel_items)
 		self.label_8.setText(u"Selected: " + str(sel_count))
+
 
 	# Process selected folders automatically (no user interaction)
 	def processBatchAuto(self):
@@ -2320,16 +2379,15 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		if sel_count > 0:
 			i_cnt = 0
 			self.progressBar.setEnabled
+			self.progressBar.setMinimum(i_cnt)
 			self.progressBar.setMaximum(sel_count)
 			self.progressBar.setValue(i_cnt)
 			self.progressBar.setTextVisible(True)
 			self.pushButton_3.setIcon(iconStart)
-			ms_header = "Nr, Date/Time, Chunk Name, Photos Nr, Point File, Path, Camera\n"
-			appLogBatch(ms_header)
-   
+			
 			for item in self.sel_items:
 				i_cnt = i_cnt + 1
-				self.progressBar.setFormat(u"%v/%m")
+				self.progressBar.setFormat(u"Complete %v/%m")
 				self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " / Current: <b>" + str(item.text(0)) + "</b>")
 				doc = Metashape.app.document
 				netpath = Metashape.app.document.path
@@ -2360,9 +2418,10 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 						ms_pntfile = "None"
 				
 				now = datetime.now()
-				dt_string = now.strftime("%d/%m/%Y %H:%M")
-				ms_data = str(i_cnt) + ", " + dt_string + ", " + chunk_name + ", " + str(len(photos)) + ", " + ms_pntfile + ", " + image_folder + ", " + item_cam + "\n"
-				appLogBatch(ms_data)
+				dt_string = now.strftime("%d.%m.%Y")
+				tm_string = now.strftime("%H:%M")
+				ms_data = dt_string + ", " + tm_string + ", " + chunk_name + ", " + str(len(photos)) + ", " + ms_pntfile + ", " + image_folder + ", " + item_cam + "\n"
+				self.logWriteBatch(ms_data)
 				
 				self.progressBar.setValue(i_cnt)
 
@@ -2370,12 +2429,12 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 				self.pushButton_3.setIcon(iconError)
 				self.label_8.setText(u"<html><head/><body><p><span style='font-weight:600;'>Processing error!</span> / Imported " + str(i_cnt) + " of " + str(sel_count) + " / Could not import <span style=' font-weight:600;'>" + str(item.text(0)) + "</span></p></body></html>")
 				#ms_procend = dt_string + "Processing failed!" + str(item.text(0))
-				#appLogBatch(ms_procend)
+				#logWriteBatch(ms_procend)
 			else:
 				self.pushButton_3.setIcon(iconProcess)
 				self.label_8.setText(u"<html><head/><body><p><span style='font-weight:600;'>Processing done!</span> / Imported " + str(i_cnt) + " of " + str(sel_count) + "</p></body></html>")
 				#ms_procend = dt_string + "Processing successfull!"
-				#appLogBatch(ms_procend)
+				#logWriteBatch(ms_procend)
 
 			doc.save(netpath)
 			Metashape.app.update()
@@ -2399,13 +2458,15 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		if sel_count > 0:
 			i_cnt = 0
 			self.progressBar.setEnabled
+			self.progressBar.setMinimum(i_cnt)
 			self.progressBar.setMaximum(sel_count)
 			self.progressBar.setValue(i_cnt)
 			self.progressBar.setTextVisible(True)
 			self.pushButton_3.setIcon(iconStart)
+			
 			for item in self.sel_items:
 				i_cnt = i_cnt + 1
-				self.progressBar.setFormat(u"%v/%m")
+				self.progressBar.setFormat(u"Complete %v/%m")
 				self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " / Current: <b>" + str(item.text(0)) + "</b>")
 				doc = Metashape.app.document
 				netpath = Metashape.app.document.path
@@ -2435,6 +2496,12 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 					chunk.importReference(points_file, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
 					chunk.updateTransform()
 				
+				now = datetime.now()
+				dt_string = now.strftime("%d.%m.%Y")
+				tm_string = now.strftime("%H:%M")
+				ms_data = dt_string + ", " + tm_string + ", " + chunk_name + ", " + str(len(photos)) + ", " + os.path.basename(points_file) + ", " + image_folder + ", " + item_cam + "\n"
+				self.logWriteBatch(ms_data)
+				
 				self.progressBar.setValue(i_cnt)
 				
 			if i_cnt < sel_count:
@@ -2450,12 +2517,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 
 	def processBatch(self):
 		if self.checkBox_3.isChecked() == True:
-			self.progressBar.setMinimum(0)
-			self.progressBar.setMaximum(0)
 			self.processBatchAuto()
 		else:
-			self.progressBar.setMinimum(0)
-			self.progressBar.setMaximum(0)
 			self.processBatchManual()
 
 
@@ -2550,24 +2613,6 @@ def appAbout():
 	message_box.setText(app_aboutmsg)
 
 	message_box.exec_()
-
-
-def appLogBatch(data):
-	projDoc = Metashape.app.document
-	projDocFile = str(projDoc).replace("<Document '", "").replace("'>", "")
-	logFilenamePath = projDocFile.replace(".psx", "_log.csv")	# Datoteka z nastavitvami projekta
-	logFilenameExists = os.path.isfile(logFilenamePath)	# Preveri, če datoteka z projektom obstaja
-		
-	if logFilenameExists == False:
-		print(str(data))
-		with open(logFilenamePath, "w") as f:
-			f.write(data)
-	else:
-		print(str(data))
-		with open(logFilenamePath, "a") as f:
-			f.write(data)
-	
-	print("\nOpened log: " + logFilenamePath + "\n")
 
 
 def prazno():

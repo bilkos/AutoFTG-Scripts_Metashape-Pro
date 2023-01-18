@@ -1,0 +1,1258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0" connectslotsbyname="false">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>750</width>
+    <height>846</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>751</width>
+      <height>521</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+    <widget class="QWidget" name="tab_meta">
+     <attribute name="icon">
+      <iconset resource="../qtresources.qrc">
+       <normaloff>:/icons/icons8-clipboard-50.png</normaloff>:/icons/icons8-clipboard-50.png</iconset>
+     </attribute>
+     <attribute name="title">
+      <string>Meta podatki</string>
+     </attribute>
+     <widget class="QWidget" name="formLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>5</y>
+        <width>546</width>
+        <height>476</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="../qtresources.qrc">:/icons/icons8-clipboard-50.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_3">
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>16</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Meta Podatki</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="datumInUraLabel">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Datum / Ura</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QDateTimeEdit" name="datumInUraDateTimeEdit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+         <property name="dateTime">
+          <datetime>
+           <hour>0</hour>
+           <minute>0</minute>
+           <second>0</second>
+           <year>2023</year>
+           <month>1</month>
+           <day>1</day>
+          </datetime>
+         </property>
+         <property name="displayFormat">
+          <string>dd.MM.yyyy HH:mm</string>
+         </property>
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Snemanje</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QComboBox" name="comboBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Segoe UI</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="statusTip">
+            <string>Kategorija podatkov (izbere začetno mapo)...</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>Predor T8</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/icons8-underground-50.png</normaloff>:/icons/icons8-underground-50.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Aerosnemanje</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/icons8-quadcopter-50.png</normaloff>:/icons/icons8-quadcopter-50.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Drugo</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/icons8-camera-50.png</normaloff>:/icons/icons8-camera-50.png</iconset>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBox_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Segoe UI</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="statusTip">
+            <string>Pod-kategorija za podatke...</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>GC - KALOTA</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/template_kalota-zelena.png</normaloff>:/icons/template_kalota-zelena.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>GC - STOPNICA - IZKOP</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/template_stopnica-zelena.png</normaloff>:/icons/template_stopnica-zelena.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>GC - STOPNICA- BBET</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/template_stopnica-zelena.png</normaloff>:/icons/template_stopnica-zelena.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>SC - KALOTA</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/template_kalota-modra.png</normaloff>:/icons/template_kalota-modra.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>SC - STOPNICA - IZKOP</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/template_stopnica-modra.png</normaloff>:/icons/template_stopnica-modra.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>SC - STOPNICA- BBET</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/template_stopnica-modra.png</normaloff>:/icons/template_stopnica-modra.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>PRECNIK - 4</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/template_kalota-oranzna.png</normaloff>:/icons/template_kalota-oranzna.png</iconset>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Naziv Mape</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="lineEdit_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="placeholderText">
+          <string>Naziv mape za podatke...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Meril</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QComboBox" name="comboBox_3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <family>Segoe UI</family>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <item>
+            <property name="text">
+             <string>Ni podatka</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/icons8-rename-50.png</normaloff>:/icons/icons8-rename-50.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Boris B.</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/icons8-user-menu-male-50.png</normaloff>:/icons/icons8-user-menu-male-50.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Gregor Ž.</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/icons8-user-menu-male-50.png</normaloff>:/icons/icons8-user-menu-male-50.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Darko M.</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/icons8-user-menu-male-50.png</normaloff>:/icons/icons8-user-menu-male-50.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Dragan B.</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/icons8-user-menu-male-50.png</normaloff>:/icons/icons8-user-menu-male-50.png</iconset>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Slaviša M.</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../qtresources.qrc">
+              <normaloff>:/icons/icons8-user-menu-male-50.png</normaloff>:/icons/icons8-user-menu-male-50.png</iconset>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_4">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>250</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="placeholderText">
+            <string>Ime osebe, ki je izvedla snemanje/meritve...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Kamera&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QComboBox" name="comboBox_5">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <item>
+          <property name="text">
+           <string>dibit kamera</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-camera-on-tripod-96.png</normaloff>:/icons/icons8-camera-on-tripod-96.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Dron</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-quadcopter-50.png</normaloff>:/icons/icons8-quadcopter-50.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>DSLR</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-slr-small-lens-96.png</normaloff>:/icons/icons8-slr-small-lens-96.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Standard</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-slr-camera-50.png</normaloff>:/icons/icons8-slr-camera-50.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Smartphone</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-touchscreen-48.png</normaloff>:/icons/icons8-touchscreen-48.png</iconset>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Instrument</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QComboBox" name="comboBox_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <item>
+          <property name="text">
+           <string>Leica TS16 1&quot; (Total Station)</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icons/icons8-land-surveying-48.png</normaloff>:/icons/icons8-land-surveying-48.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Leica MS50 1&quot; (Multi Station)</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icons/icons8-land-surveying-48.png</normaloff>:/icons/icons8-land-surveying-48.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Leica GS15 (GPS)</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icons/icons8-satellite-96.png</normaloff>:/icons/icons8-satellite-96.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>TPS</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icons/icons8-land-surveying-48.png</normaloff>:/icons/icons8-land-surveying-48.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>GPS</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icons/icons8-satellite-48.png</normaloff>:/icons/icons8-satellite-48.png</iconset>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Mapa za podatke</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QLineEdit" name="lineEdit_5">
+         <property name="placeholderText">
+          <string>Osnovna mapa za nove podatke...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_posnetki">
+     <attribute name="icon">
+      <iconset resource="../qtresources.qrc">
+       <normaloff>:/icons/icons8-camera-50.png</normaloff>:/icons/icons8-camera-50.png</iconset>
+     </attribute>
+     <attribute name="title">
+      <string>Posnetki</string>
+     </attribute>
+     <widget class="QWidget" name="gridLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>5</y>
+        <width>736</width>
+        <height>481</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <item row="3" column="0" colspan="2">
+        <widget class="QTreeWidget" name="treeWidget">
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="indentation">
+          <number>0</number>
+         </property>
+         <property name="uniformRowHeights">
+          <bool>true</bool>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <attribute name="headerMinimumSectionSize">
+          <number>150</number>
+         </attribute>
+         <attribute name="headerStretchLastSection">
+          <bool>false</bool>
+         </attribute>
+         <column>
+          <property name="text">
+           <string notr="true">Naziv</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Ustvarjen</string>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="textAlignment">
+           <set>AlignLeading|AlignVCenter</set>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Velikost</string>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="textAlignment">
+           <set>AlignLeading|AlignVCenter</set>
+          </property>
+         </column>
+         <item>
+          <property name="text">
+           <string>SAM_9088.jpg</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-afternoon-50.png</normaloff>:/icons/icons8-afternoon-50.png</iconset>
+          </property>
+          <property name="text">
+           <string>16.01.‎2023 ‏‎23:44:55</string>
+          </property>
+          <property name="text">
+           <string>11,2 MB</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>SAM_9087.jpg</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-afternoon-50.png</normaloff>:/icons/icons8-afternoon-50.png</iconset>
+          </property>
+          <property name="text">
+           <string>16.01.‎2023 ‏‎23:44:46</string>
+          </property>
+          <property name="text">
+           <string>10,5 MB</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_7">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="../qtresources.qrc">:/icons/icons8-camera-50.png</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="font">
+            <font>
+             <family>Segoe UI</family>
+             <pointsize>16</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Posnetki</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLineEdit" name="lineEdit_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>350</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Segoe UI</family>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="placeholderText">
+            <string>Lokacija kjer so novi posnetki...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Brskaj</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../qtresources.qrc">
+             <normaloff>:/icons/icons8-images-folder-50.png</normaloff>:/icons/icons8-images-folder-50.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_markerji">
+     <attribute name="icon">
+      <iconset resource="../qtresources.qrc">
+       <normaloff>:/icons/icons8-my-location-50.png</normaloff>:/icons/icons8-my-location-50.png</iconset>
+     </attribute>
+     <attribute name="title">
+      <string>Markerji</string>
+     </attribute>
+     <widget class="QWidget" name="gridLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>4</y>
+        <width>736</width>
+        <height>491</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_2">
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>16</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Markerji</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QPlainTextEdit" name="plainTextEdit">
+         <property name="font">
+          <font>
+           <family>Consolas</family>
+           <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="lineWrapMode">
+          <enum>QPlainTextEdit::NoWrap</enum>
+         </property>
+         <property name="plainText">
+          <string>Delovišče: T8 Koper
+Podatki o izkopu: GC - Brizgani beton stopnice na stacionaži: 24+081,6
+Datum in čas slikanja: 16.01.2023. 20:00
+Serijska št. tanjhimetra: ------
+Ime in priimek: Slaviša M.
+    
+target 1,406920.499,47561.936,52.565
+target 2,406920.265,47563.500,52.684
+target 3,406919.880,47564.966,52.793
+target 4,406919.537,47566.364,52.871
+target 5,406922.064,47568.283,51.895
+target 6,406924.877,47568.800,51.841
+target 7,406927.629,47567.396,52.717
+target 8,406927.718,47565.965,52.726
+target 9,406927.795,47564.618,52.663
+target 10,406927.990,47563.095,52.727    
+</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_12">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="../qtresources.qrc">:/icons/icons8-my-location-50.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="placeholderText">
+          <string>Datoteka z koordinatami markerjev...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="pushButton">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Brskaj</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../qtresources.qrc">
+           <normaloff>:/icons/icons8-move-to-folder-50.png</normaloff>:/icons/icons8-move-to-folder-50.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>750</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>Meni</string>
+    </property>
+    <addaction name="actionNova"/>
+    <addaction name="actionKopiraj_Podatke"/>
+    <addaction name="separator"/>
+    <addaction name="actionIzhod"/>
+   </widget>
+   <widget class="QMenu" name="menuNastavitve">
+    <property name="title">
+     <string>Nastavitve</string>
+    </property>
+    <addaction name="actionKategorije_Pod_kategorije"/>
+    <addaction name="actionSeznam_Oseb"/>
+    <addaction name="actionKamere"/>
+    <addaction name="actionInstrumenti"/>
+    <addaction name="separator"/>
+    <addaction name="actionNastavitve"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuNastavitve"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::TopToolBarArea</set>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionNova"/>
+   <addaction name="separator"/>
+   <addaction name="actionKopiraj_Podatke"/>
+   <addaction name="separator"/>
+  </widget>
+  <action name="actionNova">
+   <property name="icon">
+    <iconset resource="../qtresources.qrc">
+     <normaloff>:/icons/icons8-add-folder-50.png</normaloff>:/icons/icons8-add-folder-50.png</iconset>
+   </property>
+   <property name="text">
+    <string>Nova</string>
+   </property>
+   <property name="toolTip">
+    <string>Nova</string>
+   </property>
+  </action>
+  <action name="actionNastavitve">
+   <property name="icon">
+    <iconset resource="../qtresources.qrc">
+     <normaloff>:/icons/icons8-tools-50.png</normaloff>:/icons/icons8-tools-50.png</iconset>
+   </property>
+   <property name="text">
+    <string>Splošne Nastavitve</string>
+   </property>
+   <property name="shortcut">
+    <string>N</string>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionKopiraj_Podatke">
+   <property name="icon">
+    <iconset resource="../qtresources.qrc">
+     <normaloff>:/icons/icons8-downloading-updates-50.png</normaloff>:/icons/icons8-downloading-updates-50.png</iconset>
+   </property>
+   <property name="text">
+    <string>Kopiraj Podatke</string>
+   </property>
+  </action>
+  <action name="actionIzhod">
+   <property name="icon">
+    <iconset resource="../qtresources.qrc">
+     <normaloff>:/icons/icons8-close-window-50.png</normaloff>:/icons/icons8-close-window-50.png</iconset>
+   </property>
+   <property name="text">
+    <string>Izhod</string>
+   </property>
+  </action>
+  <action name="actionKamere">
+   <property name="icon">
+    <iconset resource="../qtresources.qrc">
+     <normaloff>:/icons/icons8-cameras-50.png</normaloff>:/icons/icons8-cameras-50.png</iconset>
+   </property>
+   <property name="text">
+    <string>Kamere</string>
+   </property>
+   <property name="shortcut">
+    <string>C</string>
+   </property>
+  </action>
+  <action name="actionKategorije_Pod_kategorije">
+   <property name="icon">
+    <iconset resource="../qtresources.qrc">
+     <normaloff>:/icons/icons8-product-documents-50.png</normaloff>:/icons/icons8-product-documents-50.png</iconset>
+   </property>
+   <property name="text">
+    <string>Kategorije Podatkov</string>
+   </property>
+   <property name="shortcut">
+    <string>K</string>
+   </property>
+  </action>
+  <action name="actionSeznam_Oseb">
+   <property name="icon">
+    <iconset resource="../qtresources.qrc">
+     <normaloff>:/icons/icons8-user-menu-male-50.png</normaloff>:/icons/icons8-user-menu-male-50.png</iconset>
+   </property>
+   <property name="text">
+    <string>Seznam Oseb</string>
+   </property>
+   <property name="shortcut">
+    <string>S</string>
+   </property>
+  </action>
+  <action name="actionInstrumenti">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/icons/icons8-land-surveying-48.png</normaloff>:/icons/icons8-land-surveying-48.png</iconset>
+   </property>
+   <property name="text">
+    <string>Instrumenti</string>
+   </property>
+   <property name="shortcut">
+    <string>I</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="5" margin="10"/>
+ <resources>
+  <include location="../qtresources.qrc"/>
+  <include location="qtresources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>comboBox_3</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>lineEdit_4</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>172</x>
+     <y>253</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>277</x>
+     <y>248</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>lineEdit_5</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>168</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>158</x>
+     <y>345</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tabWidget</sender>
+   <signal>currentChanged(int)</signal>
+   <receiver>statusbar</receiver>
+   <slot>clearMessage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>69</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>143</x>
+     <y>845</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <designerdata>
+  <property name="gridDeltaX">
+   <number>5</number>
+  </property>
+  <property name="gridDeltaY">
+   <number>5</number>
+  </property>
+  <property name="gridSnapX">
+   <bool>true</bool>
+  </property>
+  <property name="gridSnapY">
+   <bool>true</bool>
+  </property>
+  <property name="gridVisible">
+   <bool>true</bool>
+  </property>
+ </designerdata>
+</ui>

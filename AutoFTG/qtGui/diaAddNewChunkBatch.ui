@@ -712,7 +712,7 @@
          <bool>true</bool>
         </attribute>
         <attribute name="headerDefaultSectionSize">
-         <number>170</number>
+         <number>155</number>
         </attribute>
         <column>
          <property name="text">
@@ -733,10 +733,24 @@
          <property name="text">
           <string notr="true">Point File</string>
          </property>
+         <property name="textAlignment">
+          <set>AlignLeading|AlignVCenter</set>
+         </property>
         </column>
         <column>
          <property name="text">
           <string notr="true">Images</string>
+         </property>
+         <property name="textAlignment">
+          <set>AlignLeading|AlignVCenter</set>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Imported</string>
+         </property>
+         <property name="textAlignment">
+          <set>AlignLeading|AlignVCenter</set>
          </property>
         </column>
         <item>
@@ -750,16 +764,28 @@
          <property name="text">
           <string/>
          </property>
+         <property name="textAlignment">
+          <set>AlignCenter</set>
+         </property>
          <property name="icon">
           <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-done-50.png</normaloff>:/icons/icons8-done-50.png</iconset>
+           <normaloff>:/icons/icons8-check-file-50.png</normaloff>:/icons/icons8-check-file-50.png</iconset>
          </property>
          <property name="text">
           <string notr="true">No images</string>
          </property>
+         <property name="textAlignment">
+          <set>AlignCenter</set>
+         </property>
          <property name="icon">
           <iconset resource="../qtresources.qrc">
            <normaloff>:/icons/icons8-no-camera-96.png</normaloff>:/icons/icons8-no-camera-96.png</iconset>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="textAlignment">
+          <set>AlignTrailing|AlignVCenter</set>
          </property>
          <property name="flags">
           <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -783,7 +809,7 @@
          </property>
          <property name="icon">
           <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-close-50.png</normaloff>:/icons/icons8-close-50.png</iconset>
+           <normaloff>:/icons/icons8-error-48.png</normaloff>:/icons/icons8-error-48.png</iconset>
          </property>
          <property name="text">
           <string notr="true">20</string>
@@ -792,8 +818,11 @@
           <iconset resource="../qtresources.qrc">
            <normaloff>:/icons/icons8-add-camera-50.png</normaloff>:/icons/icons8-add-camera-50.png</iconset>
          </property>
+         <property name="text">
+          <string/>
+         </property>
          <property name="flags">
-          <set>NoItemFlags</set>
+          <set>ItemIsEnabled</set>
          </property>
         </item>
         <item>
@@ -815,7 +844,7 @@
          </property>
          <property name="icon">
           <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-done-50.png</normaloff>:/icons/icons8-done-50.png</iconset>
+           <normaloff>:/icons/icons8-check-file-50.png</normaloff>:/icons/icons8-check-file-50.png</iconset>
          </property>
          <property name="text">
           <string notr="true">27</string>
@@ -823,6 +852,13 @@
          <property name="icon">
           <iconset resource="../qtresources.qrc">
            <normaloff>:/icons/icons8-add-camera-50.png</normaloff>:/icons/icons8-add-camera-50.png</iconset>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../qtresources.qrc">
+           <normaloff>:/icons/icons8-done-50.png</normaloff>:/icons/icons8-done-50.png</iconset>
          </property>
          <property name="flags">
           <set>ItemIsSelectable|ItemIsEnabled</set>
