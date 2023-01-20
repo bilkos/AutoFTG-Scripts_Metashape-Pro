@@ -1,2 +1,3 @@
-# -*- coding: utf-8 -*-
-from AutoFTG import autoftg_main
+import AutoFTG.autoftg_main
+import AutoFTG.autoftg_batch
+

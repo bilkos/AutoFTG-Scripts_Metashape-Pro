@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0" connectslotsbyname="false">
+<ui version="4.0">
  <author>Boris Bilc</author>
  <class>DialogBatchChunk</class>
  <widget class="QDialog" name="DialogBatchChunk">
@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>767</height>
+    <height>580</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>786</width>
+     <width>781</width>
      <height>561</height>
     </rect>
    </property>
@@ -89,56 +89,421 @@
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string notr="true">Data location</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_4">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="statusTip">
+           <string notr="true">Disable to set custom location for data. Enable to use project default data location settings.</string>
+          </property>
+          <property name="text">
+           <string notr="true">Use Project Data Location</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-copy-to-folder-50.png</normaloff>:/icons/icons8-copy-to-folder-50.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0">
+       <widget class="QTreeWidget" name="treeWidget">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOn</enum>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOn</enum>
+        </property>
+        <property name="autoScrollMargin">
+         <number>20</number>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+        </property>
+        <property name="tabKeyNavigation">
+         <bool>true</bool>
+        </property>
+        <property name="showDropIndicator" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::MultiSelection</enum>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="uniformRowHeights">
+         <bool>true</bool>
+        </property>
+        <property name="sortingEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="allColumnsShowFocus">
+         <bool>true</bool>
+        </property>
+        <attribute name="headerVisible">
+         <bool>true</bool>
+        </attribute>
+        <column>
+         <property name="text">
+          <string notr="true">Folders</string>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string notr="true">Point File</string>
+         </property>
+         <property name="textAlignment">
+          <set>AlignLeading|AlignVCenter</set>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string notr="true">Images</string>
+         </property>
+         <property name="textAlignment">
+          <set>AlignLeading|AlignVCenter</set>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Imported</string>
+         </property>
+         <property name="textAlignment">
+          <set>AlignLeading|AlignVCenter</set>
+         </property>
+        </column>
+        <item>
+         <property name="text">
+          <string notr="true">root</string>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="icon">
+          <iconset resource="../qtresources.qrc">
+           <normaloff>:/icons/icons8-folder-tree-50.png</normaloff>:/icons/icons8-folder-tree-50.png</iconset>
+         </property>
+         <item>
+          <property name="text">
+           <string notr="true">20230109-0530</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-check-file-50.png</normaloff>:/icons/icons8-check-file-50.png</iconset>
+          </property>
+          <property name="text">
+           <string notr="true">No images</string>
+          </property>
+          <property name="textAlignment">
+           <set>AlignCenter</set>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-no-camera-96.png</normaloff>:/icons/icons8-no-camera-96.png</iconset>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="textAlignment">
+           <set>AlignTrailing|AlignVCenter</set>
+          </property>
+          <property name="flags">
+           <set>ItemIsSelectable|ItemIsEnabled</set>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string notr="true">20230109-0030</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+           </font>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-error-48.png</normaloff>:/icons/icons8-error-48.png</iconset>
+          </property>
+          <property name="text">
+           <string notr="true">20</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-add-camera-50.png</normaloff>:/icons/icons8-add-camera-50.png</iconset>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="flags">
+           <set>ItemIsEnabled</set>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string notr="true">20230109-0010</string>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-check-file-50.png</normaloff>:/icons/icons8-check-file-50.png</iconset>
+          </property>
+          <property name="text">
+           <string notr="true">27</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-add-camera-50.png</normaloff>:/icons/icons8-add-camera-50.png</iconset>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-done-50.png</normaloff>:/icons/icons8-done-50.png</iconset>
+          </property>
+          <property name="flags">
+           <set>ItemIsSelectable|ItemIsEnabled</set>
+          </property>
+         </item>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QProgressBar" name="progressBar">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>10</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+        <property name="textVisible">
+         <bool>false</bool>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="textDirection">
+         <enum>QProgressBar::TopToBottom</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QPushButton" name="pushButton_3">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string notr="true">Press [Ctrl+P] to start processing</string>
+          </property>
+          <property name="statusTip">
+           <string notr="true">Process selected folders, and create new chunks...</string>
+          </property>
+          <property name="text">
+           <string notr="true">Ready</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-submit-progress-96.png</normaloff>
+            <disabledoff>:/icons/icons8-ok-50.png</disabledoff>:/icons/icons8-submit-progress-96.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="shortcut">
+           <string notr="true">P</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="statusTip">
+           <string notr="true">Exit chunk creator...</string>
+          </property>
+          <property name="text">
+           <string notr="true">Close</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-close-window-50.png</normaloff>:/icons/icons8-close-window-50.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="shortcut">
+           <string notr="true">X</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item row="0" column="1" rowspan="3">
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="3" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QLabel" name="label_10">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <family>Segoe UI</family>
-              <pointsize>9</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string notr="true">Suffix:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_7">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="text">
-             <string notr="true">Suffix...</string>
-            </property>
-            <property name="buddy">
-             <cstring>cbChunkSettings</cstring>
-            </property>
-           </widget>
-          </item>
-         </layout>
+        <item row="5" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>240</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>240</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string notr="true">Camera</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
         </item>
-        <item row="7" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item row="8" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
-           <widget class="QLabel" name="label_9">
+           <widget class="QLabel" name="label_13">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -153,16 +518,13 @@
               <bold>true</bold>
              </font>
             </property>
-            <property name="frameShape">
-             <enum>QFrame::NoFrame</enum>
-            </property>
             <property name="text">
-             <string notr="true">Type:      </string>
+             <string notr="true">SubType:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_12">
+           <widget class="QLabel" name="label_14">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
               <horstretch>0</horstretch>
@@ -218,6 +580,202 @@
             </property>
             <property name="buddy">
              <cstring>cbChunkSettings</cstring>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QComboBox" name="cbChunkSettings">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="statusTip">
+           <string notr="true">Choose settings used for chunk creation...</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string notr="true">Default</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../qtresources.qrc">
+             <normaloff>:/icons/icons8-add-tab-50.png</normaloff>:/icons/icons8-add-tab-50.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">KALOTA</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../qtresources.qrc">
+             <normaloff>:/icons/kalota_m.png</normaloff>:/icons/kalota_m.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">STOPNICA - IZKOP</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../qtresources.qrc">
+             <normaloff>:/icons/stopnca_o.png</normaloff>:/icons/stopnca_o.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">STOPNICA - B.BET.</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../qtresources.qrc">
+             <normaloff>:/icons/stopnca_s.png</normaloff>:/icons/stopnca_s.png</iconset>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="12" column="0">
+         <widget class="QCheckBox" name="checkBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>9</pointsize>
+           </font>
+          </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Enabled:&lt;/span&gt; Marker coordinates will be imported after target detection. &lt;span style=&quot; font-weight:600;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Disabled:&lt;/span&gt; Coordinates are not imported. User must manually import coordinates.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;*&lt;/span&gt; Automatic importing of marker coordinates only works if point file name is the same as it's parent folder name, and contains a header with metadata. Point coordinates should start at row #7.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string notr="true">Import Marker Coordinates</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-map-marker-50.png</normaloff>:/icons/icons8-map-marker-50.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>240</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>240</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string notr="true">Chunk Creation</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="0">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="0">
+         <widget class="Line" name="line_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>9</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string notr="true">Type:      </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_12">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="text">
+             <string notr="true">TextLabel</string>
             </property>
            </widget>
           </item>
@@ -305,43 +863,49 @@
           </item>
          </widget>
         </item>
-        <item row="12" column="0">
-         <widget class="QCheckBox" name="checkBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <family>Segoe UI</family>
-            <pointsize>9</pointsize>
-           </font>
-          </property>
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="toolTip">
-           <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Enabled:&lt;/span&gt; Marker coordinates will be imported after target detection. &lt;span style=&quot; font-weight:600;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Disabled:&lt;/span&gt; Coordinates are not imported. User must manually import coordinates.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;*&lt;/span&gt; Automatic importing of marker coordinates only works if point file name is the same as it's parent folder name, and contains a header with metadata. Point coordinates should start at row #7.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="text">
-           <string notr="true">Import Marker Coordinates</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../qtresources.qrc">
-            <normaloff>:/icons/icons8-map-marker-50.png</normaloff>:/icons/icons8-map-marker-50.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
+        <item row="3" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_10">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>9</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string notr="true">Suffix:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="text">
+             <string notr="true">Suffix...</string>
+            </property>
+            <property name="buddy">
+             <cstring>cbChunkSettings</cstring>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item row="11" column="0">
          <widget class="QCheckBox" name="checkBox_2">
@@ -381,145 +945,10 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QComboBox" name="cbChunkSettings">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <family>Segoe UI</family>
-            <pointsize>11</pointsize>
-           </font>
-          </property>
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="statusTip">
-           <string notr="true">Choose settings used for chunk creation...</string>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string notr="true">Default</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../qtresources.qrc">
-             <normaloff>:/icons/icons8-add-tab-50.png</normaloff>:/icons/icons8-add-tab-50.png</iconset>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string notr="true">KALOTA</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../qtresources.qrc">
-             <normaloff>:/icons/kalota_m.png</normaloff>:/icons/kalota_m.png</iconset>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string notr="true">STOPNICA - IZKOP</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../qtresources.qrc">
-             <normaloff>:/icons/stopnca_o.png</normaloff>:/icons/stopnca_o.png</iconset>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string notr="true">STOPNICA - B.BET.</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../qtresources.qrc">
-             <normaloff>:/icons/stopnca_s.png</normaloff>:/icons/stopnca_s.png</iconset>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>240</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>240</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <family>Segoe UI</family>
-            <pointsize>11</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string notr="true">Camera</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
         <item row="4" column="0">
          <widget class="Line" name="line_6">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="14" column="0">
-         <widget class="QCheckBox" name="checkBox_3">
-          <property name="font">
-           <font>
-            <family>Segoe UI</family>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="toolTip">
-           <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Enabled:&lt;/span&gt; Automatic chunk creation with predefined settings&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Disabled:&lt;/span&gt; Manual confirmation of intermediate steps&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="text">
-           <string notr="true">Automatic Processing</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../qtresources.qrc">
-            <normaloff>:/icons/icons8-in-progress-96.png</normaloff>:/icons/icons8-in-progress-96.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -559,311 +988,75 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
-          <item>
-           <widget class="QLabel" name="label_13">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <family>Segoe UI</family>
-              <pointsize>9</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string notr="true">SubType:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_14">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="text">
-             <string notr="true">TextLabel</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>240</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>240</width>
-            <height>25</height>
-           </size>
-          </property>
+        <item row="14" column="0">
+         <widget class="QCheckBox" name="checkBox_3">
           <property name="font">
            <font>
             <family>Segoe UI</family>
-            <pointsize>11</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
+            <pointsize>10</pointsize>
            </font>
           </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Enabled:&lt;/span&gt; Automatic chunk creation with predefined settings&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Disabled:&lt;/span&gt; Manual confirmation of intermediate steps&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="text">
-           <string notr="true">Chunk Creation</string>
+           <string notr="true">Automatic Processing</string>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
+          <property name="icon">
+           <iconset resource="../qtresources.qrc">
+            <normaloff>:/icons/icons8-in-progress-96.png</normaloff>:/icons/icons8-in-progress-96.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="9" column="0">
-         <widget class="Line" name="line">
+        <item row="15" column="0">
+         <spacer name="verticalSpacer">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Vertical</enum>
           </property>
-         </widget>
-        </item>
-        <item row="13" column="0">
-         <widget class="Line" name="line_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
+         </spacer>
         </item>
        </layout>
       </item>
-      <item row="2" column="0">
-       <widget class="QTreeWidget" name="treeWidget">
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_8">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize">
-         <size>
-          <width>525</width>
-          <height>0</height>
-         </size>
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>9</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+         </font>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>525</width>
-          <height>16777215</height>
-         </size>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
         </property>
-        <property name="autoScrollMargin">
-         <number>20</number>
+        <property name="text">
+         <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Failed!&lt;/span&gt; / Imported X of Y / Could not import &lt;span style=&quot; font-weight:600;&quot;&gt;item_name&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
-        <property name="editTriggers">
-         <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+        <property name="indent">
+         <number>10</number>
         </property>
-        <property name="tabKeyNavigation">
-         <bool>true</bool>
-        </property>
-        <property name="showDropIndicator" stdset="0">
-         <bool>false</bool>
-        </property>
-        <property name="alternatingRowColors">
-         <bool>true</bool>
-        </property>
-        <property name="selectionMode">
-         <enum>QAbstractItemView::MultiSelection</enum>
-        </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="uniformRowHeights">
-         <bool>true</bool>
-        </property>
-        <property name="sortingEnabled">
-         <bool>true</bool>
-        </property>
-        <property name="allColumnsShowFocus">
-         <bool>true</bool>
-        </property>
-        <attribute name="headerVisible">
-         <bool>true</bool>
-        </attribute>
-        <attribute name="headerDefaultSectionSize">
-         <number>155</number>
-        </attribute>
-        <column>
-         <property name="text">
-          <string notr="true">Folders</string>
-         </property>
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="icon">
-          <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-folder-tree-50.png</normaloff>:/icons/icons8-folder-tree-50.png</iconset>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string notr="true">Point File</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignLeading|AlignVCenter</set>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string notr="true">Images</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignLeading|AlignVCenter</set>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Imported</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignLeading|AlignVCenter</set>
-         </property>
-        </column>
-        <item>
-         <property name="text">
-          <string notr="true">20230109-0530</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-         <property name="icon">
-          <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-check-file-50.png</normaloff>:/icons/icons8-check-file-50.png</iconset>
-         </property>
-         <property name="text">
-          <string notr="true">No images</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignCenter</set>
-         </property>
-         <property name="icon">
-          <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-no-camera-96.png</normaloff>:/icons/icons8-no-camera-96.png</iconset>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="textAlignment">
-          <set>AlignTrailing|AlignVCenter</set>
-         </property>
-         <property name="flags">
-          <set>ItemIsSelectable|ItemIsEnabled</set>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">20230109-0030</string>
-         </property>
-         <property name="font">
-          <font>
-           <family>Segoe UI</family>
-          </font>
-         </property>
-         <property name="icon">
-          <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-error-48.png</normaloff>:/icons/icons8-error-48.png</iconset>
-         </property>
-         <property name="text">
-          <string notr="true">20</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-add-camera-50.png</normaloff>:/icons/icons8-add-camera-50.png</iconset>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="flags">
-          <set>ItemIsEnabled</set>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string notr="true">20230109-0010</string>
-         </property>
-         <property name="font">
-          <font>
-           <family>Segoe UI</family>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="icon">
-          <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-folder-50.png</normaloff>:/icons/icons8-folder-50.png</iconset>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-check-file-50.png</normaloff>:/icons/icons8-check-file-50.png</iconset>
-         </property>
-         <property name="text">
-          <string notr="true">27</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-add-camera-50.png</normaloff>:/icons/icons8-add-camera-50.png</iconset>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="../qtresources.qrc">
-           <normaloff>:/icons/icons8-done-50.png</normaloff>:/icons/icons8-done-50.png</iconset>
-         </property>
-         <property name="flags">
-          <set>ItemIsSelectable|ItemIsEnabled</set>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="1" column="0">
@@ -956,211 +1149,15 @@
         </item>
        </layout>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_8">
-        <property name="font">
-         <font>
-          <family>Segoe UI</family>
-          <pointsize>9</pointsize>
-          <weight>50</weight>
-          <bold>false</bold>
-         </font>
-        </property>
+      <item row="3" column="1">
+       <widget class="QLabel" name="label_16">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="text">
-         <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Failed!&lt;/span&gt; / Imported X of Y / Could not import &lt;span style=&quot; font-weight:600;&quot;&gt;item_name&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="indent">
-         <number>10</number>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Selected: &lt;span style=&quot; font-weight:600;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-      </item>
-      <item row="4" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QPushButton" name="pushButton_3">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="toolTip">
-           <string notr="true">Press [Ctrl+P] to start processing</string>
-          </property>
-          <property name="statusTip">
-           <string notr="true">Process selected folders, and create new chunks...</string>
-          </property>
-          <property name="text">
-           <string notr="true">Process</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../qtresources.qrc">
-            <normaloff>:/icons/icons8-submit-progress-96.png</normaloff>:/icons/icons8-submit-progress-96.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>24</width>
-            <height>24</height>
-           </size>
-          </property>
-          <property name="shortcut">
-           <string notr="true">P</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-          <property name="default">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_2">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="statusTip">
-           <string notr="true">Exit chunk creator...</string>
-          </property>
-          <property name="text">
-           <string notr="true">Close</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../qtresources.qrc">
-            <normaloff>:/icons/icons8-close-window-50.png</normaloff>:/icons/icons8-close-window-50.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>24</width>
-            <height>24</height>
-           </size>
-          </property>
-          <property name="shortcut">
-           <string notr="true">X</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <family>Segoe UI</family>
-            <pointsize>11</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string notr="true">Data location</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="checkBox_4">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="statusTip">
-           <string notr="true">Disable to set custom location for data. Enable to use project default data location settings.</string>
-          </property>
-          <property name="text">
-           <string notr="true">Use Project Data Location</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../qtresources.qrc">
-            <normaloff>:/icons/icons8-copy-to-folder-50.png</normaloff>:/icons/icons8-copy-to-folder-50.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="4" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_8">
-        <item>
-         <widget class="QProgressBar" name="progressBar">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-          <property name="maximum">
-           <number>10</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-          <property name="textVisible">
-           <bool>false</bool>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="textDirection">
-           <enum>QProgressBar::TopToBottom</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_16">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="../qtresources.qrc">:/icons/icons8-error-48.png</pixmap>
-          </property>
-          <property name="scaledContents">
-           <bool>true</bool>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </item>
      </layout>
     </item>
