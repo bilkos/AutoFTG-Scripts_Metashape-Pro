@@ -15,6 +15,10 @@ from PySide2.QtWidgets import *
 import AutoFTG.autoftg_main as autoftg_main
 from AutoFTG.qtresources import *
 
+# <!#FV> 2.5.9 </#FV>
+
+app_ver = "2.5.9"
+
 
 class Ui_DialogBatchChunk(QtWidgets.QDialog):
 	def __init__(self, parent):
@@ -24,8 +28,15 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.itemDefFolder = autoftg_main.menuCfg.get(self.itemDef, "work_folder")
 		self.itemDefFolderName = self.itemDefFolder.split(os.sep)[-1]
 		self.setObjectName(u"DialogBatchChunk")
+		self.resize(870, 650)
+		sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+		sizePolicy.setHorizontalStretch(0)
+		sizePolicy.setVerticalStretch(0)
+		sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
+		self.setSizePolicy(sizePolicy)
+		self.setMinimumSize(QSize(870, 650))
+		self.setMaximumSize(QSize(870, 650))
 		self.setWindowTitle(u"Batch Chunk Creator")
-		self.resize(800, 580)
 		appIcon = QIcon()
 		appIcon.addFile(u":/icons/AutoFTG-appicon.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.setWindowIcon(appIcon)
@@ -305,43 +316,6 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.gridLayout_3.addLayout(self.horizontalLayout_8, 2, 0, 1, 1)
 
 		self.checkBox_2 = QCheckBox(self.verticalLayoutWidget)
-		cicon = QIcon()
-		cicon.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		cicon1 = QIcon()
-		cicon1.addFile(u":/icons/icons8-panorama-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		cicon2 = QIcon()
-		cicon2.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		cicon3 = QIcon()
-		cicon3.addFile(u":/icons/icons8-video-stabilization-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		cicon4 = QIcon()
-		cicon4.addFile(u":/icons/icons8-touchscreen-48.png", QSize(), QIcon.Normal, QIcon.Off)
-		cicon5 = QIcon()
-		cicon5.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		cicon5a = QIcon()
-		cicon5a.addFile(u":/icons/icons8-ios-application-placeholder-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		cicoTripod = QIcon()
-		cicoTripod.addFile(u":/icons/icons8-camera-on-tripod-96.png", QSize(), QIcon.Normal, QIcon.Off)
-		for cam in autoftg_main.cam_list:
-			icon_type = autoftg_main.camCfg.get(cam, "Type")
-			icon_subtype = autoftg_main.camCfg.get(cam, "SubType")
-			if icon_subtype == "SmartPhone":
-				self.comboBox_2.addItem(cicon4, cam)
-			elif icon_subtype == "Drone":
-				self.comboBox_2.addItem(cicon5, cam)
-			elif icon_subtype == "Special":
-				self.comboBox_2.addItem(cicoTripod, cam)
-			else:
-				if icon_type == "Fisheye":
-					self.comboBox_2.addItem(cicon1, cam)
-				elif icon_type == "Spherical":
-					self.comboBox_2.addItem(cicon3, cam)
-				elif icon_type == "Cylindrical":
-					self.comboBox_2.addItem(cicon2, cam)
-				elif icon_type == "RPC":
-					self.comboBox_2.addItem(cicon5a, cam)
-				else:
-					self.comboBox_2.addItem(cicon, cam)
-
 		self.checkBox_2.setObjectName(u"checkBox_2")
 		sizePolicy8 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
 		sizePolicy8.setHorizontalStretch(0)
@@ -506,6 +480,43 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.horizontalLayout_12.setSpacing(5)
 		self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
 		self.comboBox_2 = QComboBox(self.verticalLayoutWidget)
+		cicon = QIcon()
+		cicon.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon1 = QIcon()
+		cicon1.addFile(u":/icons/icons8-panorama-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon2 = QIcon()
+		cicon2.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon3 = QIcon()
+		cicon3.addFile(u":/icons/icons8-video-stabilization-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon4 = QIcon()
+		cicon4.addFile(u":/icons/icons8-touchscreen-48.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon5 = QIcon()
+		cicon5.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon5a = QIcon()
+		cicon5a.addFile(u":/icons/icons8-ios-application-placeholder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicoTripod = QIcon()
+		cicoTripod.addFile(u":/icons/icons8-camera-on-tripod-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		for cam in autoftg_main.cam_list:
+			icon_type = autoftg_main.camCfg.get(cam, "Type")
+			icon_subtype = autoftg_main.camCfg.get(cam, "SubType")
+			if icon_subtype == "SmartPhone":
+				self.comboBox_2.addItem(cicon4, cam)
+			elif icon_subtype == "Drone":
+				self.comboBox_2.addItem(cicon5, cam)
+			elif icon_subtype == "Special":
+				self.comboBox_2.addItem(cicoTripod, cam)
+			else:
+				if icon_type == "Fisheye":
+					self.comboBox_2.addItem(cicon1, cam)
+				elif icon_type == "Spherical":
+					self.comboBox_2.addItem(cicon3, cam)
+				elif icon_type == "Cylindrical":
+					self.comboBox_2.addItem(cicon2, cam)
+				elif icon_type == "RPC":
+					self.comboBox_2.addItem(cicon5a, cam)
+				else:
+					self.comboBox_2.addItem(cicon, cam)
+		self.comboBox_2.setCurrentText(autoftg_main.selected_camera)
 		self.comboBox_2.setObjectName(u"comboBox_2")
 		sizePolicy10 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Maximum)
 		sizePolicy10.setHorizontalStretch(0)
@@ -743,8 +754,6 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.verticalLayout_2.addLayout(self.gridLayout)
 
 
-		
-		
 		defChk = self.cbChunkSettings.currentText()
 		self.label_6.setText(autoftg_main.menuCfg.get(defChk, "chunk_name_prefix"))
 		self.label_7.setText(autoftg_main.menuCfg.get(defChk, "chunk_name_suffix"))
@@ -771,10 +780,11 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.projDocFile = str(autoftg_main.projDoc).replace("<Document '", "").replace("'>", "")
 		self.logFilenamePath = self.projDocFile.replace(".psx", "_log.csv")	# Datoteka z nastavitvami projekta
 		
+		self.setCurrentSettings()
+		self.setCurrentCamera()
 		self.updateFolders()
 		
-		QMetaObject.connectSlotsByName(self)
-		
+
 		self.exec()
 
 
