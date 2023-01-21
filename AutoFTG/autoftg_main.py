@@ -46,7 +46,7 @@ from AutoFTG.qtresources import *
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.5.6"
+app_ver = "2.5.7"
 appsettings_ver = "6"
 app_author = "Author: Boris Bilc\n\n"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
@@ -84,42 +84,42 @@ def loadIcoSettings():
 	icoCfgFileExists = os.path.isfile(icoCfgFilePath)	# Check if settings file exists
 	if icoCfgFileExists == False:
 		icoCfg.add_section("ICONS")
-		icoCfg.set("ICONS", "aicon00", "icons8-xbox-cross-96.png")
-		icoCfg.set("ICONS", "aicon01", "icons8-product-documents-50.png")
-		icoCfg.set("ICONS", "aicon02", "icons8-documents-folder-50-2.png")
-		icoCfg.set("ICONS", "aicon03", "icons8-documents-folder-50.png")
-		icoCfg.set("ICONS", "aicon04", "icons8-dossier-50.png")
-		icoCfg.set("ICONS", "aicon05", "icons8-pictures-folder-50-2.png")
-		icoCfg.set("ICONS", "aicon06", "icons8-folded-booklet-50.png")
-		icoCfg.set("ICONS", "aicon07", "icons8-images-folder-50.png")
-		icoCfg.set("ICONS", "aicon08", "icons8-full-image-50.png")
-		icoCfg.set("ICONS", "aicon09", "icons8-video-folder-50.png")
-		icoCfg.set("ICONS", "aicon10", "icons8-ftp-50.png")
-		icoCfg.set("ICONS", "aicon11", "icons8-web-camera-50.png")
-		icoCfg.set("ICONS", "aicon12", "icons8-camera-on-tripod-96.png")
-		icoCfg.set("ICONS", "aicon13", "icons8-sd-50.png")
-		icoCfg.set("ICONS", "aicon14", "icons8-quadcopter-50.png")
-		icoCfg.set("ICONS", "aicon15", "icons8-plane-48.png")
-		icoCfg.set("ICONS", "aicon16", "icons8-national-park-48.png")
-		icoCfg.set("ICONS", "aicon17", "icons8-ground-48.png")
-		icoCfg.set("ICONS", "aicon18", "icons8-country-48.png")
-		icoCfg.set("ICONS", "aicon19", "icons8-subway-50.png")
-		icoCfg.set("ICONS", "aicon20", "icons8-underground-50.png")
-		icoCfg.set("ICONS", "aicon21", "icons8-land-surveying-48.png")
-		icoCfg.set("ICONS", "aicon22", "icons8-drawing-compass-48.png")
-		icoCfg.set("ICONS", "aicon23", "icons8-camera-50.png")
-		icoCfg.set("ICONS", "aicon24", "menu_kalota-modra.png")
-		icoCfg.set("ICONS", "aicon25", "menu_kalota-oranzna.png")
-		icoCfg.set("ICONS", "aicon26", "template_kalota-modra.png")
-		icoCfg.set("ICONS", "aicon27", "template_kalota-oranzna.png")
-		icoCfg.set("ICONS", "aicon28", "template_kalota-rdeca.png")
-		icoCfg.set("ICONS", "aicon29", "template_kalota-vijola.png")
-		icoCfg.set("ICONS", "aicon30", "template_kalota-zelena.png")
-		icoCfg.set("ICONS", "aicon31", "template_stopnica-modra.png")
-		icoCfg.set("ICONS", "aicon32", "template_stopnica-oranzna.png")
-		icoCfg.set("ICONS", "aicon33", "template_stopnica-rdeca.png")
-		icoCfg.set("ICONS", "aicon34", "template_stopnica-vijola.png")
-		icoCfg.set("ICONS", "aicon35", "template_stopnica-zelena.png")
+		icoCfg.set("ICONS", "ico-0", "icons8-xbox-cross-96.png")
+		icoCfg.set("ICONS", "ico-1", "icons8-product-documents-50.png")
+		icoCfg.set("ICONS", "ico-2", "icons8-documents-folder-50-2.png")
+		icoCfg.set("ICONS", "ico-3", "icons8-documents-folder-50.png")
+		icoCfg.set("ICONS", "ico-4", "icons8-dossier-50.png")
+		icoCfg.set("ICONS", "ico-5", "icons8-pictures-folder-50-2.png")
+		icoCfg.set("ICONS", "ico-6", "icons8-folded-booklet-50.png")
+		icoCfg.set("ICONS", "ico-7", "icons8-images-folder-50.png")
+		icoCfg.set("ICONS", "ico-8", "icons8-full-image-50.png")
+		icoCfg.set("ICONS", "ico-9", "icons8-video-folder-50.png")
+		icoCfg.set("ICONS", "ico-10", "icons8-ftp-50.png")
+		icoCfg.set("ICONS", "ico-11", "icons8-web-camera-50.png")
+		icoCfg.set("ICONS", "ico-12", "icons8-camera-on-tripod-96.png")
+		icoCfg.set("ICONS", "ico-13", "icons8-sd-50.png")
+		icoCfg.set("ICONS", "ico-14", "icons8-quadcopter-50.png")
+		icoCfg.set("ICONS", "ico-15", "icons8-plane-48.png")
+		icoCfg.set("ICONS", "ico-16", "icons8-national-park-48.png")
+		icoCfg.set("ICONS", "ico-17", "icons8-ground-48.png")
+		icoCfg.set("ICONS", "ico-18", "icons8-country-48.png")
+		icoCfg.set("ICONS", "ico-19", "icons8-subway-50.png")
+		icoCfg.set("ICONS", "ico-20", "icons8-underground-50.png")
+		icoCfg.set("ICONS", "ico-21", "icons8-land-surveying-48.png")
+		icoCfg.set("ICONS", "ico-22", "icons8-drawing-compass-48.png")
+		icoCfg.set("ICONS", "ico-23", "icons8-camera-50.png")
+		icoCfg.set("ICONS", "ico-24", "menu_kalota-modra.png")
+		icoCfg.set("ICONS", "ico-25", "menu_kalota-oranzna.png")
+		icoCfg.set("ICONS", "ico-26", "template_kalota-modra.png")
+		icoCfg.set("ICONS", "ico-27", "template_kalota-oranzna.png")
+		icoCfg.set("ICONS", "ico-28", "template_kalota-rdeca.png")
+		icoCfg.set("ICONS", "ico-29", "template_kalota-vijola.png")
+		icoCfg.set("ICONS", "ico-30", "template_kalota-zelena.png")
+		icoCfg.set("ICONS", "ico-31", "template_stopnica-modra.png")
+		icoCfg.set("ICONS", "ico-32", "template_stopnica-oranzna.png")
+		icoCfg.set("ICONS", "ico-33", "template_stopnica-rdeca.png")
+		icoCfg.set("ICONS", "ico-34", "template_stopnica-vijola.png")
+		icoCfg.set("ICONS", "ico-35", "template_stopnica-zelena.png")
 
 		with open(icoCfgFilePath, 'w') as icoconfig:
 			camCfg.write(icoconfig)
@@ -327,10 +327,10 @@ def removeCamConfig(camname):
 def chunksCfgLoad():
 	global chunk_sections
 	if menuCfgFilePathExists == False:
-		menu_section_m = "Default"
+		menu_section_m = "GENERAL"
 		menuCfg.add_section(menu_section_m)
-		menuCfg.set(menu_section_m, "menu_category", "")
-		menuCfg.set(menu_section_m, "menu_icon", "aicon00")
+		menuCfg.set(menu_section_m, "menu_icon", "ico-0")
+		menuCfg.set(menu_section_m, "chunk_name_format", "metashape")
 		menuCfg.set(menu_section_m, "chunk_name_prefix", "")
 		menuCfg.set(menu_section_m, "chunk_name_suffix", "")
 		menuCfg.set(menu_section_m, "work_folder", str(Metashape.app.getExistingDirectory("Project data folder (batch)")))
@@ -357,7 +357,7 @@ def appCfgLoad():
 		appCfg.set('APP SETTINGS', 'settings_version', appsettings_ver)
 		appCfg.set('APP SETTINGS', 'folder_data', foldeData)
 		appCfg.set('APP SETTINGS', 'default_camera', selected_camera)
-		appCfg.set('APP SETTINGS', 'default_chunk_def', "Default")
+		appCfg.set('APP SETTINGS', 'default_chunk_def', "GENERAL")
 
 		# Writing our configuration file to 'example.cfg'
 		with open(appCfgFilePath, 'w') as configfile:
@@ -394,7 +394,7 @@ def projCfgLoad():
 		projCfg.set('PROJECT SETTINGS', 'settings_version', appsettings_ver)
 		projCfg.set('PROJECT SETTINGS', 'folder_data', str(proj_data))
 		projCfg.set('PROJECT SETTINGS', 'default_camera', selected_camera)
-		projCfg.set('PROJECT SETTINGS', 'default_chunk_def', "Default")
+		projCfg.set('PROJECT SETTINGS', 'default_chunk_def', "GENERAL")
 		
 		# Writing our configuration file to 'example.cfg'
 		with open(projCfgFilePath, 'w') as configfile:
@@ -1508,7 +1508,7 @@ class Ui_DialogAddChunkQuick(QtWidgets.QDialog):
 		self.cbChunkSettings.setFont(font2)
 		self.cbChunkSettings.setCursor(QCursor(Qt.PointingHandCursor))
 
-		self.cbChunkSettings.setCurrentText(u"Default")
+		self.cbChunkSettings.setCurrentText(u"GENERAL")
 		self.cbChunkSettings.setIconSize(QSize(20, 20))
 
 		self.verticalLayout.addWidget(self.cbChunkSettings)
