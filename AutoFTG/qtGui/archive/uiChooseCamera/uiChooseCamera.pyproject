@@ -1,0 +1,3 @@
+{
+    "files": ["dialogChooseCamera.py","uiDefaulCamera.ui","form.ui","../../qtresources.qrc"]
+}
