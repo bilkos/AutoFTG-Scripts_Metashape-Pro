@@ -22,6 +22,15 @@ Author: Boris Bilc (Slovenia)
 ![Menu Screenshot](menu_preview.jpg "Preview of AutoFTG menu in Metashape Pro")<br>
 *Preview of AutoFTG menu in Metashape Pro*<br>
 
+![Menu Screenshot 2](menu_preview2.jpg "Preview of Batch Chunk Creator in Metashape Pro")<br>
+*Preview of Batch Chunk Creator in Metashape Pro*<br>
+
+![Menu Screenshot 3](menu_preview3.jpg "Preview of Chunk Definition Editor in Metashape Pro")<br>
+*Preview of Chunk Definition Editor in Metashape Pro*<br>
+
+![Menu Screenshot 4](menu_preview4.jpg "Preview of Cameras Editor in Metashape Pro")<br>
+*Preview of Cameras Editor in Metashape Pro*<br>
+
 ---
 
 ## Installation
