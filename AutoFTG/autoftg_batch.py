@@ -646,6 +646,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		font7.setBold(True)
 		font7.setWeight(75)
 		__qtreewidgetitem = QTreeWidgetItem()
+		__qtreewidgetitem.setText(4, u"Aligned");
 		__qtreewidgetitem.setText(3, u"Imported");
 		__qtreewidgetitem.setTextAlignment(3, Qt.AlignLeading|Qt.AlignVCenter);
 		__qtreewidgetitem.setText(2, u"Images");
@@ -775,6 +776,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.pushButton_4.clicked.connect(self.updateFolders)
 		self.pushButton.clicked.connect(self.browseFolder)
 		self.treeWidget.itemSelectionChanged.connect(self.updateSelected)
+		self.btnDefChunk.clicked.connect(self.setDefaultChunk)
+		self.btnDefCam.clicked.connect(self.setDefaultCam)
 
 		self.projDoc = Metashape.app.document
 		self.projDocFile = str(autoftg_main.projDoc).replace("<Document '", "").replace("'>", "")
@@ -784,9 +787,26 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.setCurrentCamera()
 		self.updateFolders()
 		
-
+		
 		self.exec()
 
+
+	def selectChunkFormat(self):
+		chunkNameFormat = autoftg_main.menuCfg.get(self.cbChunkSettings.currentText(), "chunk_name_format")
+
+		if chunkNameFormat == "metashape":
+			self.label_19.setText(u"Metashape Default")
+		elif chunkNameFormat == "data":
+			self.label_19.setText(u"Data Folder Name")
+		elif chunkNameFormat == "point":
+			self.label_19.setText(u"Point File Metadata")
+		elif chunkNameFormat == "creation":
+			self.label_19.setText(u"Creation date-time")
+		elif chunkNameFormat == "image":
+			self.label_19.setText(u"Image date-time")
+		elif chunkNameFormat == "custom":
+			self.label_19.setText(u"Custom date-time")
+		
 
 	def setCurrentSettings(self):
 		chunkSet = self.cbChunkSettings.currentText()
@@ -798,6 +818,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			self.lineEdit.setText(str(autoftg_main.menuCfg.get(chunkSet, "work_folder")))
 			self.label_6.setText(autoftg_main.menuCfg.get(chunkSet, "chunk_name_prefix"))
 			self.label_7.setText(autoftg_main.menuCfg.get(chunkSet, "chunk_name_suffix"))
+			self.selectChunkFormat()
 		else:
 			self.lineEdit.setText(str(autoftg_main.menuCfg.get(chunkSet, "work_folder")))
 			self.pushButton.setDisabled(True)
@@ -805,6 +826,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			self.checkBox_4.setChecked(True)
 			self.label_6.setText(autoftg_main.menuCfg.get(chunkSet, "chunk_name_prefix"))
 			self.label_7.setText(autoftg_main.menuCfg.get(chunkSet, "chunk_name_suffix"))
+			self.label_19.setText(autoftg_main.menuCfg.get(chunkSet, "chunk_name_format"))
+			self.selectChunkFormat()
 
 
 	def setCurrentCamera(self):
@@ -873,8 +896,13 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			__qtreewidgetitem1 = QTreeWidgetItem(qtreewidgetitem_top);
 			image_folder = str(open_folder).replace("\\", "/") + "/" + folder
 			photos_count = len(autoftg_main.find_files(image_folder, [".jpg", ".jpeg", ".png", ".tif", ".tiff"]));
+			chunk_aligned = str(folder) + "-aligned"
+			if chunk_aligned in logArchive:
+				__qtreewidgetitem1.setIcon(4, iconDone);
+
 			if folder in logArchive:
 				__qtreewidgetitem1.setIcon(3, iconDone);
+
 			if photos_count > 0:
 				__qtreewidgetitem1.setText(2, str(photos_count) + " image(s)");
 				__qtreewidgetitem1.setIcon(2, iconAddCam);
@@ -919,6 +947,20 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.pushButton_4.setIcon(iconReload)
 		
 
+	def setDefaultChunk(self):
+		current_chunkdef = self.cbChunkSettings.currentText()
+		autoftg_main.projCfg.set("PROJECT SETTINGS", "default_chunk_def", current_chunkdef)
+		with open(autoftg_main.projCfgFilePath, 'w') as configfile:
+			autoftg_main.projCfg.write(configfile)
+		
+
+	def setDefaultCam(self):
+		current_cam = self.comboBox_2.currentText()
+		autoftg_main.projCfg.set("PROJECT SETTINGS", "default_camera", current_cam)
+		with open(autoftg_main.projCfgFilePath, 'w') as configfile:
+			autoftg_main.projCfg.write(configfile)
+
+
 	def browseFolder(self):
 		defFolder = Metashape.app.getExistingDirectory("Data folder")
 		self.lineEdit.setText(defFolder)
@@ -929,7 +971,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		global logArchive
 		logFilenameExists = os.path.isfile(self.logFilenamePath)	# Preveri, če datoteka z projektom obstaja
 		if logFilenameExists == False:
-			ms_header = "Date, Time, Chunk Name, Photos, Point File, Path, Camera\n"
+			ms_header = "Date, Time, Chunk Name, Photos, Point File, Path, Camera, Align\n"
 			print(str(ms_header))
 			with open(self.logFilenamePath, "w") as f:
 				f.write(ms_header)
@@ -944,7 +986,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		logFilenameExists = os.path.isfile(self.logFilenamePath)	# Preveri, če datoteka z projektom obstaja
 
 		if logFilenameExists == False:
-			ms_header = "Date, Time, Chunk Name, Photos, Point File, Path, Camera\n" + data
+			ms_header = "Date, Time, Chunk Name, Photos, Point File, Path, Camera, Align\n" + data
 			print(str(ms_header))
 			with open(self.logFilenamePath, "w") as f:
 				f.write(ms_header)
@@ -1037,14 +1079,24 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 					else:
 						ms_pntfile = "None"
 				
+				if self.checkBox_align.isChecked() == True:
+					chunk.matchPhotos(downscale = 0, keypoint_limit = 40000, tiepoint_limit = 10000, generic_preselection = True, reference_preselection = False)
+					doc.save()
+					chunk.alignCameras(subdivide_task = True)
+					doc.save()
+					align_done = item.text(0) + "-aligned"
+				else:
+					align_done = item.text(0) + "-not_aligned"
+
 				now = datetime.now()
 				dt_string = now.strftime("%d.%m.%Y")
 				tm_string = now.strftime("%H:%M")
-				ms_data = dt_string + ", " + tm_string + ", " + chunk_name + ", " + str(len(photos)) + ", " + ms_pntfile + ", " + image_folder + ", " + item_cam + "\n"
+				ms_data = dt_string + ", " + tm_string + ", " + chunk_name + ", " + str(len(photos)) + ", " + ms_pntfile + ", " + image_folder + ", " + item_cam + ", " + align_done + "\n"
 				self.logWriteBatch(ms_data)
 				
 				updItem = QTreeWidgetItem
 				updItem.setIcon(item, 3, iconDone)
+				updItem.setIcon(item, 4, iconDone)
 				self.treeWidget.setItemSelected(item, False)
 				self.progressBar.setValue(i_cnt)
 
@@ -1128,14 +1180,24 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 					chunk.importReference(points_file, format=Metashape.ReferenceFormatCSV, columns='nxyz', delimiter=',', skip_rows=6, create_markers=True)
 					chunk.updateTransform()
 				
+				if self.checkBox_align.isChecked() == True:
+					chunk.matchPhotos(downscale = 0, keypoint_limit = 40000, tiepoint_limit = 10000, generic_preselection = True, reference_preselection = False)
+					doc.save()
+					chunk.alignCameras(subdivide_task = True)
+					doc.save()
+					align_done = item.text(0) + "-aligned"
+				else:
+					align_done = item.text(0) + "-not_aligned"
+
 				now = datetime.now()
 				dt_string = now.strftime("%d.%m.%Y")
 				tm_string = now.strftime("%H:%M")
-				ms_data = dt_string + ", " + tm_string + ", " + chunk_name + ", " + str(len(photos)) + ", " + os.path.basename(points_file) + ", " + image_folder + ", " + item_cam + "\n"
+				ms_data = dt_string + ", " + tm_string + ", " + chunk_name + ", " + str(len(photos)) + ", " + os.path.basename(points_file) + ", " + image_folder + ", " + item_cam + ", " + align_done + "\n"
 				self.logWriteBatch(ms_data)
 				
 				updItem = QTreeWidgetItem
 				updItem.setIcon(item, 3, iconDone)
+				updItem.setIcon(item, 4, iconDone)
 				self.treeWidget.setItemSelected(item, False)
 				self.progressBar.setValue(i_cnt)
 				

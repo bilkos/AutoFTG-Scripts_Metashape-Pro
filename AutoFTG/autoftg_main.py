@@ -1751,6 +1751,7 @@ def diaAddChunkSingle():
 
 
 def diaAddChunkBatch():
+	projectOpenedCheck()
 	app = QtWidgets.QApplication.instance()
 	parent = app.activeWindow()
 	dia2 = Ui_DialogBatchChunk(parent)
