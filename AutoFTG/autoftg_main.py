@@ -1820,13 +1820,16 @@ Metashape.app.addMenuItem(labelmenu, appAbout, icon=icon_app)
 labelAddChSingle = "AutoFTG/Add Chunk (Single)"
 Metashape.app.addMenuItem(label=labelAddChSingle, func=diaAddChunkSingle, shortcut="Ctrl++", icon=iconadd)
 
-labelAddChBatch = "AutoFTG/Add Chunk (Multi)"
+labelAddChBatch = "AutoFTG/Batch Chunk Creator"
 Metashape.app.addMenuItem(label=labelAddChBatch, func=diaAddChunkBatch, shortcut="Ctrl+*", icon=icon4)
+
+labelChSet = "AutoFTG/Chunk Definition Settings"
+Metashape.app.addMenuItem(label=labelChSet, func=diaChunkSettings, icon=":/icons/icons8-content-50.png")
 
 labelsep1a = "AutoFTG/--------------------"
 Metashape.app.addMenuItem(labelsep1a, prazno)
 
-label3a = "AutoFTG/Detect markers + Import coordinates"
+label3a = "AutoFTG/Detect markers && Import coordinates"
 Metashape.app.addMenuItem(label3a, marker_targets, icon=icon38)
 
 label4 = "AutoFTG/Copy Region (Bounding Box)"
@@ -1835,10 +1838,10 @@ Metashape.app.addMenuItem(label4, copy_bbox, icon=icon15)
 labelsep1 = "AutoFTG/--------------------"
 Metashape.app.addMenuItem(labelsep1, prazno)
 
-label2 = "AutoFTG/Change Camera (Current Chunk)"
+label2 = "AutoFTG/Change Camera (Chunk)"
 Metashape.app.addMenuItem(label2, selectCamChunk, icon=icon8)
 
-label2aaa = "AutoFTG/Set Default Camera"
+label2aaa = "AutoFTG/Set Default Camera (Project)"
 Metashape.app.addMenuItem(label2aaa, selectCamDefault, icon=icon35)
 
 label2cccc = "AutoFTG/Cameras Editor"
@@ -1850,11 +1853,8 @@ Metashape.app.addMenuItem(labelsep55, prazno)
 labelset2 = "AutoFTG/Load Project Settings"
 Metashape.app.addMenuItem(labelset2, projectOpenedCheck, icon=icon40)
 
-labelset4 = "AutoFTG/Edit Current Settings"
+labelset4 = "AutoFTG/Edit Loaded Settings"
 Metashape.app.addMenuItem(labelset4, editSettings, icon=icon32)
-
-labelChSet = "AutoFTG/Chunk Definition Settings"
-Metashape.app.addMenuItem(label=labelChSet, func=diaChunkSettings, icon=":/icons/icons8-content-50.png")
 
 labelset2i = "Load Project Settings"
 Metashape.app.addMenuItem(labelset2i, projectOpenedCheck, icon=icon40)

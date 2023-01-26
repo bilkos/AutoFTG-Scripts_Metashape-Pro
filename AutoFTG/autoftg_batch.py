@@ -171,7 +171,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.checkBox_align.setFont(font1)
 		self.checkBox_align.setCursor(QCursor(Qt.PointingHandCursor))
 #if QT_CONFIG(tooltip)
-		self.checkBox_align.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Automatic chunk creation with predefined settings</p><p><span style=\" font-weight:600;\">Disabled:</span> Manual confirmation of intermediate steps</p></body></html>")
+		self.checkBox_align.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Start Align Photos process after chunk is created.</p><p><span style=\" font-weight:600;\">Disabled:</span> Align Photos is not performed at chunk creation. User must manually run this process.</p></body></html>")
 #endif // QT_CONFIG(tooltip)
 		self.checkBox_align.setText(u"Align Cameras at Creation")
 		icon3 = QIcon()
@@ -265,7 +265,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.label.setMinimumSize(QSize(0, 30))
 		self.label.setFont(font4)
 		self.label.setFrameShape(QFrame.StyledPanel)
-		self.label.setText(u"Chunk Creation")
+		self.label.setText(u"Chunk Creation Settings")
 		self.label.setIndent(10)
 
 		self.gridLayout_3.addWidget(self.label, 0, 0, 1, 1)
@@ -375,7 +375,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.label_4.setMinimumSize(QSize(0, 30))
 		self.label_4.setFont(font4)
 		self.label_4.setFrameShape(QFrame.StyledPanel)
-		self.label_4.setText(u"Camera")
+		self.label_4.setText(u"Camera Settings")
 		self.label_4.setIndent(10)
 
 		self.gridLayout_3.addWidget(self.label_4, 6, 0, 1, 1)
@@ -646,12 +646,12 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		font7.setBold(True)
 		font7.setWeight(75)
 		__qtreewidgetitem = QTreeWidgetItem()
-		__qtreewidgetitem.setText(4, u"Aligned");
-		__qtreewidgetitem.setText(3, u"Imported");
+		__qtreewidgetitem.setText(4, u"Align");
+		__qtreewidgetitem.setText(3, u"Import");
 		__qtreewidgetitem.setTextAlignment(3, Qt.AlignLeading|Qt.AlignVCenter);
 		__qtreewidgetitem.setText(2, u"Images");
 		__qtreewidgetitem.setTextAlignment(2, Qt.AlignLeading|Qt.AlignVCenter);
-		__qtreewidgetitem.setText(1, u"Point File");
+		__qtreewidgetitem.setText(1, u"Points");
 		__qtreewidgetitem.setTextAlignment(1, Qt.AlignLeading|Qt.AlignVCenter);
 		__qtreewidgetitem.setText(0, u"Folders");
 		__qtreewidgetitem.setTextAlignment(0, Qt.AlignLeading|Qt.AlignVCenter);
@@ -879,7 +879,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		
 		self.treeWidget.clear()
 		
-		itemCurFolder = str(self.lineEdit.text()).split(os.sep)[-1]
+		itemCurFolder = str(self.lineEdit.text()).split("/")[-1]
 
 		open_folder = self.lineEdit.text() + "\\"
 		
@@ -896,7 +896,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			__qtreewidgetitem1 = QTreeWidgetItem(qtreewidgetitem_top);
 			image_folder = str(open_folder).replace("\\", "/") + "/" + folder
 			photos_count = len(autoftg_main.find_files(image_folder, [".jpg", ".jpeg", ".png", ".tif", ".tiff"]));
-			chunk_aligned = str(folder) + "-aligned"
+			chunk_aligned = str(folder) + "_aligned"
 			if chunk_aligned in logArchive:
 				__qtreewidgetitem1.setIcon(4, iconDone);
 
@@ -909,7 +909,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 				__qtreewidgetitem1.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
 				
 			else:
-				__qtreewidgetitem1.setText(2, "No images");
+				__qtreewidgetitem1.setText(2, "Empty");
 				__qtreewidgetitem1.setIcon(2, iconNoCam);
 				__qtreewidgetitem1.setFlags(Qt.ItemIsEnabled);
 								
@@ -921,7 +921,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 				__qtreewidgetitem1.setText(1, u"Found");
 			else:
 				__qtreewidgetitem1.setIcon(1, iconClose);
-				__qtreewidgetitem1.setText(1, u"Not Found");
+				__qtreewidgetitem1.setText(1, u"N/A");
 				__qtreewidgetitem1.setFlags(Qt.ItemIsEnabled);
 
 			__qtreewidgetitem1.setText(0, folder);
@@ -1084,9 +1084,9 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 					doc.save()
 					chunk.alignCameras(subdivide_task = True)
 					doc.save()
-					align_done = item.text(0) + "-aligned"
+					align_done = item.text(0) + "_aligned"
 				else:
-					align_done = item.text(0) + "-not_aligned"
+					align_done = item.text(0) + "_not_aligned"
 
 				now = datetime.now()
 				dt_string = now.strftime("%d.%m.%Y")
@@ -1185,9 +1185,9 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 					doc.save()
 					chunk.alignCameras(subdivide_task = True)
 					doc.save()
-					align_done = item.text(0) + "-aligned"
+					align_done = item.text(0) + "_aligned"
 				else:
-					align_done = item.text(0) + "-not_aligned"
+					align_done = item.text(0) + "_not_aligned"
 
 				now = datetime.now()
 				dt_string = now.strftime("%d.%m.%Y")

@@ -5,6 +5,20 @@ Release notes for AutoFTG python script
 
 ---
 
+## `2023/01/25`
+
+### 2.5.6 -> 2.5.9
+
+1. Integrated option to align chunk when doing batch import
+2. Added column to see which chunks were aligned at import
+3. Added option 'set as default' to chunk definition and camera combo boxes in Batch Chunk Creator
+4. Implemented loading of project settings when starting Batch Chunk Creator
+5. Fixed column widths in Batch Chunk Creator folder list (now adjusts to contents)
+6. New menu/dialog for 'Chunk Definition Settings' to Add/Edit/Delete chunk definitions.
+
+
+---
+
 ## `2023/01/17`
 
 ### 2.5.5
