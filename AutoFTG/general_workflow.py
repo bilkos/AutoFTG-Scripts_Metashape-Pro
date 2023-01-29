@@ -75,3 +75,7 @@ if chunk.orthomosaic:
     chunk.exportRaster(output_folder + '/orthomosaic.tif', source_data = Metashape.OrthomosaicData)
 
 print('Processing finished, results saved to ' + output_folder + '.')
+
+
+
+# Date, Time, Chunk Name, Photos, Point File, Camera, Data Path, Align, Mesh, Point Cloud, Export, Export Folder

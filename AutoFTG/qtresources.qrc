@@ -1,5 +1,23 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/icons8-signal-full-48.png</file>
+    <file>icons/icons8-signal-48.png</file>
+    <file>icons/icons8-low-connection-48.png</file>
+    <file>icons/icons8-task-completed-48.png</file>
+    <file>icons/icons8-pass-48.png</file>
+    <file>icons/icons8-geodesic-dome-48.png</file>
+    <file>icons/icons8-checklist-48.png</file>
+    <file>icons/icons8-features-list-48.png</file>
+    <file>icons/icons8-questions-48.png</file>
+    <file>icons/icons8-question-mark-48.png</file>
+    <file>icons/icons8-ok-48.png</file>
+    <file>icons/icons8-verified-badge-48.png</file>
+    <file>icons/icons8-checked-checkbox-48.png</file>
+    <file>icons/icons8-microsoft-todo-2019-48.png</file>
+    <file>icons/icons8-cloud-database-48.png</file>
+    <file>icons/icons8-cloud-development-48.png</file>
+    <file>icons/icons8-3d-48.png</file>
+    <file>icons/icons8-mesh-48.png</file>
     <file>icons/icons8-ground-48.png</file>
     <file>icons/icons8-national-park-48.png</file>
     <file>icons/icons8-country-48.png</file>

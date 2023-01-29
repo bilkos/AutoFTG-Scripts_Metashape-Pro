@@ -1,17 +1,21 @@
+![Header logo](GitHub_repo_card_small.png)
+
 # AutoFTG
 
 *Python scripts for AgiSoft Metashape Pro.* 
 
 
-###### Compatible with Metashape Pro version 2.0.x
+> Compatible with Metashape Pro version 2.0.x
+
 
 ---
 
 ## Description
 
-Scripts for process automation in Agisoft Metashape Pro.
+**AutoFTG - Scripts for Agisoft Metashape Pro**
 
-This is an assembly of existing scripts from other users, and some additional scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia.
+This is an assembly of python scripts for process automation, and some existing scripts from other users
+Scripts were written for use in work process on project 2TDK, construction of railroad tunnels in Slovenia, but were later modified to support any kind of project where lots of processing is needed.
 
 
 Author: Boris Bilc (Slovenia)

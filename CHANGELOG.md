@@ -5,6 +5,23 @@ Release notes for AutoFTG python script
 
 ---
 
+## `2023/01/28`
+
+### 2.6.0
+
+1. Implemented processing of mesh, textures, point cloud, and data export options in Batch Chunk Creator
+2. List in Batch Chunk Creator now also show status for mesh and point cloud process (only works if done with batch processing)
+3. Added 'export_folder' to chunk definition settings (each definition has it's own export location)
+4. Settings dialog to editing options for mesh/texture processing in Batch Chunk Creator
+5. Added some new icons used in Batch Chunk Creator
+6. Added option in Batch Chunk Creator to open currently selected folder in File Explorer
+7. Added save and reset buttons in Batch Chunk Creator to store or reset current settings
+8. Created placeholder checkbox to disable importing of new data (in case if doing batch processing of Align Photos, Mesh, Point Cloud separatley for already imported chunks)
+9. Minor bug-fixes and improvements
+
+
+---
+
 ## `2023/01/25`
 
 ### 2.5.6 -> 2.5.9

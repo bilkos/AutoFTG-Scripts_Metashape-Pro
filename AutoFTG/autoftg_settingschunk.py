@@ -28,14 +28,14 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		sizePolicy0.setVerticalStretch(0)
 		sizePolicy0.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
 		self.setSizePolicy(sizePolicy0)
-		self.setMinimumSize(QSize(720, 420))
-		self.setMaximumSize(QSize(720, 420))
+		self.setMinimumSize(QSize(720, 480))
+		self.setMaximumSize(QSize(720, 480))
 		icon = QIcon()
 		icon.addFile(u":/icons/AutoFTG-appicon.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.setWindowIcon(icon)
 		self.gridLayoutWidget = QWidget(self)
 		self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
-		self.gridLayoutWidget.setGeometry(QRect(9, 4, 701, 406))
+		self.gridLayoutWidget.setGeometry(QRect(9, 10, 701, 461))
 		self.gridLayout = QGridLayout(self.gridLayoutWidget)
 		self.gridLayout.setSpacing(5)
 		self.gridLayout.setContentsMargins(10, 10, 10, 10)
@@ -156,7 +156,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		self.label_menuSet.setSizePolicy(sizePolicy1)
 		self.label_menuSet.setFont(font)
 		self.label_menuSet.setFrameShape(QFrame.StyledPanel)
-		self.label_menuSet.setText(u"Menu")
+		self.label_menuSet.setText(u"Menu Settings")
 
 		self.formLayout.setWidget(0, QFormLayout.SpanningRole, self.label_menuSet)
 
@@ -227,7 +227,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		self.label_chunkSet.setSizePolicy(sizePolicy1)
 		self.label_chunkSet.setFont(font)
 		self.label_chunkSet.setFrameShape(QFrame.StyledPanel)
-		self.label_chunkSet.setText(u"Chunk")
+		self.label_chunkSet.setText(u"Chunk Settings")
 
 		self.formLayout.setWidget(3, QFormLayout.SpanningRole, self.label_chunkSet)
 
@@ -377,6 +377,53 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 
 		self.formLayout.setLayout(4, QFormLayout.SpanningRole, self.horizontalLayout_7)
 
+		self.label_wfolder_2 = QLabel(self.gridLayoutWidget)
+		self.label_wfolder_2.setObjectName(u"label_wfolder_2")
+		self.label_wfolder_2.setFont(font3)
+		self.label_wfolder_2.setText(u"Prefix/Suffix")
+		self.label_wfolder_2.setIndent(5)
+
+		self.formLayout.setWidget(5, QFormLayout.LabelRole, self.label_wfolder_2)
+
+		self.horizontalLayout_5 = QHBoxLayout()
+		self.horizontalLayout_5.setSpacing(5)
+		self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+		self.lineEdit_pre = QLineEdit(self.gridLayoutWidget)
+		self.lineEdit_pre.setObjectName(u"lineEdit_pre")
+		self.lineEdit_pre.setEnabled(False)
+		sizePolicy4.setHeightForWidth(self.lineEdit_pre.sizePolicy().hasHeightForWidth())
+		self.lineEdit_pre.setSizePolicy(sizePolicy4)
+#if QT_CONFIG(tooltip)
+		self.lineEdit_pre.setToolTip(u"Leave empty to disable prefix.")
+#endif // QT_CONFIG(tooltip)
+		self.lineEdit_pre.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+		self.lineEdit_pre.setPlaceholderText(u"PREFIX_")
+
+		self.horizontalLayout_5.addWidget(self.lineEdit_pre)
+
+		self.label = QLabel(self.gridLayoutWidget)
+		self.label.setObjectName(u"label")
+		self.label.setStyleSheet(u"color: rgb(157, 158, 149);")
+		self.label.setText(u"<chunk name>")
+		self.label.setAlignment(Qt.AlignCenter)
+
+		self.horizontalLayout_5.addWidget(self.label)
+
+		self.lineEdit_suf = QLineEdit(self.gridLayoutWidget)
+		self.lineEdit_suf.setObjectName(u"lineEdit_suf")
+		self.lineEdit_suf.setEnabled(False)
+		sizePolicy4.setHeightForWidth(self.lineEdit_suf.sizePolicy().hasHeightForWidth())
+		self.lineEdit_suf.setSizePolicy(sizePolicy4)
+#if QT_CONFIG(tooltip)
+		self.lineEdit_suf.setToolTip(u"Leave empty to disable suffix.")
+#endif // QT_CONFIG(tooltip)
+		self.lineEdit_suf.setPlaceholderText(u"_SUFFIX")
+
+		self.horizontalLayout_5.addWidget(self.lineEdit_suf)
+
+
+		self.formLayout.setLayout(5, QFormLayout.FieldRole, self.horizontalLayout_5)
+
 		self.label_wfolder = QLabel(self.gridLayoutWidget)
 		self.label_wfolder.setObjectName(u"label_wfolder")
 		self.label_wfolder.setFont(font3)
@@ -390,7 +437,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		self.horizontalLayout.setObjectName(u"horizontalLayout")
 		self.lineEdit_wfolder = QLineEdit(self.gridLayoutWidget)
 		self.lineEdit_wfolder.setObjectName(u"lineEdit_wfolder")
-		self.lineEdit_wfolder.setPlaceholderText(u"Folder path...")
+		self.lineEdit_wfolder.setPlaceholderText(u"Path to folder with data...")
 
 		self.horizontalLayout.addWidget(self.lineEdit_wfolder)
 
@@ -401,7 +448,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 #if QT_CONFIG(tooltip)
 		self.pushButton_browsewf.setToolTip(u"<html><head/><body><p>Select location with working data for this definition.</p></body></html>")
 #endif // QT_CONFIG(tooltip)
-		self.pushButton_browsewf.setText(u"Browse")
+		self.pushButton_browsewf.setText(u"")
 		icon9 = QIcon()
 		icon9.addFile(u":/icons/icons8-opened-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.pushButton_browsewf.setIcon(icon9)
@@ -412,6 +459,40 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 
 
 		self.formLayout.setLayout(6, QFormLayout.FieldRole, self.horizontalLayout)
+
+		self.label_efolder = QLabel(self.gridLayoutWidget)
+		self.label_efolder.setObjectName(u"label_efolder")
+		self.label_efolder.setFont(font3)
+		self.label_efolder.setText(u"Export Folder")
+		self.label_efolder.setIndent(5)
+
+		self.formLayout.setWidget(7, QFormLayout.LabelRole, self.label_efolder)
+
+		self.horizontalLayout_10 = QHBoxLayout()
+		self.horizontalLayout_10.setSpacing(5)
+		self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
+		self.lineEdit_efolder = QLineEdit(self.gridLayoutWidget)
+		self.lineEdit_efolder.setObjectName(u"lineEdit_efolder")
+		self.lineEdit_efolder.setPlaceholderText(u"Path to folder for exporting...")
+
+		self.horizontalLayout_10.addWidget(self.lineEdit_efolder)
+
+		self.pushButton_browseef = QPushButton(self.gridLayoutWidget)
+		self.pushButton_browseef.setObjectName(u"pushButton_browseef")
+		sizePolicy3.setHeightForWidth(self.pushButton_browseef.sizePolicy().hasHeightForWidth())
+		self.pushButton_browseef.setSizePolicy(sizePolicy3)
+#if QT_CONFIG(tooltip)
+		self.pushButton_browseef.setToolTip(u"<html><head/><body><p>Select location with working data for this definition.</p></body></html>")
+#endif // QT_CONFIG(tooltip)
+		self.pushButton_browseef.setText(u"")
+		self.pushButton_browseef.setIcon(icon9)
+		self.pushButton_browseef.setIconSize(QSize(20, 20))
+		self.pushButton_browseef.setAutoDefault(False)
+
+		self.horizontalLayout_10.addWidget(self.pushButton_browseef)
+
+
+		self.formLayout.setLayout(7, QFormLayout.FieldRole, self.horizontalLayout_10)
 
 		self.horizontalLayout_2 = QHBoxLayout()
 		self.horizontalLayout_2.setSpacing(5)
@@ -462,58 +543,18 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		self.horizontalLayout_2.addWidget(self.pushButton_add)
 
 
-		self.formLayout.setLayout(8, QFormLayout.SpanningRole, self.horizontalLayout_2)
+		self.formLayout.setLayout(9, QFormLayout.FieldRole, self.horizontalLayout_2)
 
 		self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-		self.formLayout.setItem(7, QFormLayout.LabelRole, self.verticalSpacer)
+		self.formLayout.setItem(10, QFormLayout.LabelRole, self.verticalSpacer)
 
-		self.horizontalLayout_5 = QHBoxLayout()
-		self.horizontalLayout_5.setSpacing(5)
-		self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-		self.lineEdit_pre = QLineEdit(self.gridLayoutWidget)
-		self.lineEdit_pre.setObjectName(u"lineEdit_pre")
-		self.lineEdit_pre.setEnabled(False)
-		sizePolicy4.setHeightForWidth(self.lineEdit_pre.sizePolicy().hasHeightForWidth())
-		self.lineEdit_pre.setSizePolicy(sizePolicy4)
-#if QT_CONFIG(tooltip)
-		self.lineEdit_pre.setToolTip(u"Leave empty to disable prefix.")
-#endif // QT_CONFIG(tooltip)
-		self.lineEdit_pre.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-		self.lineEdit_pre.setPlaceholderText(u"PREFIX_")
+		self.line_2 = QFrame(self.gridLayoutWidget)
+		self.line_2.setObjectName(u"line_2")
+		self.line_2.setFrameShape(QFrame.HLine)
+		self.line_2.setFrameShadow(QFrame.Sunken)
 
-		self.horizontalLayout_5.addWidget(self.lineEdit_pre)
-
-		self.label = QLabel(self.gridLayoutWidget)
-		self.label.setObjectName(u"label")
-		self.label.setStyleSheet(u"color: rgb(157, 158, 149);")
-		self.label.setText(u"<chunk name>")
-		self.label.setAlignment(Qt.AlignCenter)
-
-		self.horizontalLayout_5.addWidget(self.label)
-
-		self.lineEdit_suf = QLineEdit(self.gridLayoutWidget)
-		self.lineEdit_suf.setObjectName(u"lineEdit_suf")
-		self.lineEdit_suf.setEnabled(False)
-		sizePolicy4.setHeightForWidth(self.lineEdit_suf.sizePolicy().hasHeightForWidth())
-		self.lineEdit_suf.setSizePolicy(sizePolicy4)
-#if QT_CONFIG(tooltip)
-		self.lineEdit_suf.setToolTip(u"Leave empty to disable suffix.")
-#endif // QT_CONFIG(tooltip)
-		self.lineEdit_suf.setPlaceholderText(u"_SUFFIX")
-
-		self.horizontalLayout_5.addWidget(self.lineEdit_suf)
-
-
-		self.formLayout.setLayout(5, QFormLayout.FieldRole, self.horizontalLayout_5)
-
-		self.label_wfolder_2 = QLabel(self.gridLayoutWidget)
-		self.label_wfolder_2.setObjectName(u"label_wfolder_2")
-		self.label_wfolder_2.setFont(font3)
-		self.label_wfolder_2.setText(u"Prefix/Suffix")
-		self.label_wfolder_2.setIndent(5)
-
-		self.formLayout.setWidget(5, QFormLayout.LabelRole, self.label_wfolder_2)
+		self.formLayout.setWidget(8, QFormLayout.SpanningRole, self.line_2)
 
 
 		self.gridLayout.addLayout(self.formLayout, 0, 1, 3, 1)
@@ -572,7 +613,9 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		QWidget.setTabOrder(self.lineEdit_pre, self.lineEdit_suf)
 		QWidget.setTabOrder(self.lineEdit_suf, self.lineEdit_wfolder)
 		QWidget.setTabOrder(self.lineEdit_wfolder, self.pushButton_browsewf)
-		QWidget.setTabOrder(self.pushButton_browsewf, self.pushButton_save)
+		QWidget.setTabOrder(self.pushButton_browsewf, self.lineEdit_efolder)
+		QWidget.setTabOrder(self.lineEdit_efolder, self.pushButton_browseef)
+		QWidget.setTabOrder(self.pushButton_browseef, self.pushButton_save)
 		QWidget.setTabOrder(self.pushButton_save, self.pushButton_add)
 		QWidget.setTabOrder(self.pushButton_add, self.pushButton_close)
 
@@ -586,6 +629,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		self.listWidgetChunkDefs.currentItemChanged.connect(self.pushButton_sremove.setEnabled(True))
 		self.pushButton_sedit.clicked.connect(self.editSelectedItem)
 		self.pushButton_browsewf.clicked.connect(self.selectWorkFolder)
+		self.pushButton_browseef.clicked.connect(self.selectExportFolder)
 		self.pushButton_save.clicked.connect(self.saveSelectedItem)
 		self.radioButton_1.toggled.connect(self.lineEdit_pre.setDisabled)
 		self.radioButton_1.toggled.connect(self.lineEdit_suf.setDisabled)
@@ -676,6 +720,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		self.selFormat = str(ftgMain.menuCfg.get(selected_item, "chunk_name_format"))
 		self.selectChunkFormat()
 		self.lineEdit_wfolder.setText(str(ftgMain.menuCfg.get(selected_item, "work_folder")))
+		self.lineEdit_efolder.setText(str(ftgMain.menuCfg.get(selected_item, "export_folder")))
 		self.lineEdit_pre.setText(str(ftgMain.menuCfg.get(selected_item, "chunk_name_prefix")))
 		self.lineEdit_suf.setText(str(ftgMain.menuCfg.get(selected_item, "chunk_name_suffix")))
 		self.lineEdit_name.setDisabled(True)
@@ -704,6 +749,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 			self.lineEdit_name.clear
 			self.comboBox_icon.setCurrentIndex(0)
 			self.lineEdit_wfolder.clear
+			self.lineEdit_efolder.clear
 			self.lineEdit_pre.clear
 			self.lineEdit_suf.clear
 			self.pushButton_sedit.setEnabled(True)
@@ -721,6 +767,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		ftgMain.menuCfg.set(edit_section, "chunk_name_prefix", self.lineEdit_pre.text())
 		ftgMain.menuCfg.set(edit_section, "chunk_name_suffix", self.lineEdit_suf.text())
 		ftgMain.menuCfg.set(edit_section, "work_folder", self.lineEdit_wfolder.text())
+		ftgMain.menuCfg.set(edit_section, "export_folder", self.lineEdit_efolder.text())
 		
 		with open(ftgMain.menuCfgFilePath, 'w') as menuconfig:
 			ftgMain.menuCfg.write(menuconfig)
@@ -731,6 +778,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		self.lineEdit_name.setEnabled(True)
 		self.lineEdit_name.clear()
 		self.lineEdit_wfolder.clear()
+		self.lineEdit_efolder.clear()
 		self.lineEdit_pre.clear()
 		self.lineEdit_suf.clear()
 		self.comboBox_icon.setCurrentIndex(0)
@@ -759,6 +807,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 			ftgMain.menuCfg.set(new_section, "chunk_name_prefix", self.lineEdit_pre.text())
 			ftgMain.menuCfg.set(new_section, "chunk_name_suffix", self.lineEdit_suf.text())
 			ftgMain.menuCfg.set(new_section, "work_folder", self.lineEdit_wfolder.text())
+			ftgMain.menuCfg.set(new_section, "export_folder", self.lineEdit_efolder.text())
 			
 			with open(ftgMain.menuCfgFilePath, 'w') as menuconfig:
 				ftgMain.menuCfg.write(menuconfig)
@@ -768,6 +817,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 			self.listWidgetChunkDefs.setEnabled(True)
 			self.lineEdit_name.clear()
 			self.lineEdit_wfolder.clear()
+			self.lineEdit_efolder.clear()
 			self.lineEdit_pre.clear()
 			self.lineEdit_suf.clear()
 			self.comboBox_icon.setCurrentIndex(0)
@@ -790,6 +840,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 			self.pushButton_add_action = False
 			self.lineEdit_name.clear()
 			self.lineEdit_wfolder.clear()
+			self.lineEdit_efolder.clear()
 			self.lineEdit_pre.clear()
 			self.lineEdit_suf.clear()
 			self.comboBox_icon.setCurrentIndex(0)
@@ -820,4 +871,19 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		else:
 			self.lineEdit_wfolder.setText(str(sel_folder))
 			print("Work folder location selected!")
+
+
+	def selectExportFolder(self):
+		if self.lineEdit_efolder.text() == "" or self.lineEdit_efolder.text() ==  None:
+			sel_folder = Metashape.app.getExistingDirectory("Choose Export Folder", ftgMain.selected_data_folder)
+		else:
+			cur_folder = self.lineEdit_efolder.text()
+			sel_folder = Metashape.app.getExistingDirectory("Choose Export Folder", cur_folder)
+		
+		if sel_folder == "":
+			self.lineEdit_efolder.setText(str(cur_folder))
+			print("Export folder not changed!")
+		else:
+			self.lineEdit_efolder.setText(str(sel_folder))
+			print("Export folder location selected!")
 

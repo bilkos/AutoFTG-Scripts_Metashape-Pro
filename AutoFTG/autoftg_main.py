@@ -1,9 +1,11 @@
 # AutoFTG - Scripts for Agisoft Metashape Pro
-# Scripts for process automation
-# This is an assembly of existing scripts from other users, and some additional 
-# scripts written for use in work process at project 2TIR, tunnel T8-KP in Slovenia.
+#
+# This is an assembly of python scripts for process automation, and some existing scripts from other users
+#
+# Scripts were written for use in work process on project 2TDK, construction of railroad tunnels in Slovenia,
+# but were later modified to support any kind of project where lots of processing is needed.
 # 
-# Author: Boriws Bilc
+# Author: Boris Bilc
 # 
 # Script repository (GitHub):
 # ---------------------------
@@ -13,16 +15,23 @@
 # References:
 # -----------
 # 
-# Copy Bounding Box Script
-#  https://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py
-#  Copies bounding boxes from chunk to other chunks.
+# Copy Bounding Box Script:
+# - https://github.com/agisoft-llc/metashape-scripts/blob/master/src/copy_bounding_box_dialog.py
+#   Copies bounding boxes from chunk to other chunks.
 # 
 #
-# If you add or change resorces (icons, images, etc... in qtresorces.qrc), then you need to re-compile resorces.py file
+# If you add or change resorces (icons, images, etc... in qtresorces.qrc), then you need to re-compile qtresorces.qrc file.
 # To do that you need to navigate to script folder and run following command:
 # 
 # pyside2-rcc -o resource.py qtresources.qrc
 # 
+# If you are using VSCode that you can modify and compile UI elements with PySide2-VSC extension.
+# 
+# Scripts are free to use for commercial or non-commercial use.
+# 
+# Please use 'Issues' page in GitHub repository to report any bugs, and suggestions for improvements.
+# Link to issues page: https://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro/issues
+
 
 
 import os
@@ -44,10 +53,9 @@ from AutoFTG.autoftg_batch import *
 from AutoFTG.autoftg_settingschunk import *
 from AutoFTG.qtresources import *
 
-# <!#FV> 2.5.9 </#FV>
 # App info
 app_name = "AutoFTG"
-app_ver = "2.5.9"
+app_ver = "2.6.0"
 appsettings_ver = "6"
 app_author = "Author: Boris Bilc\n\n"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
@@ -335,7 +343,8 @@ def chunksCfgLoad():
 		menuCfg.set(menu_section_m, "chunk_name_prefix", "")
 		menuCfg.set(menu_section_m, "chunk_name_suffix", "")
 		menuCfg.set(menu_section_m, "work_folder", str(Metashape.app.getExistingDirectory("Project data folder (batch)")))
-	
+		menuCfg.set(menu_section_m, "export_folder", str(Metashape.app.getExistingDirectory("Project data export folder (batch)")))
+		
 		with open(menuCfgFilePath, 'w') as menuconfig:
 			menuCfg.write(menuconfig)
 
@@ -391,6 +400,9 @@ def projCfgLoad():
 		Metashape.app.messageBox("Settings initialization...\nPlease choose data folder, and default camera.")
 		proj_data = Metashape.app.getExistingDirectory("Project data folder")
 		diaSelectCamera()
+		if projCfg.has_section('PROJECT SETTINGS') == True:
+			projCfg.remove_section('PROJECT SETTINGS')
+			
 		projCfg.add_section('PROJECT SETTINGS')
 		projCfg.set('PROJECT SETTINGS', 'settings_version', appsettings_ver)
 		projCfg.set('PROJECT SETTINGS', 'folder_data', str(proj_data))
