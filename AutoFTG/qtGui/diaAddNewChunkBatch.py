@@ -38,11 +38,11 @@ class Ui_DialogBatchChunk(object):
 		self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
 		self.verticalLayoutWidget.setGeometry(QRect(0, 0, 901, 831))
 		self.verticalLayout_2 = QVBoxLayout(self.verticalLayoutWidget)
-		self.verticalLayout_2.setSpacing(5)
+		self.verticalLayout_2.setSpacing(6)
 		self.verticalLayout_2.setContentsMargins(10, 10, 10, 10)
 		self.verticalLayout_2.setObjectName(u"verticalLayout_2")
 		self.verticalLayout_2.setSizeConstraint(QLayout.SetDefaultConstraint)
-		self.verticalLayout_2.setContentsMargins(5, 0, 5, 5)
+		self.verticalLayout_2.setContentsMargins(10, 0, 10, 0)
 		self.horizontalLayout_9 = QHBoxLayout()
 		self.horizontalLayout_9.setSpacing(5)
 		self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
@@ -180,59 +180,6 @@ class Ui_DialogBatchChunk(object):
 		icon15.addFile(u":/icons/icons8-my-location-50.png", QSize(), QIcon.Normal, QIcon.Off)
 		icon16 = QIcon()
 		icon16.addFile(u":/icons/icons8-microsoft-todo-2019-48.png", QSize(), QIcon.Normal, QIcon.Off)
-		__qtreewidgetitem1 = QTreeWidgetItem(self.treeWidget)
-		__qtreewidgetitem1.setText(0, u"root");
-		__qtreewidgetitem1.setFont(0, font2);
-		__qtreewidgetitem1.setIcon(0, icon7);
-		__qtreewidgetitem2 = QTreeWidgetItem(__qtreewidgetitem1)
-		__qtreewidgetitem2.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
-		__qtreewidgetitem2.setIcon(4, icon11);
-		__qtreewidgetitem2.setIcon(3, icon11);
-		__qtreewidgetitem2.setText(2, u"3D: -");
-		__qtreewidgetitem2.setIcon(2, icon10);
-		__qtreewidgetitem2.setText(1, u"21");
-		__qtreewidgetitem2.setIcon(1, icon9);
-		__qtreewidgetitem2.setText(0, u"20230125-1010");
-		__qtreewidgetitem2.setIcon(0, icon8);
-		__qtreewidgetitem3 = QTreeWidgetItem(__qtreewidgetitem1)
-		__qtreewidgetitem3.setFlags(Qt.NoItemFlags);
-		__qtreewidgetitem3.setTextAlignment(3, Qt.AlignTrailing|Qt.AlignVCenter);
-		__qtreewidgetitem3.setText(2, u"Missing");
-		__qtreewidgetitem3.setTextAlignment(2, Qt.AlignLeading|Qt.AlignVCenter);
-		__qtreewidgetitem3.setIcon(2, icon13);
-		__qtreewidgetitem3.setTextAlignment(1, Qt.AlignLeading|Qt.AlignVCenter);
-		__qtreewidgetitem3.setIcon(1, icon12);
-		__qtreewidgetitem3.setText(0, u"20230109-0530");
-		__qtreewidgetitem3.setIcon(0, icon8);
-		__qtreewidgetitem4 = QTreeWidgetItem(__qtreewidgetitem1)
-		__qtreewidgetitem4.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
-		__qtreewidgetitem4.setText(2, u"Found");
-		__qtreewidgetitem4.setIcon(2, icon14);
-		__qtreewidgetitem4.setText(1, u"20");
-		__qtreewidgetitem4.setIcon(1, icon1);
-		__qtreewidgetitem4.setText(0, u"20230109-0030");
-		__qtreewidgetitem4.setFont(0, font3);
-		__qtreewidgetitem4.setIcon(0, icon8);
-		__qtreewidgetitem5 = QTreeWidgetItem(__qtreewidgetitem1)
-		__qtreewidgetitem5.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
-		__qtreewidgetitem5.setBackground(6, brush);
-		__qtreewidgetitem5.setIcon(6, icon16);
-		__qtreewidgetitem5.setBackground(5, brush);
-		__qtreewidgetitem5.setIcon(5, icon16);
-		__qtreewidgetitem5.setBackground(4, brush);
-		__qtreewidgetitem5.setIcon(4, icon16);
-		__qtreewidgetitem5.setTextAlignment(3, Qt.AlignLeading|Qt.AlignVCenter);
-		__qtreewidgetitem5.setBackground(3, brush);
-		__qtreewidgetitem5.setIcon(3, icon11);
-		__qtreewidgetitem5.setText(2, u"3D: 0.0021");
-		__qtreewidgetitem5.setBackground(2, brush);
-		__qtreewidgetitem5.setIcon(2, icon15);
-		__qtreewidgetitem5.setText(1, u"27");
-		__qtreewidgetitem5.setBackground(1, brush);
-		__qtreewidgetitem5.setIcon(1, icon9);
-		__qtreewidgetitem5.setText(0, u"20230109-0010");
-		__qtreewidgetitem5.setBackground(0, brush);
-		__qtreewidgetitem5.setIcon(0, icon8);
 		self.treeWidget.setObjectName(u"treeWidget")
 		sizePolicy4 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
 		sizePolicy4.setHorizontalStretch(0)
@@ -480,100 +427,12 @@ class Ui_DialogBatchChunk(object):
 		self.gridLayout_3 = QGridLayout()
 		self.gridLayout_3.setSpacing(5)
 		self.gridLayout_3.setObjectName(u"gridLayout_3")
-		self.horizontalLayout_16 = QHBoxLayout()
-		self.horizontalLayout_16.setSpacing(5)
-		self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
-		self.checkBox_pcloud = QCheckBox(self.verticalLayoutWidget)
-		self.checkBox_pcloud.setObjectName(u"checkBox_pcloud")
-		self.checkBox_pcloud.setEnabled(True)
-		sizePolicy7.setHeightForWidth(self.checkBox_pcloud.sizePolicy().hasHeightForWidth())
-		self.checkBox_pcloud.setSizePolicy(sizePolicy7)
-		self.checkBox_pcloud.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
-		self.checkBox_pcloud.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Build Point Cloud</p><p><span style=\" font-weight:600;\">Disabled:</span> Skip...</p></body></html>")
-#endif // QT_CONFIG(tooltip)
-		self.checkBox_pcloud.setText(u"Build Point Cloud")
-		icon23 = QIcon()
-		icon23.addFile(u":/icons/icons8-live-photos-96.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.checkBox_pcloud.setIcon(icon23)
-		self.checkBox_pcloud.setIconSize(QSize(21, 21))
-		self.checkBox_pcloud.setCheckable(True)
-		self.checkBox_pcloud.setChecked(False)
-		self.checkBox_pcloud.setTristate(False)
+		self.line_5 = QFrame(self.verticalLayoutWidget)
+		self.line_5.setObjectName(u"line_5")
+		self.line_5.setFrameShadow(QFrame.Plain)
+		self.line_5.setFrameShape(QFrame.HLine)
 
-		self.horizontalLayout_16.addWidget(self.checkBox_pcloud)
-
-		self.pushButton_setPCloud = QPushButton(self.verticalLayoutWidget)
-		self.pushButton_setPCloud.setObjectName(u"pushButton_setPCloud")
-		self.pushButton_setPCloud.setEnabled(False)
-		sizePolicy6.setHeightForWidth(self.pushButton_setPCloud.sizePolicy().hasHeightForWidth())
-		self.pushButton_setPCloud.setSizePolicy(sizePolicy6)
-		self.pushButton_setPCloud.setCursor(QCursor(Qt.PointingHandCursor))
-		icon24 = QIcon()
-		icon24.addFile(u":/icons/icons8-adjust-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.pushButton_setPCloud.setIcon(icon24)
-		self.pushButton_setPCloud.setFlat(True)
-
-		self.horizontalLayout_16.addWidget(self.pushButton_setPCloud)
-
-
-		self.gridLayout_3.addLayout(self.horizontalLayout_16, 29, 0, 1, 1)
-
-		self.horizontalLayout_15 = QHBoxLayout()
-		self.horizontalLayout_15.setSpacing(5)
-		self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
-		self.checkBox_export = QCheckBox(self.verticalLayoutWidget)
-		self.checkBox_export.setObjectName(u"checkBox_export")
-		self.checkBox_export.setEnabled(True)
-		sizePolicy7.setHeightForWidth(self.checkBox_export.sizePolicy().hasHeightForWidth())
-		self.checkBox_export.setSizePolicy(sizePolicy7)
-		self.checkBox_export.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
-		self.checkBox_export.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Export selected data after build is complete.</p><p><span style=\" font-weight:600;\">Disabled:</span> Skip...</p></body></html>")
-#endif // QT_CONFIG(tooltip)
-		self.checkBox_export.setText(u"Data Export")
-		icon25 = QIcon()
-		icon25.addFile(u":/icons/icons8-share-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.checkBox_export.setIcon(icon25)
-		self.checkBox_export.setIconSize(QSize(21, 21))
-		self.checkBox_export.setCheckable(True)
-		self.checkBox_export.setChecked(False)
-		self.checkBox_export.setTristate(False)
-
-		self.horizontalLayout_15.addWidget(self.checkBox_export)
-
-		self.pushButton_setExport = QPushButton(self.verticalLayoutWidget)
-		self.pushButton_setExport.setObjectName(u"pushButton_setExport")
-		self.pushButton_setExport.setEnabled(False)
-		sizePolicy6.setHeightForWidth(self.pushButton_setExport.sizePolicy().hasHeightForWidth())
-		self.pushButton_setExport.setSizePolicy(sizePolicy6)
-		self.pushButton_setExport.setCursor(QCursor(Qt.PointingHandCursor))
-		icon26 = QIcon()
-		icon26.addFile(u":/icons/icons8-true-false-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.pushButton_setExport.setIcon(icon26)
-		self.pushButton_setExport.setFlat(True)
-
-		self.horizontalLayout_15.addWidget(self.pushButton_setExport)
-
-
-		self.gridLayout_3.addLayout(self.horizontalLayout_15, 31, 0, 1, 1)
-
-		self.label_17 = QLabel(self.verticalLayoutWidget)
-		self.label_17.setObjectName(u"label_17")
-		sizePolicy2.setHeightForWidth(self.label_17.sizePolicy().hasHeightForWidth())
-		self.label_17.setSizePolicy(sizePolicy2)
-		self.label_17.setMaximumSize(QSize(16777215, 30))
-		font7 = QFont()
-		font7.setFamily(u"Segoe UI")
-		font7.setPointSize(11)
-		font7.setBold(True)
-		font7.setWeight(75)
-		self.label_17.setFont(font7)
-		self.label_17.setFrameShape(QFrame.NoFrame)
-		self.label_17.setText(u"Processing")
-		self.label_17.setIndent(5)
-
-		self.gridLayout_3.addWidget(self.label_17, 23, 0, 1, 1)
+		self.gridLayout_3.addWidget(self.line_5, 6, 0, 1, 1)
 
 		self.line_3 = QFrame(self.verticalLayoutWidget)
 		self.line_3.setObjectName(u"line_3")
@@ -587,6 +446,11 @@ class Ui_DialogBatchChunk(object):
 		sizePolicy2.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
 		self.label_4.setSizePolicy(sizePolicy2)
 		self.label_4.setMaximumSize(QSize(16777215, 30))
+		font7 = QFont()
+		font7.setFamily(u"Segoe UI")
+		font7.setPointSize(11)
+		font7.setBold(True)
+		font7.setWeight(75)
 		self.label_4.setFont(font7)
 		self.label_4.setFrameShape(QFrame.NoFrame)
 		self.label_4.setText(u"Camera")
@@ -594,156 +458,46 @@ class Ui_DialogBatchChunk(object):
 
 		self.gridLayout_3.addWidget(self.label_4, 1, 0, 1, 1)
 
-		self.horizontalLayout_14 = QHBoxLayout()
-		self.horizontalLayout_14.setSpacing(5)
-		self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
-		self.checkBox_3 = QCheckBox(self.verticalLayoutWidget)
-		self.checkBox_3.setObjectName(u"checkBox_3")
-		sizePolicy7.setHeightForWidth(self.checkBox_3.sizePolicy().hasHeightForWidth())
-		self.checkBox_3.setSizePolicy(sizePolicy7)
-		self.checkBox_3.setCursor(QCursor(Qt.PointingHandCursor))
+		self.verticalSpacer = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
+
+		self.gridLayout_3.addItem(self.verticalSpacer, 33, 0, 1, 1)
+
+		self.horizontalLayout_11 = QHBoxLayout()
+		self.horizontalLayout_11.setSpacing(5)
+		self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+		self.checkBox_align = QCheckBox(self.verticalLayoutWidget)
+		self.checkBox_align.setObjectName(u"checkBox_align")
+		self.checkBox_align.setEnabled(True)
+		sizePolicy7.setHeightForWidth(self.checkBox_align.sizePolicy().hasHeightForWidth())
+		self.checkBox_align.setSizePolicy(sizePolicy7)
+		self.checkBox_align.setCursor(QCursor(Qt.PointingHandCursor))
 #if QT_CONFIG(tooltip)
-		self.checkBox_3.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Automatic chunk creation with predefined settings</p><p><span style=\" font-weight:600;\">Disabled:</span> Manual confirmation of intermediate steps</p></body></html>")
+		self.checkBox_align.setToolTip(u"<html><head/><body><p>Enable to run 'Align Photos' process for selected items.</p></body></html>")
 #endif // QT_CONFIG(tooltip)
-		self.checkBox_3.setText(u"Auto Import Processing")
-		icon27 = QIcon()
-		icon27.addFile(u":/icons/icons8-in-progress-96.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.checkBox_3.setIcon(icon27)
-		self.checkBox_3.setIconSize(QSize(21, 21))
-		self.checkBox_3.setCheckable(True)
-		self.checkBox_3.setChecked(True)
+		self.checkBox_align.setText(u"Align Photos")
+		self.checkBox_align.setIcon(icon4)
+		self.checkBox_align.setIconSize(QSize(21, 21))
+		self.checkBox_align.setCheckable(True)
+		self.checkBox_align.setChecked(False)
+		self.checkBox_align.setTristate(False)
 
-		self.horizontalLayout_14.addWidget(self.checkBox_3)
+		self.horizontalLayout_11.addWidget(self.checkBox_align)
 
+		self.pushButton_setAlign = QPushButton(self.verticalLayoutWidget)
+		self.pushButton_setAlign.setObjectName(u"pushButton_setAlign")
+		self.pushButton_setAlign.setEnabled(False)
+		sizePolicy6.setHeightForWidth(self.pushButton_setAlign.sizePolicy().hasHeightForWidth())
+		self.pushButton_setAlign.setSizePolicy(sizePolicy6)
+		self.pushButton_setAlign.setCursor(QCursor(Qt.PointingHandCursor))
+		icon23 = QIcon()
+		icon23.addFile(u":/icons/icons8-adjust-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton_setAlign.setIcon(icon23)
+		self.pushButton_setAlign.setFlat(True)
 
-		self.gridLayout_3.addLayout(self.horizontalLayout_14, 25, 0, 1, 1)
-
-		self.horizontalLayout_18 = QHBoxLayout()
-		self.horizontalLayout_18.setSpacing(5)
-		self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
-		self.checkBox_5 = QCheckBox(self.verticalLayoutWidget)
-		self.checkBox_5.setObjectName(u"checkBox_5")
-		self.checkBox_5.setEnabled(False)
-		sizePolicy7.setHeightForWidth(self.checkBox_5.sizePolicy().hasHeightForWidth())
-		self.checkBox_5.setSizePolicy(sizePolicy7)
-		self.checkBox_5.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
-		self.checkBox_5.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Automatic chunk creation with predefined settings</p><p><span style=\" font-weight:600;\">Disabled:</span> Manual confirmation of intermediate steps</p></body></html>")
-#endif // QT_CONFIG(tooltip)
-		self.checkBox_5.setText(u"Import New Data")
-		icon28 = QIcon()
-		icon28.addFile(u":/icons/icons8-move-to-folder-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.checkBox_5.setIcon(icon28)
-		self.checkBox_5.setIconSize(QSize(21, 21))
-		self.checkBox_5.setCheckable(True)
-		self.checkBox_5.setChecked(False)
-
-		self.horizontalLayout_18.addWidget(self.checkBox_5)
+		self.horizontalLayout_11.addWidget(self.pushButton_setAlign)
 
 
-		self.gridLayout_3.addLayout(self.horizontalLayout_18, 24, 0, 1, 1)
-
-		self.horizontalLayout_8 = QHBoxLayout()
-		self.horizontalLayout_8.setSpacing(5)
-		self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-		self.cbChunkSettings = QComboBox(self.verticalLayoutWidget)
-		icon29 = QIcon()
-		icon29.addFile(u":/icons/icons8-add-tab-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.cbChunkSettings.addItem(icon29, u"Default")
-		icon30 = QIcon()
-		icon30.addFile(u":/icons/kalota_m.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.cbChunkSettings.addItem(icon30, u"KALOTA")
-		icon31 = QIcon()
-		icon31.addFile(u":/icons/stopnca_o.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.cbChunkSettings.addItem(icon31, u"STOPNICA - IZKOP")
-		icon32 = QIcon()
-		icon32.addFile(u":/icons/stopnca_s.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.cbChunkSettings.addItem(icon32, u"STOPNICA - B.BET.")
-		self.cbChunkSettings.setObjectName(u"cbChunkSettings")
-		sizePolicy9 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
-		sizePolicy9.setHorizontalStretch(0)
-		sizePolicy9.setVerticalStretch(0)
-		sizePolicy9.setHeightForWidth(self.cbChunkSettings.sizePolicy().hasHeightForWidth())
-		self.cbChunkSettings.setSizePolicy(sizePolicy9)
-		self.cbChunkSettings.setMinimumSize(QSize(200, 0))
-		self.cbChunkSettings.setFont(font6)
-		self.cbChunkSettings.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(statustip)
-		self.cbChunkSettings.setStatusTip(u"Choose settings used for chunk creation...")
-#endif // QT_CONFIG(statustip)
-		self.cbChunkSettings.setIconSize(QSize(20, 20))
-
-		self.horizontalLayout_8.addWidget(self.cbChunkSettings)
-
-		self.btnDefChunk = QPushButton(self.verticalLayoutWidget)
-		self.btnDefChunk.setObjectName(u"btnDefChunk")
-		self.btnDefChunk.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
-		self.btnDefChunk.setToolTip(u"Set as default")
-#endif // QT_CONFIG(tooltip)
-		self.btnDefChunk.setText(u"")
-		icon33 = QIcon()
-		icon33.addFile(u":/icons/icons8-christmas-star-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.btnDefChunk.setIcon(icon33)
-		self.btnDefChunk.setIconSize(QSize(20, 20))
-		self.btnDefChunk.setAutoDefault(False)
-		self.btnDefChunk.setFlat(False)
-
-		self.horizontalLayout_8.addWidget(self.btnDefChunk)
-
-
-		self.gridLayout_3.addLayout(self.horizontalLayout_8, 8, 0, 1, 1)
-
-		self.line_2 = QFrame(self.verticalLayoutWidget)
-		self.line_2.setObjectName(u"line_2")
-		self.line_2.setFrameShadow(QFrame.Plain)
-		self.line_2.setFrameShape(QFrame.HLine)
-
-		self.gridLayout_3.addWidget(self.line_2, 22, 0, 1, 1)
-
-		self.line_6 = QFrame(self.verticalLayoutWidget)
-		self.line_6.setObjectName(u"line_6")
-		self.line_6.setFrameShape(QFrame.HLine)
-		self.line_6.setFrameShadow(QFrame.Sunken)
-
-		self.gridLayout_3.addWidget(self.line_6, 26, 0, 1, 1)
-
-		self.horizontalLayout_13 = QHBoxLayout()
-		self.horizontalLayout_13.setSpacing(5)
-		self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
-		self.checkBox_mesh = QCheckBox(self.verticalLayoutWidget)
-		self.checkBox_mesh.setObjectName(u"checkBox_mesh")
-		self.checkBox_mesh.setEnabled(True)
-		sizePolicy7.setHeightForWidth(self.checkBox_mesh.sizePolicy().hasHeightForWidth())
-		self.checkBox_mesh.setSizePolicy(sizePolicy7)
-		self.checkBox_mesh.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
-		self.checkBox_mesh.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Build Mesh and Textures</p><p><span style=\" font-weight:600;\">Disabled:</span> Skip...</p></body></html>")
-#endif // QT_CONFIG(tooltip)
-		self.checkBox_mesh.setText(u"Build Mesh && Textures")
-		icon34 = QIcon()
-		icon34.addFile(u":/icons/icons8-national-park-48.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.checkBox_mesh.setIcon(icon34)
-		self.checkBox_mesh.setIconSize(QSize(21, 21))
-		self.checkBox_mesh.setCheckable(True)
-		self.checkBox_mesh.setChecked(False)
-		self.checkBox_mesh.setTristate(False)
-
-		self.horizontalLayout_13.addWidget(self.checkBox_mesh)
-
-		self.pushButton_setMesh = QPushButton(self.verticalLayoutWidget)
-		self.pushButton_setMesh.setObjectName(u"pushButton_setMesh")
-		self.pushButton_setMesh.setEnabled(False)
-		sizePolicy6.setHeightForWidth(self.pushButton_setMesh.sizePolicy().hasHeightForWidth())
-		self.pushButton_setMesh.setSizePolicy(sizePolicy6)
-		self.pushButton_setMesh.setCursor(QCursor(Qt.PointingHandCursor))
-		self.pushButton_setMesh.setIcon(icon24)
-		self.pushButton_setMesh.setFlat(True)
-
-		self.horizontalLayout_13.addWidget(self.pushButton_setMesh)
-
-
-		self.gridLayout_3.addLayout(self.horizontalLayout_13, 28, 0, 1, 1)
+		self.gridLayout_3.addLayout(self.horizontalLayout_11, 26, 0, 1, 1)
 
 		self.horizontalLayout_7 = QHBoxLayout()
 		self.horizontalLayout_7.setSpacing(5)
@@ -779,209 +533,6 @@ class Ui_DialogBatchChunk(object):
 
 		self.gridLayout_3.addLayout(self.horizontalLayout_7, 5, 0, 1, 1)
 
-		self.line_5 = QFrame(self.verticalLayoutWidget)
-		self.line_5.setObjectName(u"line_5")
-		self.line_5.setFrameShadow(QFrame.Plain)
-		self.line_5.setFrameShape(QFrame.HLine)
-
-		self.gridLayout_3.addWidget(self.line_5, 6, 0, 1, 1)
-
-		self.horizontalLayout_19 = QHBoxLayout()
-		self.horizontalLayout_19.setSpacing(5)
-		self.horizontalLayout_19.setObjectName(u"horizontalLayout_19")
-		self.label_20 = QLabel(self.verticalLayoutWidget)
-		self.label_20.setObjectName(u"label_20")
-		self.label_20.setFont(font8)
-		self.label_20.setText(u"Data Export:")
-		self.label_20.setIndent(10)
-
-		self.horizontalLayout_19.addWidget(self.label_20)
-
-		self.label_expFolder = QLabel(self.verticalLayoutWidget)
-		self.label_expFolder.setObjectName(u"label_expFolder")
-		sizePolicy1.setHeightForWidth(self.label_expFolder.sizePolicy().hasHeightForWidth())
-		self.label_expFolder.setSizePolicy(sizePolicy1)
-		self.label_expFolder.setMinimumSize(QSize(200, 15))
-		self.label_expFolder.setMaximumSize(QSize(200, 45))
-		self.label_expFolder.setFont(font9)
-		self.label_expFolder.setFrameShape(QFrame.NoFrame)
-		self.label_expFolder.setText(u"")
-		self.label_expFolder.setWordWrap(True)
-
-		self.horizontalLayout_19.addWidget(self.label_expFolder)
-
-
-		self.gridLayout_3.addLayout(self.horizontalLayout_19, 12, 0, 1, 1)
-
-		self.horizontalLayout_12 = QHBoxLayout()
-		self.horizontalLayout_12.setSpacing(5)
-		self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-		self.comboBox_2 = QComboBox(self.verticalLayoutWidget)
-		icon35 = QIcon()
-		icon35.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox_2.addItem(icon35, u"Cam 1")
-		icon36 = QIcon()
-		icon36.addFile(u":/icons/icons8-video-wall-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox_2.addItem(icon36, u"Cam 2")
-		self.comboBox_2.addItem(icon23, u"Cam 3")
-		icon37 = QIcon()
-		icon37.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox_2.addItem(icon37, u"Cam 4")
-		icon38 = QIcon()
-		icon38.addFile(u":/icons/icons8-video-stabilization-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox_2.addItem(icon38, u"Cam 5")
-		icon39 = QIcon()
-		icon39.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.comboBox_2.addItem(icon39, u"Cam 6")
-		self.comboBox_2.setObjectName(u"comboBox_2")
-		sizePolicy10 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Maximum)
-		sizePolicy10.setHorizontalStretch(0)
-		sizePolicy10.setVerticalStretch(0)
-		sizePolicy10.setHeightForWidth(self.comboBox_2.sizePolicy().hasHeightForWidth())
-		self.comboBox_2.setSizePolicy(sizePolicy10)
-		self.comboBox_2.setMinimumSize(QSize(200, 0))
-		self.comboBox_2.setFont(font6)
-		self.comboBox_2.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(statustip)
-		self.comboBox_2.setStatusTip(u"Choose camera settings to be applied when creating new chunk...")
-#endif // QT_CONFIG(statustip)
-		self.comboBox_2.setIconSize(QSize(20, 20))
-
-		self.horizontalLayout_12.addWidget(self.comboBox_2)
-
-		self.btnDefCam = QPushButton(self.verticalLayoutWidget)
-		self.btnDefCam.setObjectName(u"btnDefCam")
-		self.btnDefCam.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
-		self.btnDefCam.setToolTip(u"Set as default")
-#endif // QT_CONFIG(tooltip)
-		self.btnDefCam.setText(u"")
-		self.btnDefCam.setIcon(icon33)
-		self.btnDefCam.setIconSize(QSize(20, 20))
-		self.btnDefCam.setAutoDefault(False)
-		self.btnDefCam.setFlat(False)
-
-		self.horizontalLayout_12.addWidget(self.btnDefCam)
-
-
-		self.gridLayout_3.addLayout(self.horizontalLayout_12, 3, 0, 1, 1)
-
-		self.label_5 = QLabel(self.verticalLayoutWidget)
-		self.label_5.setObjectName(u"label_5")
-		sizePolicy2.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
-		self.label_5.setSizePolicy(sizePolicy2)
-		self.label_5.setMaximumSize(QSize(16777215, 30))
-		self.label_5.setFont(font7)
-		self.label_5.setFrameShape(QFrame.NoFrame)
-		self.label_5.setText(u"Markers")
-		self.label_5.setIndent(5)
-
-		self.gridLayout_3.addWidget(self.label_5, 19, 0, 1, 1)
-
-		self.checkBox = QCheckBox(self.verticalLayoutWidget)
-		self.checkBox.setObjectName(u"checkBox")
-		sizePolicy2.setHeightForWidth(self.checkBox.sizePolicy().hasHeightForWidth())
-		self.checkBox.setSizePolicy(sizePolicy2)
-		self.checkBox.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
-		self.checkBox.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Marker coordinates will be imported after target detection. <span style=\" font-weight:600;\">*</span></p><p><span style=\" font-weight:600;\">Disabled:</span> Coordinates are not imported. User must manually import coordinates.</p><p><span style=\" font-weight:600;\">*</span> Automatic importing of marker coordinates only works if point file name is the same as it's parent folder name, and contains a header with metadata. Point coordinates should start at row #7.</p></body></html>")
-#endif // QT_CONFIG(tooltip)
-		self.checkBox.setText(u"Import Marker Coordinates")
-		icon40 = QIcon()
-		icon40.addFile(u":/icons/icons8-map-marker-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.checkBox.setIcon(icon40)
-		self.checkBox.setIconSize(QSize(21, 21))
-		self.checkBox.setChecked(True)
-
-		self.gridLayout_3.addWidget(self.checkBox, 21, 0, 1, 1)
-
-		self.horizontalLayout_11 = QHBoxLayout()
-		self.horizontalLayout_11.setSpacing(5)
-		self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
-		self.checkBox_align = QCheckBox(self.verticalLayoutWidget)
-		self.checkBox_align.setObjectName(u"checkBox_align")
-		self.checkBox_align.setEnabled(True)
-		sizePolicy7.setHeightForWidth(self.checkBox_align.sizePolicy().hasHeightForWidth())
-		self.checkBox_align.setSizePolicy(sizePolicy7)
-		self.checkBox_align.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
-		self.checkBox_align.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Align Photos after import.</p><p><span style=\" font-weight:600;\">Disabled:</span> Skip...</p></body></html>")
-#endif // QT_CONFIG(tooltip)
-		self.checkBox_align.setText(u"Align Photos")
-		self.checkBox_align.setIcon(icon4)
-		self.checkBox_align.setIconSize(QSize(21, 21))
-		self.checkBox_align.setCheckable(True)
-		self.checkBox_align.setChecked(False)
-		self.checkBox_align.setTristate(False)
-
-		self.horizontalLayout_11.addWidget(self.checkBox_align)
-
-		self.pushButton_setAlign = QPushButton(self.verticalLayoutWidget)
-		self.pushButton_setAlign.setObjectName(u"pushButton_setAlign")
-		self.pushButton_setAlign.setEnabled(False)
-		sizePolicy6.setHeightForWidth(self.pushButton_setAlign.sizePolicy().hasHeightForWidth())
-		self.pushButton_setAlign.setSizePolicy(sizePolicy6)
-		self.pushButton_setAlign.setCursor(QCursor(Qt.PointingHandCursor))
-		self.pushButton_setAlign.setIcon(icon24)
-		self.pushButton_setAlign.setFlat(True)
-
-		self.horizontalLayout_11.addWidget(self.pushButton_setAlign)
-
-
-		self.gridLayout_3.addLayout(self.horizontalLayout_11, 27, 0, 1, 1)
-
-		self.line_7 = QFrame(self.verticalLayoutWidget)
-		self.line_7.setObjectName(u"line_7")
-		self.line_7.setFrameShape(QFrame.HLine)
-		self.line_7.setFrameShadow(QFrame.Sunken)
-
-		self.gridLayout_3.addWidget(self.line_7, 30, 0, 1, 1)
-
-		self.horizontalLayout_5 = QHBoxLayout()
-		self.horizontalLayout_5.setSpacing(5)
-		self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-		self.label_11 = QLabel(self.verticalLayoutWidget)
-		self.label_11.setObjectName(u"label_11")
-		self.label_11.setFont(font8)
-		self.label_11.setText(u"Prefix:")
-		self.label_11.setIndent(10)
-
-		self.horizontalLayout_5.addWidget(self.label_11)
-
-		self.label_6 = QLabel(self.verticalLayoutWidget)
-		self.label_6.setObjectName(u"label_6")
-		sizePolicy5.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
-		self.label_6.setSizePolicy(sizePolicy5)
-		self.label_6.setMinimumSize(QSize(0, 20))
-		self.label_6.setMaximumSize(QSize(16777215, 20))
-		self.label_6.setFont(font9)
-		self.label_6.setFrameShape(QFrame.NoFrame)
-		self.label_6.setText(u"")
-
-		self.horizontalLayout_5.addWidget(self.label_6)
-
-
-		self.gridLayout_3.addLayout(self.horizontalLayout_5, 9, 0, 1, 1)
-
-		self.checkBox_2 = QCheckBox(self.verticalLayoutWidget)
-		self.checkBox_2.setObjectName(u"checkBox_2")
-		sizePolicy2.setHeightForWidth(self.checkBox_2.sizePolicy().hasHeightForWidth())
-		self.checkBox_2.setSizePolicy(sizePolicy2)
-		self.checkBox_2.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
-		self.checkBox_2.setToolTip(u"<html><head/><body><p>Enable automatic target detection when new chunk is created...</p></body></html>")
-#endif // QT_CONFIG(tooltip)
-		self.checkBox_2.setText(u"Automatic Target Detection")
-		self.checkBox_2.setIcon(icon15)
-		self.checkBox_2.setIconSize(QSize(21, 21))
-		self.checkBox_2.setChecked(True)
-
-		self.gridLayout_3.addWidget(self.checkBox_2, 20, 0, 1, 1)
-
-		self.verticalSpacer = QSpacerItem(20, 10, QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
-
-		self.gridLayout_3.addItem(self.verticalSpacer, 34, 0, 1, 1)
-
 		self.horizontalLayout_6 = QHBoxLayout()
 		self.horizontalLayout_6.setSpacing(5)
 		self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
@@ -1009,6 +560,13 @@ class Ui_DialogBatchChunk(object):
 
 		self.gridLayout_3.addLayout(self.horizontalLayout_6, 4, 0, 1, 1)
 
+		self.line_7 = QFrame(self.verticalLayoutWidget)
+		self.line_7.setObjectName(u"line_7")
+		self.line_7.setFrameShape(QFrame.HLine)
+		self.line_7.setFrameShadow(QFrame.Sunken)
+
+		self.gridLayout_3.addWidget(self.line_7, 29, 0, 1, 1)
+
 		self.horizontalLayout_3 = QHBoxLayout()
 		self.horizontalLayout_3.setSpacing(5)
 		self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -1035,6 +593,292 @@ class Ui_DialogBatchChunk(object):
 
 		self.gridLayout_3.addLayout(self.horizontalLayout_3, 10, 0, 1, 1)
 
+		self.horizontalLayout_8 = QHBoxLayout()
+		self.horizontalLayout_8.setSpacing(5)
+		self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+		self.cbChunkSettings = QComboBox(self.verticalLayoutWidget)
+		icon24 = QIcon()
+		icon24.addFile(u":/icons/icons8-add-tab-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon25 = QIcon()
+		icon25.addFile(u":/icons/kalota_m.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon26 = QIcon()
+		icon26.addFile(u":/icons/stopnca_o.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon27 = QIcon()
+		icon27.addFile(u":/icons/stopnca_s.png", QSize(), QIcon.Normal, QIcon.Off)
+		for section in autoftg_main.chunk_sections:
+			menu_icon = autoftg_main.menuCfg.get(section, "menu_icon")
+			menu_icon_path = u":/icons/" + autoftg_main.icoCfg.get("ICONS", menu_icon)
+			setticon = QIcon()
+			setticon.addFile(menu_icon_path, QSize(), QIcon.Normal, QIcon.Off)
+			self.cbChunkSettings.addItem(setticon, section)
+
+		self.cbChunkSettings.setCurrentText(self.itemDef)
+		self.cbChunkSettings.setObjectName(u"cbChunkSettings")
+		sizePolicy9 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
+		sizePolicy9.setHorizontalStretch(0)
+		sizePolicy9.setVerticalStretch(0)
+		sizePolicy9.setHeightForWidth(self.cbChunkSettings.sizePolicy().hasHeightForWidth())
+		self.cbChunkSettings.setSizePolicy(sizePolicy9)
+		self.cbChunkSettings.setMinimumSize(QSize(200, 0))
+		self.cbChunkSettings.setFont(font6)
+		self.cbChunkSettings.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(statustip)
+		self.cbChunkSettings.setStatusTip(u"Choose settings used for chunk creation...")
+#endif // QT_CONFIG(statustip)
+		self.cbChunkSettings.setIconSize(QSize(20, 20))
+
+		self.horizontalLayout_8.addWidget(self.cbChunkSettings)
+
+		self.btnDefChunk = QPushButton(self.verticalLayoutWidget)
+		self.btnDefChunk.setObjectName(u"btnDefChunk")
+		self.btnDefChunk.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(tooltip)
+		self.btnDefChunk.setToolTip(u"Set as default")
+#endif // QT_CONFIG(tooltip)
+		self.btnDefChunk.setText(u"")
+		icon28 = QIcon()
+		icon28.addFile(u":/icons/icons8-christmas-star-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.btnDefChunk.setIcon(icon28)
+		self.btnDefChunk.setIconSize(QSize(20, 20))
+		self.btnDefChunk.setAutoDefault(False)
+		self.btnDefChunk.setFlat(False)
+
+		self.horizontalLayout_8.addWidget(self.btnDefChunk)
+
+
+		self.gridLayout_3.addLayout(self.horizontalLayout_8, 8, 0, 1, 1)
+
+		self.horizontalLayout_13 = QHBoxLayout()
+		self.horizontalLayout_13.setSpacing(5)
+		self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
+		self.checkBox_mesh = QCheckBox(self.verticalLayoutWidget)
+		self.checkBox_mesh.setObjectName(u"checkBox_mesh")
+		self.checkBox_mesh.setEnabled(True)
+		sizePolicy7.setHeightForWidth(self.checkBox_mesh.sizePolicy().hasHeightForWidth())
+		self.checkBox_mesh.setSizePolicy(sizePolicy7)
+		self.checkBox_mesh.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(tooltip)
+		self.checkBox_mesh.setToolTip(u"<html><head/><body><p>Enable to run 'Build Mesh/Build Textures' processing for selected items.</p></body></html>")
+#endif // QT_CONFIG(tooltip)
+		self.checkBox_mesh.setText(u"Build Mesh && Textures")
+		icon29 = QIcon()
+		icon29.addFile(u":/icons/icons8-national-park-48.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.checkBox_mesh.setIcon(icon29)
+		self.checkBox_mesh.setIconSize(QSize(21, 21))
+		self.checkBox_mesh.setCheckable(True)
+		self.checkBox_mesh.setChecked(False)
+		self.checkBox_mesh.setTristate(False)
+
+		self.horizontalLayout_13.addWidget(self.checkBox_mesh)
+
+		self.pushButton_setMesh = QPushButton(self.verticalLayoutWidget)
+		self.pushButton_setMesh.setObjectName(u"pushButton_setMesh")
+		self.pushButton_setMesh.setEnabled(False)
+		sizePolicy6.setHeightForWidth(self.pushButton_setMesh.sizePolicy().hasHeightForWidth())
+		self.pushButton_setMesh.setSizePolicy(sizePolicy6)
+		self.pushButton_setMesh.setCursor(QCursor(Qt.PointingHandCursor))
+		self.pushButton_setMesh.setIcon(icon23)
+		self.pushButton_setMesh.setFlat(True)
+
+		self.horizontalLayout_13.addWidget(self.pushButton_setMesh)
+
+
+		self.gridLayout_3.addLayout(self.horizontalLayout_13, 27, 0, 1, 1)
+
+		self.line_6 = QFrame(self.verticalLayoutWidget)
+		self.line_6.setObjectName(u"line_6")
+		self.line_6.setFrameShape(QFrame.HLine)
+		self.line_6.setFrameShadow(QFrame.Sunken)
+
+		self.gridLayout_3.addWidget(self.line_6, 25, 0, 1, 1)
+
+		self.horizontalLayout_12 = QHBoxLayout()
+		self.horizontalLayout_12.setSpacing(5)
+		self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
+		self.comboBox_2 = QComboBox(self.verticalLayoutWidget)
+		icon30 = QIcon()
+		icon30.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon31 = QIcon()
+		icon31.addFile(u":/icons/icons8-video-wall-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon32 = QIcon()
+		icon32.addFile(u":/icons/icons8-live-photos-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon33 = QIcon()
+		icon33.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon34 = QIcon()
+		icon34.addFile(u":/icons/icons8-video-stabilization-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		icon35 = QIcon()
+		icon35.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon = QIcon()
+		cicon.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon1 = QIcon()
+		cicon1.addFile(u":/icons/icons8-panorama-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon2 = QIcon()
+		cicon2.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon3 = QIcon()
+		cicon3.addFile(u":/icons/icons8-video-stabilization-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon4 = QIcon()
+		cicon4.addFile(u":/icons/icons8-touchscreen-48.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon5 = QIcon()
+		cicon5.addFile(u":/icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicon5a = QIcon()
+		cicon5a.addFile(u":/icons/icons8-ios-application-placeholder-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		cicoTripod = QIcon()
+		cicoTripod.addFile(u":/icons/icons8-camera-on-tripod-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		for cam in autoftg_main.cam_list:
+			icon_type = autoftg_main.camCfg.get(cam, "Type")
+			icon_subtype = autoftg_main.camCfg.get(cam, "SubType")
+			if icon_subtype == "SmartPhone":
+				self.comboBox_2.addItem(cicon4, cam)
+			elif icon_subtype == "Drone":
+				self.comboBox_2.addItem(cicon5, cam)
+			elif icon_subtype == "Special":
+				self.comboBox_2.addItem(cicoTripod, cam)
+			else:
+				if icon_type == "Fisheye":
+					self.comboBox_2.addItem(cicon1, cam)
+				elif icon_type == "Spherical":
+					self.comboBox_2.addItem(cicon3, cam)
+				elif icon_type == "Cylindrical":
+					self.comboBox_2.addItem(cicon2, cam)
+				elif icon_type == "RPC":
+					self.comboBox_2.addItem(cicon5a, cam)
+				else:
+					self.comboBox_2.addItem(cicon, cam)
+		
+		self.comboBox_2.setCurrentText(autoftg_main.selected_camera)
+		self.comboBox_2.setObjectName(u"comboBox_2")
+		sizePolicy10 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Maximum)
+		sizePolicy10.setHorizontalStretch(0)
+		sizePolicy10.setVerticalStretch(0)
+		sizePolicy10.setHeightForWidth(self.comboBox_2.sizePolicy().hasHeightForWidth())
+		self.comboBox_2.setSizePolicy(sizePolicy10)
+		self.comboBox_2.setMinimumSize(QSize(200, 0))
+		self.comboBox_2.setFont(font6)
+		self.comboBox_2.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(statustip)
+		self.comboBox_2.setStatusTip(u"Choose camera settings to be applied when creating new chunk...")
+#endif // QT_CONFIG(statustip)
+		self.comboBox_2.setIconSize(QSize(20, 20))
+
+		self.horizontalLayout_12.addWidget(self.comboBox_2)
+
+		self.btnDefCam = QPushButton(self.verticalLayoutWidget)
+		self.btnDefCam.setObjectName(u"btnDefCam")
+		self.btnDefCam.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(tooltip)
+		self.btnDefCam.setToolTip(u"Set as default")
+#endif // QT_CONFIG(tooltip)
+		self.btnDefCam.setText(u"")
+		self.btnDefCam.setIcon(icon28)
+		self.btnDefCam.setIconSize(QSize(20, 20))
+		self.btnDefCam.setAutoDefault(False)
+		self.btnDefCam.setFlat(False)
+
+		self.horizontalLayout_12.addWidget(self.btnDefCam)
+
+
+		self.gridLayout_3.addLayout(self.horizontalLayout_12, 3, 0, 1, 1)
+
+		self.horizontalLayout_20 = QHBoxLayout()
+		self.horizontalLayout_20.setSpacing(5)
+		self.horizontalLayout_20.setObjectName(u"horizontalLayout_20")
+		self.pushButton_resetSet = QPushButton(self.verticalLayoutWidget)
+		self.pushButton_resetSet.setObjectName(u"pushButton_resetSet")
+		sizePolicy6.setHeightForWidth(self.pushButton_resetSet.sizePolicy().hasHeightForWidth())
+		self.pushButton_resetSet.setSizePolicy(sizePolicy6)
+#if QT_CONFIG(tooltip)
+		self.pushButton_resetSet.setToolTip(u"Reset settings to definition values.")
+#endif // QT_CONFIG(tooltip)
+		self.pushButton_resetSet.setText(u"Reset")
+		icon36 = QIcon()
+		icon36.addFile(u":/icons/icons8-rotate-48.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton_resetSet.setIcon(icon36)
+		self.pushButton_resetSet.setIconSize(QSize(20, 20))
+
+		self.horizontalLayout_20.addWidget(self.pushButton_resetSet)
+
+		self.pushButton_saveSet = QPushButton(self.verticalLayoutWidget)
+		self.pushButton_saveSet.setObjectName(u"pushButton_saveSet")
+		sizePolicy6.setHeightForWidth(self.pushButton_saveSet.sizePolicy().hasHeightForWidth())
+		self.pushButton_saveSet.setSizePolicy(sizePolicy6)
+#if QT_CONFIG(tooltip)
+		self.pushButton_saveSet.setToolTip(u"Save current settings to selected definition.")
+#endif // QT_CONFIG(tooltip)
+		self.pushButton_saveSet.setText(u"Save")
+		icon37 = QIcon()
+		icon37.addFile(u":/icons/icons8-save-all-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton_saveSet.setIcon(icon37)
+		self.pushButton_saveSet.setIconSize(QSize(20, 20))
+		self.pushButton_saveSet.setAutoDefault(False)
+		self.pushButton_saveSet.setFlat(False)
+
+		self.horizontalLayout_20.addWidget(self.pushButton_saveSet)
+
+
+		self.gridLayout_3.addLayout(self.horizontalLayout_20, 31, 0, 1, 1)
+
+		self.horizontalLayout_5 = QHBoxLayout()
+		self.horizontalLayout_5.setSpacing(5)
+		self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+		self.label_11 = QLabel(self.verticalLayoutWidget)
+		self.label_11.setObjectName(u"label_11")
+		self.label_11.setFont(font8)
+		self.label_11.setText(u"Prefix:")
+		self.label_11.setIndent(10)
+
+		self.horizontalLayout_5.addWidget(self.label_11)
+
+		self.label_6 = QLabel(self.verticalLayoutWidget)
+		self.label_6.setObjectName(u"label_6")
+		sizePolicy5.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
+		self.label_6.setSizePolicy(sizePolicy5)
+		self.label_6.setMinimumSize(QSize(0, 20))
+		self.label_6.setMaximumSize(QSize(16777215, 20))
+		self.label_6.setFont(font9)
+		self.label_6.setFrameShape(QFrame.NoFrame)
+		self.label_6.setText(u"")
+
+		self.horizontalLayout_5.addWidget(self.label_6)
+
+
+		self.gridLayout_3.addLayout(self.horizontalLayout_5, 9, 0, 1, 1)
+
+		self.label_5 = QLabel(self.verticalLayoutWidget)
+		self.label_5.setObjectName(u"label_5")
+		sizePolicy2.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
+		self.label_5.setSizePolicy(sizePolicy2)
+		self.label_5.setMaximumSize(QSize(16777215, 30))
+		self.label_5.setFont(font7)
+		self.label_5.setFrameShape(QFrame.NoFrame)
+		self.label_5.setText(u"Markers")
+		self.label_5.setIndent(5)
+
+		self.gridLayout_3.addWidget(self.label_5, 19, 0, 1, 1)
+
+		self.horizontalLayout_14 = QHBoxLayout()
+		self.horizontalLayout_14.setSpacing(5)
+		self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
+		self.checkBox_3 = QCheckBox(self.verticalLayoutWidget)
+		self.checkBox_3.setObjectName(u"checkBox_3")
+		sizePolicy7.setHeightForWidth(self.checkBox_3.sizePolicy().hasHeightForWidth())
+		self.checkBox_3.setSizePolicy(sizePolicy7)
+		self.checkBox_3.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(tooltip)
+		self.checkBox_3.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Checked:</span> Enable new chunk creation and data import.</p><p><span style=\" font-weight:600;\">Not Checked:</span> Disable new chunk creation. Used when processing existing chunks.</p></body></html>")
+#endif // QT_CONFIG(tooltip)
+		self.checkBox_3.setText(u"Auto Import Processing")
+		icon38 = QIcon()
+		icon38.addFile(u":/icons/icons8-in-progress-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.checkBox_3.setIcon(icon38)
+		self.checkBox_3.setIconSize(QSize(21, 21))
+		self.checkBox_3.setCheckable(True)
+		self.checkBox_3.setChecked(True)
+
+		self.horizontalLayout_14.addWidget(self.checkBox_3)
+
+
+		self.gridLayout_3.addLayout(self.horizontalLayout_14, 24, 0, 1, 1)
+
 		self.label = QLabel(self.verticalLayoutWidget)
 		self.label.setObjectName(u"label")
 		sizePolicy2.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
@@ -1046,6 +890,45 @@ class Ui_DialogBatchChunk(object):
 		self.label.setIndent(5)
 
 		self.gridLayout_3.addWidget(self.label, 7, 0, 1, 1)
+
+		self.horizontalLayout_15 = QHBoxLayout()
+		self.horizontalLayout_15.setSpacing(5)
+		self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
+		self.checkBox_export = QCheckBox(self.verticalLayoutWidget)
+		self.checkBox_export.setObjectName(u"checkBox_export")
+		self.checkBox_export.setEnabled(True)
+		sizePolicy7.setHeightForWidth(self.checkBox_export.sizePolicy().hasHeightForWidth())
+		self.checkBox_export.setSizePolicy(sizePolicy7)
+		self.checkBox_export.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(tooltip)
+		self.checkBox_export.setToolTip(u"<html><head/><body><p>Enable to export data for selected items after build is complete.</p></body></html>")
+#endif // QT_CONFIG(tooltip)
+		self.checkBox_export.setText(u"Data Export")
+		icon39 = QIcon()
+		icon39.addFile(u":/icons/icons8-share-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.checkBox_export.setIcon(icon39)
+		self.checkBox_export.setIconSize(QSize(21, 21))
+		self.checkBox_export.setCheckable(True)
+		self.checkBox_export.setChecked(False)
+		self.checkBox_export.setTristate(False)
+
+		self.horizontalLayout_15.addWidget(self.checkBox_export)
+
+		self.pushButton_setExport = QPushButton(self.verticalLayoutWidget)
+		self.pushButton_setExport.setObjectName(u"pushButton_setExport")
+		self.pushButton_setExport.setEnabled(False)
+		sizePolicy6.setHeightForWidth(self.pushButton_setExport.sizePolicy().hasHeightForWidth())
+		self.pushButton_setExport.setSizePolicy(sizePolicy6)
+		self.pushButton_setExport.setCursor(QCursor(Qt.PointingHandCursor))
+		icon40 = QIcon()
+		icon40.addFile(u":/icons/icons8-true-false-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.pushButton_setExport.setIcon(icon40)
+		self.pushButton_setExport.setFlat(True)
+
+		self.horizontalLayout_15.addWidget(self.pushButton_setExport)
+
+
+		self.gridLayout_3.addLayout(self.horizontalLayout_15, 30, 0, 1, 1)
 
 		self.horizontalLayout_10 = QHBoxLayout()
 		self.horizontalLayout_10.setSpacing(5)
@@ -1073,37 +956,118 @@ class Ui_DialogBatchChunk(object):
 
 		self.gridLayout_3.addLayout(self.horizontalLayout_10, 11, 0, 1, 1)
 
-		self.horizontalLayout_20 = QHBoxLayout()
-		self.horizontalLayout_20.setSpacing(5)
-		self.horizontalLayout_20.setObjectName(u"horizontalLayout_20")
-		self.pushButton_resetSet = QPushButton(self.verticalLayoutWidget)
-		self.pushButton_resetSet.setObjectName(u"pushButton_resetSet")
-		sizePolicy6.setHeightForWidth(self.pushButton_resetSet.sizePolicy().hasHeightForWidth())
-		self.pushButton_resetSet.setSizePolicy(sizePolicy6)
-		self.pushButton_resetSet.setText(u"Reset")
+		self.checkBox = QCheckBox(self.verticalLayoutWidget)
+		self.checkBox.setObjectName(u"checkBox")
+		sizePolicy2.setHeightForWidth(self.checkBox.sizePolicy().hasHeightForWidth())
+		self.checkBox.setSizePolicy(sizePolicy2)
+		self.checkBox.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(tooltip)
+		self.checkBox.setToolTip(u"<html><head/><body><p><span style=\" font-weight:600;\">Enabled:</span> Marker coordinates will be imported after target detection. <span style=\" font-weight:600;\">*</span></p><p><span style=\" font-weight:600;\">Disabled:</span> Coordinates are not imported. User must manually import coordinates.</p><p><span style=\" font-weight:600;\">*</span> Automatic importing of marker coordinates only works if point file name is the same as it's parent folder name, and contains a header with metadata. Point coordinates should start at row #7.</p></body></html>")
+#endif // QT_CONFIG(tooltip)
+		self.checkBox.setText(u"Import Marker Coordinates")
 		icon41 = QIcon()
-		icon41.addFile(u":/icons/icons8-rotate-48.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.pushButton_resetSet.setIcon(icon41)
-		self.pushButton_resetSet.setIconSize(QSize(20, 20))
+		icon41.addFile(u":/icons/icons8-map-marker-50.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.checkBox.setIcon(icon41)
+		self.checkBox.setIconSize(QSize(21, 21))
+		self.checkBox.setChecked(True)
 
-		self.horizontalLayout_20.addWidget(self.pushButton_resetSet)
+		self.gridLayout_3.addWidget(self.checkBox, 21, 0, 1, 1)
 
-		self.pushButton_saveSet = QPushButton(self.verticalLayoutWidget)
-		self.pushButton_saveSet.setObjectName(u"pushButton_saveSet")
-		sizePolicy6.setHeightForWidth(self.pushButton_saveSet.sizePolicy().hasHeightForWidth())
-		self.pushButton_saveSet.setSizePolicy(sizePolicy6)
-		self.pushButton_saveSet.setText(u"Save")
-		icon42 = QIcon()
-		icon42.addFile(u":/icons/icons8-save-all-50.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.pushButton_saveSet.setIcon(icon42)
-		self.pushButton_saveSet.setIconSize(QSize(20, 20))
-		self.pushButton_saveSet.setAutoDefault(False)
-		self.pushButton_saveSet.setFlat(False)
+		self.horizontalLayout_16 = QHBoxLayout()
+		self.horizontalLayout_16.setSpacing(5)
+		self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
+		self.checkBox_pcloud = QCheckBox(self.verticalLayoutWidget)
+		self.checkBox_pcloud.setObjectName(u"checkBox_pcloud")
+		self.checkBox_pcloud.setEnabled(True)
+		sizePolicy7.setHeightForWidth(self.checkBox_pcloud.sizePolicy().hasHeightForWidth())
+		self.checkBox_pcloud.setSizePolicy(sizePolicy7)
+		self.checkBox_pcloud.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(tooltip)
+		self.checkBox_pcloud.setToolTip(u"<html><head/><body><p>Enable to run 'Build Point Cloud' processing for selected items.</p></body></html>")
+#endif // QT_CONFIG(tooltip)
+		self.checkBox_pcloud.setText(u"Build Point Cloud")
+		self.checkBox_pcloud.setIcon(icon32)
+		self.checkBox_pcloud.setIconSize(QSize(21, 21))
+		self.checkBox_pcloud.setCheckable(True)
+		self.checkBox_pcloud.setChecked(False)
+		self.checkBox_pcloud.setTristate(False)
 
-		self.horizontalLayout_20.addWidget(self.pushButton_saveSet)
+		self.horizontalLayout_16.addWidget(self.checkBox_pcloud)
+
+		self.pushButton_setPCloud = QPushButton(self.verticalLayoutWidget)
+		self.pushButton_setPCloud.setObjectName(u"pushButton_setPCloud")
+		self.pushButton_setPCloud.setEnabled(False)
+		sizePolicy6.setHeightForWidth(self.pushButton_setPCloud.sizePolicy().hasHeightForWidth())
+		self.pushButton_setPCloud.setSizePolicy(sizePolicy6)
+		self.pushButton_setPCloud.setCursor(QCursor(Qt.PointingHandCursor))
+		self.pushButton_setPCloud.setIcon(icon23)
+		self.pushButton_setPCloud.setFlat(True)
+
+		self.horizontalLayout_16.addWidget(self.pushButton_setPCloud)
 
 
-		self.gridLayout_3.addLayout(self.horizontalLayout_20, 32, 0, 1, 1)
+		self.gridLayout_3.addLayout(self.horizontalLayout_16, 28, 0, 1, 1)
+
+		self.label_17 = QLabel(self.verticalLayoutWidget)
+		self.label_17.setObjectName(u"label_17")
+		sizePolicy2.setHeightForWidth(self.label_17.sizePolicy().hasHeightForWidth())
+		self.label_17.setSizePolicy(sizePolicy2)
+		self.label_17.setMaximumSize(QSize(16777215, 30))
+		self.label_17.setFont(font7)
+		self.label_17.setFrameShape(QFrame.NoFrame)
+		self.label_17.setText(u"Processing")
+		self.label_17.setIndent(5)
+
+		self.gridLayout_3.addWidget(self.label_17, 23, 0, 1, 1)
+
+		self.checkBox_2 = QCheckBox(self.verticalLayoutWidget)
+		self.checkBox_2.setObjectName(u"checkBox_2")
+		sizePolicy2.setHeightForWidth(self.checkBox_2.sizePolicy().hasHeightForWidth())
+		self.checkBox_2.setSizePolicy(sizePolicy2)
+		self.checkBox_2.setCursor(QCursor(Qt.PointingHandCursor))
+#if QT_CONFIG(tooltip)
+		self.checkBox_2.setToolTip(u"<html><head/><body><p>Enable automatic target detection when new chunk is created...</p></body></html>")
+#endif // QT_CONFIG(tooltip)
+		self.checkBox_2.setText(u"Automatic Target Detection")
+		self.checkBox_2.setIcon(icon15)
+		self.checkBox_2.setIconSize(QSize(21, 21))
+		self.checkBox_2.setChecked(True)
+
+		self.gridLayout_3.addWidget(self.checkBox_2, 20, 0, 1, 1)
+
+		self.line_2 = QFrame(self.verticalLayoutWidget)
+		self.line_2.setObjectName(u"line_2")
+		self.line_2.setFrameShadow(QFrame.Plain)
+		self.line_2.setFrameShape(QFrame.HLine)
+
+		self.gridLayout_3.addWidget(self.line_2, 22, 0, 1, 1)
+
+		self.horizontalLayout_19 = QHBoxLayout()
+		self.horizontalLayout_19.setSpacing(5)
+		self.horizontalLayout_19.setObjectName(u"horizontalLayout_19")
+		self.label_20 = QLabel(self.verticalLayoutWidget)
+		self.label_20.setObjectName(u"label_20")
+		self.label_20.setFont(font8)
+		self.label_20.setText(u"Data Export:")
+		self.label_20.setIndent(10)
+
+		self.horizontalLayout_19.addWidget(self.label_20)
+
+		self.label_expFolder = QLabel(self.verticalLayoutWidget)
+		self.label_expFolder.setObjectName(u"label_expFolder")
+		sizePolicy10.setHeightForWidth(self.label_expFolder.sizePolicy().hasHeightForWidth())
+		self.label_expFolder.setSizePolicy(sizePolicy10)
+		self.label_expFolder.setMinimumSize(QSize(200, 15))
+		self.label_expFolder.setMaximumSize(QSize(16777215, 60))
+		self.label_expFolder.setFont(font9)
+		self.label_expFolder.setFrameShape(QFrame.NoFrame)
+		self.label_expFolder.setText(u"")
+		self.label_expFolder.setWordWrap(True)
+
+		self.horizontalLayout_19.addWidget(self.label_expFolder)
+
+
+		self.gridLayout_3.addLayout(self.horizontalLayout_19, 12, 0, 1, 1)
 
 
 		self.gridLayout.addLayout(self.gridLayout_3, 0, 2, 3, 1)
@@ -1146,12 +1110,12 @@ class Ui_DialogBatchChunk(object):
 		self.treeWidget.setSortingEnabled(False)
 		self.treeWidget.setSortingEnabled(__sortingEnabled)
 
-		self.pushButton_setPCloud.setText("")
-		self.pushButton_setExport.setText("")
+		self.pushButton_setAlign.setText("")
 
 		self.pushButton_setMesh.setText("")
 
-		self.pushButton_setAlign.setText("")
+		self.pushButton_setExport.setText("")
+		self.pushButton_setPCloud.setText("")
 		pass
 	# retranslateUi
 
