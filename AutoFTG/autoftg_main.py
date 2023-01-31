@@ -55,7 +55,7 @@ from AutoFTG.qtresources import *
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.6.0"
+app_ver = "2.6.1"
 appsettings_ver = "6"
 app_author = "Author: Boris Bilc\n\n"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"

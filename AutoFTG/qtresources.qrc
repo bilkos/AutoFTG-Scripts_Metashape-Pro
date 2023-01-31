@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/">
+    <file>icons/icons8-connection-status-on-48.png</file>
+    <file>icons/icons8-no-connection-48.png</file>
     <file>icons/icons8-signal-full-48.png</file>
     <file>icons/icons8-signal-48.png</file>
     <file>icons/icons8-low-connection-48.png</file>

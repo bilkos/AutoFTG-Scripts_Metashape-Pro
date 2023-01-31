@@ -56,71 +56,91 @@ class Ui_dialogDefCam(object):
         font = QFont()
         font.setPointSize(11)
         self.label.setFont(font)
+#if QT_CONFIG(tooltip)
+        self.label.setToolTip(u"")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(statustip)
+        self.label.setStatusTip(u"")
+#endif // QT_CONFIG(statustip)
+#if QT_CONFIG(whatsthis)
+        self.label.setWhatsThis(u"")
+#endif // QT_CONFIG(whatsthis)
+#if QT_CONFIG(accessibility)
+        self.label.setAccessibleName(u"")
+#endif // QT_CONFIG(accessibility)
+#if QT_CONFIG(accessibility)
+        self.label.setAccessibleDescription(u"")
+#endif // QT_CONFIG(accessibility)
         self.label.setText(u"Choose default camera")
 
         self.verticalLayout.addWidget(self.label)
 
         self.listWidget = QListWidget(self.verticalLayoutWidget)
         icon = QIcon()
-        icon.addFile(u":/icons/icons8-full-page-view-50.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/AutoFTG/resources/CamImages.png", QSize(), QIcon.Normal, QIcon.Off)
         __qlistwidgetitem = QListWidgetItem(self.listWidget)
-        __qlistwidgetitem.setText(u"Frame");
+        __qlistwidgetitem.setText(u"Item 1");
         __qlistwidgetitem.setIcon(icon);
-        icon1 = QIcon()
-        icon1.addFile(u":/icons/icons8-panorama-50.png", QSize(), QIcon.Normal, QIcon.Off)
+        __qlistwidgetitem.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
         __qlistwidgetitem1 = QListWidgetItem(self.listWidget)
-        __qlistwidgetitem1.setText(u"Fisheye");
-        __qlistwidgetitem1.setIcon(icon1);
-        icon2 = QIcon()
-        icon2.addFile(u":/icons/icons8-aperture-50.png", QSize(), QIcon.Normal, QIcon.Off)
-        __qlistwidgetitem2 = QListWidgetItem(self.listWidget)
-        __qlistwidgetitem2.setText(u"Conical");
-        __qlistwidgetitem2.setIcon(icon2);
-        icon3 = QIcon()
-        icon3.addFile(u":/icons/icons8-video-stabilization-50.png", QSize(), QIcon.Normal, QIcon.Off)
-        __qlistwidgetitem3 = QListWidgetItem(self.listWidget)
-        __qlistwidgetitem3.setText(u"Spherical");
-        __qlistwidgetitem3.setIcon(icon3);
-        icon4 = QIcon()
-        icon4.addFile(u"../../icons/icons8-quadcopter-50.png", QSize(), QIcon.Normal, QIcon.Off)
-        __qlistwidgetitem4 = QListWidgetItem(self.listWidget)
-        __qlistwidgetitem4.setText(u"Drone");
-        __qlistwidgetitem4.setIcon(icon4);
-        self.listWidget.setObjectName(u"listWidget")
+        __qlistwidgetitem1.setText(u"Item 2");
+        __qlistwidgetitem1.setIcon(icon);
+        __qlistwidgetitem1.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
+        icon1 = QIcon()
+        icon1.addFile(u":/AutoFTG/resources/Pictures.png", QSize(), QIcon.Normal, QIcon.Off)
+        brush = QBrush(QColor(253, 255, 211, 255))
+        brush.setStyle(Qt.SolidPattern)
         font1 = QFont()
-        font1.setPointSize(10)
-        self.listWidget.setFont(font1)
+        font1.setBold(True)
+        font1.setWeight(75)
+        __qlistwidgetitem2 = QListWidgetItem(self.listWidget)
+        __qlistwidgetitem2.setText(u"Item 3");
+        __qlistwidgetitem2.setFont(font1);
+        __qlistwidgetitem2.setBackground(brush);
+        __qlistwidgetitem2.setIcon(icon1);
+        __qlistwidgetitem2.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
+        __qlistwidgetitem3 = QListWidgetItem(self.listWidget)
+        __qlistwidgetitem3.setText(u"Item 4");
+        __qlistwidgetitem3.setIcon(icon);
+        __qlistwidgetitem3.setFlags(Qt.ItemIsSelectable|Qt.ItemIsEnabled);
+        self.listWidget.setObjectName(u"listWidget")
+        font2 = QFont()
+        font2.setPointSize(10)
+        self.listWidget.setFont(font2)
+#if QT_CONFIG(tooltip)
+        self.listWidget.setToolTip(u"")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(statustip)
+        self.listWidget.setStatusTip(u"")
+#endif // QT_CONFIG(statustip)
+#if QT_CONFIG(whatsthis)
+        self.listWidget.setWhatsThis(u"")
+#endif // QT_CONFIG(whatsthis)
+#if QT_CONFIG(accessibility)
+        self.listWidget.setAccessibleName(u"")
+#endif // QT_CONFIG(accessibility)
+#if QT_CONFIG(accessibility)
+        self.listWidget.setAccessibleDescription(u"")
+#endif // QT_CONFIG(accessibility)
         self.listWidget.setFrameShape(QFrame.StyledPanel)
         self.listWidget.setFrameShadow(QFrame.Plain)
         self.listWidget.setDefaultDropAction(Qt.IgnoreAction)
+        self.listWidget.setAlternatingRowColors(True)
         self.listWidget.setIconSize(QSize(20, 20))
 
         self.verticalLayout.addWidget(self.listWidget)
 
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setSpacing(5)
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.pushButton_2 = QPushButton(self.verticalLayoutWidget)
-        self.pushButton_2.setObjectName(u"pushButton_2")
-        icon5 = QIcon()
-        icon5.addFile(u":/icons/icons8-close-50.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.pushButton_2.setIcon(icon5)
+        self.buttonBox = QDialogButtonBox(self.verticalLayoutWidget)
+        self.buttonBox.setObjectName(u"buttonBox")
+        self.buttonBox.setOrientation(Qt.Horizontal)
+        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
 
-        self.horizontalLayout_2.addWidget(self.pushButton_2)
-
-        self.pushButton = QPushButton(self.verticalLayoutWidget)
-        self.pushButton.setObjectName(u"pushButton")
-        icon6 = QIcon()
-        icon6.addFile(u":/icons/icons8-done-50.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.pushButton.setIcon(icon6)
-
-        self.horizontalLayout_2.addWidget(self.pushButton)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.verticalLayout.addWidget(self.buttonBox)
 
 
         self.retranslateUi(dialogDefCam)
+        self.buttonBox.accepted.connect(dialogDefCam.accept)
+        self.buttonBox.rejected.connect(dialogDefCam.reject)
 
         self.listWidget.setCurrentRow(-1)
 
@@ -132,8 +152,6 @@ class Ui_dialogDefCam(object):
         self.listWidget.setSortingEnabled(False)
         self.listWidget.setSortingEnabled(__sortingEnabled)
 
-        self.pushButton_2.setText(QCoreApplication.translate("dialogDefCam", u"Cancel", None))
-        self.pushButton.setText(QCoreApplication.translate("dialogDefCam", u"Ok", None))
         pass
     # retranslateUi
 

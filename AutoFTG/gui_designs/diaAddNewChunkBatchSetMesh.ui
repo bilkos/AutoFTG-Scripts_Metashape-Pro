@@ -1,0 +1,745 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DialogSettingsMesh</class>
+ <widget class="QDialog" name="DialogSettingsMesh">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>350</width>
+    <height>510</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string notr="true">Settings: Mesh &amp; Textures</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../qtresources.qrc">
+    <normaloff>:/icons/AutoFTG-appicon.png</normaloff>:/icons/AutoFTG-appicon.png</iconset>
+  </property>
+  <widget class="QWidget" name="formLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>351</width>
+     <height>511</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout">
+    <property name="leftMargin">
+     <number>10</number>
+    </property>
+    <property name="topMargin">
+     <number>5</number>
+    </property>
+    <property name="rightMargin">
+     <number>10</number>
+    </property>
+    <property name="bottomMargin">
+     <number>10</number>
+    </property>
+    <item row="0" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label_11">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="../qtresources.qrc">:/icons/icons8-geodesic-dome-48.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string notr="true">Depth Maps</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Depth Maps Quality</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QComboBox" name="comboBox_depthQuality">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>26</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>26</height>
+       </size>
+      </property>
+      <property name="currentText">
+       <string notr="true">Medium</string>
+      </property>
+      <property name="currentIndex">
+       <number>2</number>
+      </property>
+      <item>
+       <property name="text">
+        <string notr="true">Ultra High</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-connection-status-on-48.png</normaloff>:/icons/icons8-connection-status-on-48.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">HIgh</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-signal-full-48.png</normaloff>:/icons/icons8-signal-full-48.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Medium</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-signal-48.png</normaloff>:/icons/icons8-signal-48.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Low</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-low-connection-48.png</normaloff>:/icons/icons8-low-connection-48.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Lowest</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-no-connection-48.png</normaloff>:/icons/icons8-no-connection-48.png</iconset>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>Depth Filtering</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QComboBox" name="comboBox_depthFilter">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>26</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>26</height>
+       </size>
+      </property>
+      <property name="currentText">
+       <string notr="true">Moderate</string>
+      </property>
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <item>
+       <property name="text">
+        <string notr="true">Mild</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Moderate</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Aggresive</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="2">
+     <widget class="Line" name="line_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QLabel" name="label_12">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="../qtresources.qrc">:/icons/icons8-mesh-48.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_10">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string notr="true">Mesh Options</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string notr="true">Surface Type</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QComboBox" name="cbMeshType">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>26</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>26</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string notr="true">Choose type of model reconstruction</string>
+      </property>
+      <item>
+       <property name="text">
+        <string notr="true">Arbitrary</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-3d-48.png</normaloff>:/icons/icons8-3d-48.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Height Field</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-national-park-48.png</normaloff>:/icons/icons8-national-park-48.png</iconset>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string notr="true">Face Count</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QComboBox" name="cbFaceCount">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>26</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>26</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string notr="true">Choose face count density</string>
+      </property>
+      <property name="currentText">
+       <string notr="true">Medium</string>
+      </property>
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <item>
+       <property name="text">
+        <string notr="true">High</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-signal-full-48.png</normaloff>:/icons/icons8-signal-full-48.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Medium</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-signal-48.png</normaloff>:/icons/icons8-signal-48.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Low</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-low-connection-48.png</normaloff>:/icons/icons8-low-connection-48.png</iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Custom</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../qtresources.qrc">
+         <normaloff>:/icons/icons8-rename-50.png</normaloff>:/icons/icons8-rename-50.png</iconset>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QLineEdit" name="lineEditFaceCount">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="placeholderText">
+       <string notr="true">Custom face count</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QCheckBox" name="checkBox_inter">
+      <property name="toolTip">
+       <string notr="true">Enable interpolation</string>
+      </property>
+      <property name="text">
+       <string notr="true">Interpolation</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QCheckBox" name="checkBox_vcol">
+      <property name="toolTip">
+       <string notr="true">Calculate vertex colors</string>
+      </property>
+      <property name="text">
+       <string notr="true">Vertex Colors</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1">
+     <widget class="QCheckBox" name="checkBox_vcon">
+      <property name="toolTip">
+       <string notr="true">Calculate vertex confidence</string>
+      </property>
+      <property name="text">
+       <string notr="true">Vertex Confidence</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0" colspan="2">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <item>
+       <widget class="QLabel" name="label_13">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="../qtresources.qrc">:/icons/icons8-video-wall-50.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string notr="true">Textures Options</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="13" column="0" colspan="2">
+     <widget class="QGroupBox" name="groupBox_buildTex">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>90</height>
+       </size>
+      </property>
+      <property name="title">
+       <string notr="true">Build Textures</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="gridLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>311</width>
+         <height>52</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string notr="true">Size</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="checkBox_texFillHoles">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string notr="true">Fill Holes</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="lineEdit_texSize">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>60</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string notr="true">4096</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string notr="true">Levels</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="checkBox_texGhostFilt">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string notr="true">Ghosting Filter</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QLineEdit" name="lineEdit_texLevels">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+          <property name="maxLength">
+           <number>2</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLabel" name="label_7">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string notr="true">x</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>5</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item row="15" column="0" colspan="2">
+     <widget class="Line" name="line_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="16" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="pushButton_Save">
+        <property name="text">
+         <string notr="true">Save</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../qtresources.qrc">
+          <normaloff>:/icons/icons8-save-close-50.png</normaloff>:/icons/icons8-save-close-50.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="default">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_Cancel">
+        <property name="text">
+         <string notr="true">Cancel</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../qtresources.qrc">
+          <normaloff>:/icons/icons8-close-window-50.png</normaloff>:/icons/icons8-close-window-50.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="14" column="1">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>comboBox_depthQuality</tabstop>
+  <tabstop>comboBox_depthFilter</tabstop>
+  <tabstop>cbMeshType</tabstop>
+  <tabstop>cbFaceCount</tabstop>
+  <tabstop>lineEditFaceCount</tabstop>
+  <tabstop>checkBox_inter</tabstop>
+  <tabstop>checkBox_vcol</tabstop>
+  <tabstop>checkBox_vcon</tabstop>
+  <tabstop>groupBox_buildTex</tabstop>
+  <tabstop>checkBox_texFillHoles</tabstop>
+  <tabstop>checkBox_texGhostFilt</tabstop>
+  <tabstop>lineEdit_texSize</tabstop>
+  <tabstop>lineEdit_texLevels</tabstop>
+  <tabstop>pushButton_Save</tabstop>
+  <tabstop>pushButton_Cancel</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../qtresources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>pushButton_Cancel</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogSettingsMesh</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>237</x>
+     <y>395</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>297</x>
+     <y>417</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_Save</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogSettingsMesh</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>122</x>
+     <y>396</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>105</x>
+     <y>415</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbFaceCount</sender>
+   <signal>highlighted(QString)</signal>
+   <receiver>lineEditFaceCount</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>77</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>230</x>
+     <y>106</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

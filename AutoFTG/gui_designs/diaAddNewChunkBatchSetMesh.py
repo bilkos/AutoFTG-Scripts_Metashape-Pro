@@ -1,35 +1,29 @@
-import os
-import shutil
-import sys
-import time
-import subprocess
-from configparser import ConfigParser
-from datetime import datetime
-from os import path
+# -*- coding: utf-8 -*-
 
-import Metashape
-from PySide2 import QtCore, QtGui, QtWidgets
+################################################################################
+## Form generated from reading UI file 'diaAddNewChunkBatchSetMesh.ui'
+##
+## Created by: Qt User Interface Compiler version 5.15.2
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
+
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-import AutoFTG.autoftg_main as autoftg_main
-from AutoFTG.qtresources import *
-import AutoFTG.autoftg_batch as autoftg_batch
-from AutoFTG.autoftg_batch import *
+import qtresources_rc
 
-
-class Ui_DialogSettingsMesh(QtWidgets.QDialog):
-	def __init__(self, parent):
-		QtWidgets.QDialog.__init__(self, parent)
-		self.currentChkDef = autoftg_batch.chunkSet
-		self.setObjectName(u"DialogSettingsMesh")
-		self.resize(350, 510)
-		self.setWindowTitle(u"Settings: Mesh & Textures")
+class Ui_DialogSettingsMesh(object):
+	def setupUi(self, DialogSettingsMesh):
+		if not DialogSettingsMesh.objectName():
+			DialogSettingsMesh.setObjectName(u"DialogSettingsMesh")
+		DialogSettingsMesh.resize(350, 510)
+		DialogSettingsMesh.setWindowTitle(u"Settings: Mesh & Textures")
 		icon = QIcon()
 		icon.addFile(u":/icons/AutoFTG-appicon.png", QSize(), QIcon.Normal, QIcon.Off)
-		self.setWindowIcon(icon)
-		self.formLayoutWidget = QWidget(self)
+		DialogSettingsMesh.setWindowIcon(icon)
+		self.formLayoutWidget = QWidget(DialogSettingsMesh)
 		self.formLayoutWidget.setObjectName(u"formLayoutWidget")
 		self.formLayoutWidget.setGeometry(QRect(0, 0, 351, 511))
 		self.formLayout = QFormLayout(self.formLayoutWidget)
@@ -388,97 +382,27 @@ class Ui_DialogSettingsMesh(QtWidgets.QDialog):
 		QWidget.setTabOrder(self.lineEdit_texLevels, self.pushButton_Save)
 		QWidget.setTabOrder(self.pushButton_Save, self.pushButton_Cancel)
 
-		self.pushButton_Cancel.clicked.connect(self.reject)
-		self.pushButton_Save.clicked.connect(self.saveSettingsMesh)
-		self.cbFaceCount.currentTextChanged.connect(self.customFaceCount)
-		
+		self.retranslateUi(DialogSettingsMesh)
+		self.pushButton_Cancel.clicked.connect(DialogSettingsMesh.reject)
+		self.pushButton_Save.clicked.connect(DialogSettingsMesh.accept)
+		self.cbFaceCount.highlighted.connect(self.lineEditFaceCount.setText)
 
-		self.cbFaceCount.setCurrentIndex(1)
 		self.comboBox_depthQuality.setCurrentIndex(2)
 		self.comboBox_depthFilter.setCurrentIndex(1)
 		self.cbFaceCount.setCurrentIndex(1)
 		self.pushButton_Save.setDefault(True)
 
 
-		QMetaObject.connectSlotsByName(self)
+		QMetaObject.connectSlotsByName(DialogSettingsMesh)
+	# setupUi
 
-		self.loadSettingsMesh()
+	def retranslateUi(self, DialogSettingsMesh):
+		self.label_8.setText(QCoreApplication.translate("DialogSettingsMesh", u"Depth Maps Quality", None))
 
-		self.exec_()
-
-
-	def customFaceCount(self):
-		if self.cbFaceCount.currentText() == "Custom":
-			self.lineEditFaceCount.setEnabled(True)
-		else:
-			self.lineEditFaceCount.setEnabled(False)
-		
-
-	def loadSettingsMesh(self):
-		depth_quality = autoftg_main.menuCfg.get(self.currentChkDef, "mesh_depthmaps")
-		depth_filter = autoftg_main.menuCfg.get(self.currentChkDef, "mesh_depthfilter")
-		mesh_type = autoftg_main.menuCfg.get(self.currentChkDef, "mesh_type")
-		mesh_face_count = autoftg_main.menuCfg.get(self.currentChkDef, "mesh_face_count")
-		mesh_face_count_custom = autoftg_main.menuCfg.get(self.currentChkDef, "mesh_face_count_custom")
-		mesh_interpolation = autoftg_main.menuCfg.getboolean(self.currentChkDef, "mesh_interpolation")
-		mesh_vertex_color = autoftg_main.menuCfg.getboolean(self.currentChkDef, "mesh_vertex_color")
-		mesh_vertex_confidence = autoftg_main.menuCfg.getboolean(self.currentChkDef, "mesh_vertex_confidence")
-		texture_build = autoftg_main.menuCfg.getboolean(self.currentChkDef, "texture_build")
-		texture_size = autoftg_main.menuCfg.get(self.currentChkDef, "texture_size")
-		texture_levels = autoftg_main.menuCfg.get(self.currentChkDef, "texture_levels")
-		texture_fill = autoftg_main.menuCfg.getboolean(self.currentChkDef, "texture_fill")
-		texture_ghosting = autoftg_main.menuCfg.getboolean(self.currentChkDef, "texture_ghosting")
-		
-		self.comboBox_depthQuality.setCurrentText(depth_quality)
-		self.comboBox_depthFilter.setCurrentText(depth_filter)
-		self.cbMeshType.setCurrentText(mesh_type)
-		self.cbFaceCount.setCurrentText(mesh_face_count)
-		self.lineEditFaceCount.setText(mesh_face_count_custom)
-		self.checkBox_inter.setChecked(mesh_interpolation)
-		self.checkBox_vcol.setChecked(mesh_vertex_color)
-		self.checkBox_vcon.setChecked(mesh_vertex_confidence)
-		self.groupBox_buildTex.setChecked(texture_build)
-		self.checkBox_texFillHoles.setChecked(texture_fill)
-		self.checkBox_texGhostFilt.setChecked(texture_ghosting)
-		self.lineEdit_texSize.setText(texture_size)
-		self.lineEdit_texLevels.setText(texture_levels)		
-		
-		print("Mesh and textures settings loaded...")
+		self.label_9.setText(QCoreApplication.translate("DialogSettingsMesh", u"Depth Filtering", None))
 
 
-	def saveSettingsMesh(self):
-		depth_quality = self.comboBox_depthQuality.currentText()
-		depth_filter = self.comboBox_depthFilter.currentText()
-		mesh_type = self.cbMeshType.currentText()
-		mesh_face_count = self.cbFaceCount.currentText()
-		mesh_face_count_custom = self.lineEditFaceCount.text()
-		mesh_interpolation = self.checkBox_inter.isChecked()
-		mesh_vertex_color = self.checkBox_vcol.isChecked()
-		mesh_vertex_confidence = self.checkBox_vcon.isChecked()
-		texture_build = self.groupBox_buildTex.isChecked()
-		texture_size = self.lineEdit_texSize.text()
-		texture_levels = self.lineEdit_texLevels.text()
-		texture_fill = self.checkBox_texFillHoles.isChecked()
-		texture_ghosting = self.checkBox_texGhostFilt.isChecked()
-		
-		autoftg_main.menuCfg.set(self.currentChkDef, "mesh_depthmaps", depth_quality)
-		autoftg_main.menuCfg.set(self.currentChkDef, "mesh_depthfilter", depth_filter)
-		autoftg_main.menuCfg.set(self.currentChkDef, "mesh_type", mesh_type)
-		autoftg_main.menuCfg.set(self.currentChkDef, "mesh_face_count", mesh_face_count)
-		autoftg_main.menuCfg.set(self.currentChkDef, "mesh_face_count_custom", mesh_face_count_custom)
-		autoftg_main.menuCfg.set(self.currentChkDef, "mesh_interpolation", str(mesh_interpolation))
-		autoftg_main.menuCfg.set(self.currentChkDef, "mesh_vertex_color", str(mesh_vertex_color))
-		autoftg_main.menuCfg.set(self.currentChkDef, "mesh_vertex_confidence", str(mesh_vertex_confidence))
-		autoftg_main.menuCfg.set(self.currentChkDef, "texture_build", str(texture_build))
-		autoftg_main.menuCfg.set(self.currentChkDef, "texture_size", texture_size)
-		autoftg_main.menuCfg.set(self.currentChkDef, "texture_levels", texture_levels)
-		autoftg_main.menuCfg.set(self.currentChkDef, "texture_fill", str(texture_fill))
-		autoftg_main.menuCfg.set(self.currentChkDef, "texture_ghosting", str(texture_ghosting))
-		
-		with open(autoftg_main.menuCfgFilePath, 'w') as configfile:
-			autoftg_main.menuCfg.write(configfile)
 
-		print("Mesh and textures settings saved...")
-		
-		self.accept()
+		pass
+	# retranslateUi
 
