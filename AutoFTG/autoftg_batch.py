@@ -1538,9 +1538,23 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 
 
 				align_done = ""
+				# Metashape.ReferencePreselectionMode.[ReferencePreselectionSource, ReferencePreselectionEstimated, ReferencePreselectionSequential]
 				if self.checkBox_align.isChecked() == True:
+					align_quality = 0
+					align_genPresel = False
+					align_refPresel = False
+					align_refPreselMode = Metashape.ReferencePreselectionMode.ReferencePreselectionSource
+					align_keyLimit = 40000
+					align_tieLimit = 10000
+					align_filterMask = False
+					align_maskTie = False
+					align_filterSta = False
+					align_keepKey = False
+					align_guidedMatching = False
+					align_resetCurrent = True
+
 					self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " | Current: <b>" + str(item.text(0)) + " (" + chunk_key + ")</b> - Align Photos...")
-					chunk.matchPhotos(downscale = 0, keypoint_limit = 40000, tiepoint_limit = 10000, generic_preselection = False, reference_preselection = False)
+					chunk.matchPhotos(downscale=align_quality, keypoint_limit=align_keyLimit, tiepoint_limit=align_tieLimit, generic_preselection=align_genPresel, reference_preselection=align_refPresel, reference_preselection_mode=align_refPreselMode, filter_mask=align_filterMask, mask_tiepoints=align_maskTie, filter_stationary_points=align_filterSta, keep_keypoints=align_keepKey, guided_matching=align_guidedMatching, reset_matches=align_resetCurrent, subdivide_task=True)
 					doc.save(netpath)
 					chunk.alignCameras(subdivide_task = True)
 					doc.save(netpath)
@@ -1576,7 +1590,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 						filter_mode = Metashape.NoFiltering
 
 
-					chunk.buildDepthMaps(downscale = depth_quality, filter_mode = filter_mode)
+					chunk.buildDepthMaps(downscale=depth_quality, filter_mode=filter_mode)
 					
 					doc.save(netpath)
 
@@ -1602,7 +1616,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 					else:
 						mesh_type = Metashape.SurfaceType.HeightField
 
-					chunk.buildModel(surface_type = mesh_type, interpolation = mesh_int, face_count = mesh_facecount, face_count_custom = mesh_facecount_custom, source_data = Metashape.DepthMapsData, vertex_colors = self.mesh_vertex_color, vertex_confidence = self.mesh_vertex_confidence, subdivide_task=True)
+					chunk.buildModel(surface_type=mesh_type, interpolation=mesh_int, face_count=mesh_facecount, face_count_custom=mesh_facecount_custom, source_data=Metashape.DepthMapsData, vertex_colors =self.mesh_vertex_color, vertex_confidence=self.mesh_vertex_confidence, subdivide_task=True)
 					
 					mesh_buildModel = 'M'
 					doc.save(netpath)
@@ -1624,8 +1638,17 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 
 				ptcloud_done = ""
 				if self.checkBox_pcloud.isChecked() == True:
+					source_data = Metashape.DataSource.DepthMapsData
+					point_colors = True
+					point_confidence = False
+					keep_depth = True
+					max_neighbors = 100
+					uniform_sampling = False
+					points_spacing = 0.02
+					subdivide_task = True
+
 					self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " | Current: <b>" + str(item.text(0)) + " (" + chunk_key + ")</b> - Building Point Cloud...")
-					chunk.buildPointCloud()
+					chunk.buildPointCloud(source_data=source_data, point_color=point_colors, point_confidence=point_confidence, keep_depth=keep_depth, max_neighbors=max_neighbors, uniform_sampling=uniform_sampling, points_spacing=points_spacing, subdivide_task=subdivide_task)
 					doc.save(netpath)
 					ptcloud_done = 'PC'
 					updItem.setIcon(item, 6, iconToDo)
@@ -1642,7 +1665,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 						Metashape.app.update()
 
 					if chunk.point_cloud:
-						chunk.exportPointCloud(output_folder + "/" + chunk_name + ".laz", source_data = Metashape.PointCloudData, save_point_color=True, save_point_normal=True, save_point_confidence=True)
+						chunk.exportPointCloud(path=output_folder + "/" + chunk_name + ".laz", source_data=Metashape.PointCloudData, save_point_color=True, save_point_normal=True, save_point_confidence=True)
 						chunk_eptc = chunk_name + ".laz"
 						Metashape.app.update()
 

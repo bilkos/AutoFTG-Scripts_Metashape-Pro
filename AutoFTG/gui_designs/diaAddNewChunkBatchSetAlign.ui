@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
-    <height>240</height>
+    <width>290</width>
+    <height>460</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>-1</x>
-     <y>-1</y>
-     <width>321</width>
-     <height>241</height>
+     <x>0</x>
+     <y>0</y>
+     <width>291</width>
+     <height>461</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -37,6 +37,12 @@
     </property>
     <item row="0" column="0" colspan="2">
      <widget class="QLabel" name="label_4">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="font">
        <font>
         <family>Segoe UI</family>
@@ -46,22 +52,9 @@
        </font>
       </property>
       <property name="text">
-       <string>Align Photos Settings</string>
+       <string notr="true">Align Photos Settings</string>
       </property>
      </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Quality</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QComboBox" name="comboBox"/>
-    </item>
-    <item row="5" column="1">
-     <widget class="QComboBox" name="comboBox_2"/>
     </item>
     <item row="1" column="0" colspan="2">
      <widget class="Line" name="line">
@@ -70,30 +63,306 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QCheckBox" name="checkBox">
+    <item row="2" column="0">
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="text">
-       <string>Generic Preselection</string>
+       <string notr="true">Quality</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
+    <item row="2" column="1">
+     <widget class="QComboBox" name="comboBox">
+      <property name="currentText">
+       <string notr="true">Highest</string>
+      </property>
+      <item>
+       <property name="text">
+        <string notr="true">Highest</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">High</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Medium</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Low</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string notr="true">Lowest</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="2">
+     <widget class="Line" name="line_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
      <widget class="QLabel" name="label_2">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="text">
-       <string>Source</string>
+       <string notr="true">Pre-selection</string>
       </property>
      </widget>
     </item>
     <item row="4" column="1">
-     <widget class="QCheckBox" name="checkBox_2">
+     <widget class="QCheckBox" name="checkBox">
       <property name="text">
-       <string>Reference Preselection</string>
+       <string notr="true">Generic</string>
       </property>
      </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QCheckBox" name="checkBox_2">
+      <property name="text">
+       <string notr="true">Reference</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QComboBox" name="comboBox_2">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="currentText">
+       <string notr="true">Source</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Source</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Estimated</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Sequential</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="7" column="0" colspan="2">
+     <widget class="Line" name="line_5">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string notr="true">Point Limit</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string notr="true">Key</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string notr="true">Tie</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="9" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLineEdit" name="lineEdit_2">
+        <property name="placeholderText">
+         <string notr="true">40000</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit">
+        <property name="placeholderText">
+         <string notr="true">10000</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="10" column="0" colspan="2">
+     <widget class="Line" name="line_4">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string notr="true">Other</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1">
+     <widget class="QCheckBox" name="checkBox_3">
+      <property name="text">
+       <string notr="true">Filter Stationary Points</string>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="1">
+     <widget class="QCheckBox" name="checkBox_4">
+      <property name="text">
+       <string notr="true">Mask Tie Points</string>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="1">
+     <widget class="QCheckBox" name="checkBox_5">
+      <property name="text">
+       <string notr="true">Keep Key Points</string>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="1">
+     <widget class="QCheckBox" name="checkBox_6">
+      <property name="text">
+       <string notr="true">Guided Matching</string>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="1">
+     <widget class="QCheckBox" name="checkBox_7">
+      <property name="text">
+       <string notr="true">Reset Alignement</string>
+      </property>
+     </widget>
+    </item>
+    <item row="16" column="1">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="17" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="text">
+         <string notr="true">Save</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../qtresources.qrc">
+          <normaloff>:/icons/icons8-save-as-50.png</normaloff>:/icons/icons8-save-as-50.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string notr="true">Cancel</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../qtresources.qrc">
+          <normaloff>:/icons/icons8-close-window-50.png</normaloff>:/icons/icons8-close-window-50.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
  </widget>
- <resources/>
- <connections/>
+ <resources>
+  <include location="../qtresources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>checkBox_2</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>comboBox_2</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>226</x>
+     <y>114</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>228</x>
+     <y>138</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
