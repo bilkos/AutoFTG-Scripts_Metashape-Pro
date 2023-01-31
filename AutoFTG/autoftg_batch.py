@@ -1623,7 +1623,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 
 
 				ptcloud_done = ""
-				if self.checkBox_export.isChecked() == True:
+				if self.checkBox_pcloud.isChecked() == True:
 					self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " | Current: <b>" + str(item.text(0)) + " (" + chunk_key + ")</b> - Building Point Cloud...")
 					chunk.buildPointCloud()
 					doc.save(netpath)
@@ -1634,10 +1634,10 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 
 				chunk_emodel = ""
 				chunk_eptc = ""
-				if self.checkBox_pcloud.isChecked() == True:
+				if self.checkBox_export.isChecked() == True:
 					self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " | Current: <b>" + str(item.text(0)) + " (" + chunk_key + ")</b> - Exporting Data...")
 					if chunk.model:
-						chunk.exportModel(path=output_folder + "/" + chunk_name + ".obj", binary=True, precision=4, texture_format='ImageFormatJPEG', save_texture=True, save_uv=True, save_normals=True, save_colors=True, save_confidence=False, save_cameras=True, save_markers=True, save_udim=False, save_alpha=False, embed_texture=False, strip_extensions=False, colors_rgb_8bit=True, comment=chunk_name, save_comment=True)
+						chunk.exportModel(path=output_folder + "/" + chunk_name + ".obj", binary=True, precision=4, texture_format=Metashape.ImageFormat.ImageFormatJPEG, save_texture=True, save_uv=True, save_normals=True, save_colors=True, save_confidence=False, save_cameras=True, save_markers=True, save_udim=False, save_alpha=False, embed_texture=False, strip_extensions=False, colors_rgb_8bit=True, comment=chunk_name, save_comment=True)
 						chunk_emodel = chunk_name + ".obj"
 						Metashape.app.update()
 

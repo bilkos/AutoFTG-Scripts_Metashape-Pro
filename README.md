@@ -21,19 +21,28 @@ Scripts were written for use in work process on project 2TDK, construction of ra
 Author: Boris Bilc (Slovenia)
 
 
-### Menu Screenshot
+### Screenshots
 
-![Menu Screenshot](menu_preview.jpg "Preview of AutoFTG menu in Metashape Pro")<br>
-*Preview of AutoFTG menu in Metashape Pro*<br>
+*Preview of AutoFTG menu in Metashape Pro & Create New Chunk (Single)*<br>
+![Menu Screenshot](AutoFTG/doc/menu_preview.jpg "Preview of AutoFTG menu in Metashape Pro")
+![Menu Screenshot 6](AutoFTG/doc/menu_preview6.jpg "Create New Chunk (Single)")<br>
 
-![Menu Screenshot 2](menu_preview2.jpg "Preview of Batch Chunk Creator in Metashape Pro")<br>
-*Preview of Batch Chunk Creator in Metashape Pro*<br>
+*Batch Chunk Creator*<br>
+![Menu Screenshot 2](AutoFTG/doc/menu_preview2.jpg "Batch Chunk Creator")<br>
 
-![Menu Screenshot 3](menu_preview3.jpg "Preview of Chunk Definition Editor in Metashape Pro")<br>
-*Preview of Chunk Definition Editor in Metashape Pro*<br>
+*Chunk Definition Editor*<br>
+![Menu Screenshot 3](AutoFTG/doc/menu_preview3.jpg "Chunk Definition Editor")<br>
 
-![Menu Screenshot 4](menu_preview4.jpg "Preview of Cameras Editor in Metashape Pro")<br>
-*Preview of Cameras Editor in Metashape Pro*<br>
+*Model Processing Settings*<br>
+![Menu Screenshot 5](AutoFTG/doc/menu_preview5.jpg "Model Processing Settings")<br>
+
+*Copy Region Dialog*<br>
+![Menu Screenshot 7](AutoFTG/doc/menu_preview7.jpg "Copy Region Dialog")<br>
+
+*Select Default/Chunk Camera* & *Cameras Editor*<br>
+![Menu Screenshot 8](AutoFTG/doc/menu_preview8.jpg "Select Default/Chunk Camera")![Menu Screenshot 4](AutoFTG/doc/menu_preview4.jpg "Cameras Editor")<br>
+
+
 
 ---
 
