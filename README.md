@@ -1,4 +1,4 @@
-![Header logo](GitHub_repo_card_small.png)
+![Header logo](AutoFTG/doc/GitHub_repo_card_small.png)
 
 # AutoFTG
 
