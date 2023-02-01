@@ -5,6 +5,18 @@ Release notes for AutoFTG python script
 
 ---
 
+### 2023/02/01
+
+## `2.6.2`
+
+- Created tabs for settings in Batch Chunk Creator
+- Added dialog for Align Photos settings
+- Added new options in chunk definitions settings file
+- Minor bug-fixes
+
+
+---
+
 ### 2023/01/31
 
 ## `2.6.1`
