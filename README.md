@@ -33,8 +33,8 @@ Author: Boris Bilc (Slovenia)
 *Chunk Definition Editor*<br>
 ![Menu Screenshot 3](AutoFTG/doc/menu_preview3.jpg "Chunk Definition Editor")<br>
 
-*Model Processing Settings*<br>
-![Menu Screenshot 5](AutoFTG/doc/menu_preview5.jpg "Model Processing Settings")<br>
+*Align Photos Settings & Model Processing Settings*<br>
+![Menu Screenshot AP](AutoFTG/doc/menu_preview_AlignPhotosSet.jpg "Align Photos Settings")![Menu Screenshot 5](AutoFTG/doc/menu_preview5.jpg "Model Processing Settings")<br>
 
 *Copy Region Dialog*<br>
 ![Menu Screenshot 7](AutoFTG/doc/menu_preview7.jpg "Copy Region Dialog")<br>
