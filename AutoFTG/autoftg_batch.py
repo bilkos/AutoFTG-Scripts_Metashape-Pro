@@ -1,3 +1,9 @@
+# AutoFTG - Scripts for Agisoft Metashape Pro
+#
+# Dialog: Batch Chunk Creator - Main Window
+# ----------------------------------------------------------------
+
+
 import os
 import shutil
 import sys
@@ -18,6 +24,7 @@ from PySide2.QtWidgets import *
 import AutoFTG.autoftg_main as autoftg_main
 from AutoFTG.autoftg_batch_setmesh import *
 from AutoFTG.autoftg_batch_setalign import *
+from AutoFTG.autoftg_batch_setpointc import *
 
 from AutoFTG.qtresources import *
 
@@ -40,8 +47,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		sizePolicy.setVerticalStretch(0)
 		sizePolicy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
 		self.setSizePolicy(sizePolicy)
-		self.setMinimumSize(QSize(920, 725))
-		self.setMaximumSize(QSize(920, 725))
+		self.setMinimumSize(QSize(920, 750))
+		self.setMaximumSize(QSize(920, 750))
 		self.setWindowTitle(u"Batch Chunk Creator")
 		appIcon = QIcon()
 		appIcon.addFile(u":/icons/AutoFTG-appicon.png", QSize(), QIcon.Normal, QIcon.Off)
@@ -796,7 +803,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 
 		self.pushButton_setPCloud = QPushButton(self.layoutWidget)
 		self.pushButton_setPCloud.setObjectName(u"pushButton_setPCloud")
-		self.pushButton_setPCloud.setEnabled(False)
+		self.pushButton_setPCloud.setEnabled(True)
 		sizePolicy4.setHeightForWidth(self.pushButton_setPCloud.sizePolicy().hasHeightForWidth())
 		self.pushButton_setPCloud.setSizePolicy(sizePolicy4)
 		self.pushButton_setPCloud.setCursor(QCursor(Qt.PointingHandCursor))
@@ -1189,7 +1196,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.pushButton_setAlign.clicked.connect(self.diaSettingsAlign)
 		self.pushButton_setMesh.setEnabled(True)
 		self.pushButton_setMesh.clicked.connect(self.diaSettingsMesh)
-		# self.pushButton_setPCloud.clicked.connect()
+		self.pushButton_setPCloud.clicked.connect(self.diaSettingsPoint)
 		# self.pushButton_setExport.clicked.connect()
 		self.pushButton_saveSet.clicked.connect(self.saveCurrentSettings)
 		self.pushButton_resetSet.clicked.connect(self.resetCurrentSettings)
@@ -1723,13 +1730,12 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 					point_colors = True
 					point_confidence = False
 					keep_depth = True
-					max_neighbors = 100
 					uniform_sampling = False
 					points_spacing = 0.02
 					subdivide_task = True
 
 					self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " | Current: <b>" + str(item.text(0)) + " (" + chunk_key + ")</b> - Building Point Cloud...")
-					chunk.buildPointCloud(source_data=source_data, point_color=point_colors, point_confidence=point_confidence, keep_depth=keep_depth, max_neighbors=max_neighbors, uniform_sampling=uniform_sampling, points_spacing=points_spacing, subdivide_task=subdivide_task)
+					chunk.buildPointCloud(source_data=source_data, point_color=point_colors, point_confidence=point_confidence, keep_depth=keep_depth, uniform_sampling=uniform_sampling, points_spacing=points_spacing, subdivide_task=subdivide_task)
 					doc.save(netpath)
 					ptcloud_done = 'PC'
 					updItem.setIcon(item, 6, iconToDo)
@@ -1957,5 +1963,12 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		app_inst = QtWidgets.QApplication.instance()
 		parent = app_inst.activeWindow()
 		setAlignDia = Ui_DialogAlignPhotos(parent)
+		self.setCurrentSettings()
+
+
+	def diaSettingsPoint(self):
+		app_inst = QtWidgets.QApplication.instance()
+		parent = app_inst.activeWindow()
+		setPointDia = Ui_DialogPCloudSet(parent)
 		self.setCurrentSettings()
 

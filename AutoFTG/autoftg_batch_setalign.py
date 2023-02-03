@@ -1,3 +1,9 @@
+# AutoFTG - Scripts for Agisoft Metashape Pro
+#
+# Dialog: Batch Chunk Creator - Align Photos Settings
+# ----------------------------------------------------------------
+
+
 import os
 import shutil
 import sys
@@ -255,7 +261,6 @@ class Ui_DialogAlignPhotos(QtWidgets.QDialog):
 
 		
 	def loadSettingsAlign(self):
-		autoftg_main.menuCfg.get(self.currentChkDef, "mesh_depthmaps")
 		align_quality = autoftg_main.menuCfg.get(self.currentChkDef, "align_quality")
 		align_gen_presel = autoftg_main.menuCfg.getboolean(self.currentChkDef, "align_gen_presel")
 		align_ref_presel = autoftg_main.menuCfg.getboolean(self.currentChkDef, "align_ref_presel")
