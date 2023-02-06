@@ -17,7 +17,6 @@ import AutoFTG.autoftg_main as autoftg_main
 from AutoFTG.qtresources import *
 import AutoFTG.autoftg_batch as autoftg_batch
 from AutoFTG.autoftg_batch import *
-from AutoFTG.autoftg_settingsmain import *
 
 
 class Ui_DialogSettingsMesh(QtWidgets.QDialog):

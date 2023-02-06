@@ -12,7 +12,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-import AutoFTG.autoftg_main as autoftg_main
+import AutoFTG.autoftg_main as ftgMain
 from AutoFTG.qtresources import *
 
 
@@ -688,13 +688,13 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		
 
 	def listChunkDefs(self):
-		self.lineEdit_wfolder.setText(autoftg_main.selected_data_folder)
+		self.lineEdit_wfolder.setText(ftgMain.selected_data_folder)
 		self.pushButton_save.setDisabled(True)
 		self.pushButton_sremove.setEnabled(True)
 		self.listWidgetChunkDefs.clear()
-		for section in autoftg_main.chunk_sections:
-			menu_icon = autoftg_main.menuCfg.get(section, "menu_icon")
-			menu_icon_path = u":/icons/" + autoftg_main.icoCfg.get("ICONS", menu_icon)
+		for section in ftgMain.chunk_sections:
+			menu_icon = ftgMain.menuCfg.get(section, "menu_icon")
+			menu_icon_path = u":/icons/" + ftgMain.icoCfg.get("ICONS", menu_icon)
 			seticon = QIcon()
 			seticon.addFile(menu_icon_path, QSize(), QIcon.Normal, QIcon.Off)
 			self.qlistwidgetitem = QListWidgetItem(self.listWidgetChunkDefs)
@@ -704,9 +704,9 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 
 	def readIconsIni(self):
 		ico_count = 0
-		for iconitem in autoftg_main.icons_list:
+		for iconitem in ftgMain.icons_list:
 			aicon_name = "ico-" + str(ico_count)
-			aicon_path = u":/icons/" + autoftg_main.icoCfg.get("ICONS", iconitem)
+			aicon_path = u":/icons/" + ftgMain.icoCfg.get("ICONS", iconitem)
 			aicon = QIcon()
 			aicon.addFile(aicon_path, QSize(), QIcon.Normal, QIcon.Off)
 			self.comboBox_icon.addItem(aicon, aicon_name)
@@ -716,13 +716,13 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 	def editSelectedItem(self):
 		selected_item = self.listWidgetChunkDefs.currentItem().text()
 		self.lineEdit_name.setText(selected_item)
-		self.comboBox_icon.setCurrentText(str(autoftg_main.menuCfg.get(selected_item, "menu_icon")))
-		self.selFormat = str(autoftg_main.menuCfg.get(selected_item, "chunk_name_format"))
+		self.comboBox_icon.setCurrentText(str(ftgMain.menuCfg.get(selected_item, "menu_icon")))
+		self.selFormat = str(ftgMain.menuCfg.get(selected_item, "chunk_name_format"))
 		self.selectChunkFormat()
-		self.lineEdit_wfolder.setText(str(autoftg_main.menuCfg.get(selected_item, "work_folder")))
-		self.lineEdit_efolder.setText(str(autoftg_main.menuCfg.get(selected_item, "export_folder")))
-		self.lineEdit_pre.setText(str(autoftg_main.menuCfg.get(selected_item, "chunk_name_prefix")))
-		self.lineEdit_suf.setText(str(autoftg_main.menuCfg.get(selected_item, "chunk_name_suffix")))
+		self.lineEdit_wfolder.setText(str(ftgMain.menuCfg.get(selected_item, "work_folder")))
+		self.lineEdit_efolder.setText(str(ftgMain.menuCfg.get(selected_item, "export_folder")))
+		self.lineEdit_pre.setText(str(ftgMain.menuCfg.get(selected_item, "chunk_name_prefix")))
+		self.lineEdit_suf.setText(str(ftgMain.menuCfg.get(selected_item, "chunk_name_suffix")))
 		self.lineEdit_name.setDisabled(True)
 		self.listWidgetChunkDefs.setDisabled(True)
 		self.pushButton_sedit.setDisabled(True)
@@ -741,10 +741,10 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		
 		if confirm_remove == True:
 			self.backupSettings()
-			autoftg_main.menuCfg.remove_section(selected_item)
+			ftgMain.menuCfg.remove_section(selected_item)
 			
-			with open(autoftg_main.menuCfgFilePath, 'w') as menuconfig:
-				autoftg_main.menuCfg.write(menuconfig)
+			with open(ftgMain.menuCfgFilePath, 'w') as menuconfig:
+				ftgMain.menuCfg.write(menuconfig)
 
 			self.lineEdit_name.clear
 			self.comboBox_icon.setCurrentIndex(0)
@@ -762,17 +762,17 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 
 	def saveSelectedItem(self):
 		edit_section = self.lineEdit_name.text()
-		autoftg_main.menuCfg.set(edit_section, "menu_icon", self.comboBox_icon.currentText())
-		autoftg_main.menuCfg.set(edit_section, "chunk_name_format", self.selFormat)
-		autoftg_main.menuCfg.set(edit_section, "chunk_name_prefix", self.lineEdit_pre.text())
-		autoftg_main.menuCfg.set(edit_section, "chunk_name_suffix", self.lineEdit_suf.text())
-		autoftg_main.menuCfg.set(edit_section, "work_folder", self.lineEdit_wfolder.text())
-		autoftg_main.menuCfg.set(edit_section, "export_folder", self.lineEdit_efolder.text())
+		ftgMain.menuCfg.set(edit_section, "menu_icon", self.comboBox_icon.currentText())
+		ftgMain.menuCfg.set(edit_section, "chunk_name_format", self.selFormat)
+		ftgMain.menuCfg.set(edit_section, "chunk_name_prefix", self.lineEdit_pre.text())
+		ftgMain.menuCfg.set(edit_section, "chunk_name_suffix", self.lineEdit_suf.text())
+		ftgMain.menuCfg.set(edit_section, "work_folder", self.lineEdit_wfolder.text())
+		ftgMain.menuCfg.set(edit_section, "export_folder", self.lineEdit_efolder.text())
 		
-		with open(autoftg_main.menuCfgFilePath, 'w') as menuconfig:
-			autoftg_main.menuCfg.write(menuconfig)
+		with open(ftgMain.menuCfgFilePath, 'w') as menuconfig:
+			ftgMain.menuCfg.write(menuconfig)
 		
-		autoftg_main.chunksCfgLoad()
+		ftgMain.chunksCfgLoad()
 		
 		self.listWidgetChunkDefs.setEnabled(True)
 		self.lineEdit_name.setEnabled(True)
@@ -801,18 +801,18 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 		if self.btnAction == True:
 			self.backupSettings()
 			new_section = self.lineEdit_name.text()
-			autoftg_main.menuCfg.add_section(new_section)
-			autoftg_main.menuCfg.set(new_section, "menu_icon", self.comboBox_icon.currentText())
-			autoftg_main.menuCfg.set(new_section, "chunk_name_format", self.selFormat)
-			autoftg_main.menuCfg.set(new_section, "chunk_name_prefix", self.lineEdit_pre.text())
-			autoftg_main.menuCfg.set(new_section, "chunk_name_suffix", self.lineEdit_suf.text())
-			autoftg_main.menuCfg.set(new_section, "work_folder", self.lineEdit_wfolder.text())
-			autoftg_main.menuCfg.set(new_section, "export_folder", self.lineEdit_efolder.text())
+			ftgMain.menuCfg.add_section(new_section)
+			ftgMain.menuCfg.set(new_section, "menu_icon", self.comboBox_icon.currentText())
+			ftgMain.menuCfg.set(new_section, "chunk_name_format", self.selFormat)
+			ftgMain.menuCfg.set(new_section, "chunk_name_prefix", self.lineEdit_pre.text())
+			ftgMain.menuCfg.set(new_section, "chunk_name_suffix", self.lineEdit_suf.text())
+			ftgMain.menuCfg.set(new_section, "work_folder", self.lineEdit_wfolder.text())
+			ftgMain.menuCfg.set(new_section, "export_folder", self.lineEdit_efolder.text())
 			
-			with open(autoftg_main.menuCfgFilePath, 'w') as menuconfig:
-				autoftg_main.menuCfg.write(menuconfig)
+			with open(ftgMain.menuCfgFilePath, 'w') as menuconfig:
+				ftgMain.menuCfg.write(menuconfig)
 			
-			autoftg_main.chunksCfgLoad()
+			ftgMain.chunksCfgLoad()
 			
 			self.listWidgetChunkDefs.setEnabled(True)
 			self.lineEdit_name.clear()
@@ -853,14 +853,14 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 
 	def backupSettings(self):
 		menuCfgFileBackup = "settings_newchunk.old"
-		menuCfgFileBackupPath =  autoftg_main.menuCfgPath + "/" + menuCfgFileBackup
-		shutil.copy2(autoftg_main.menuCfgFilePath, menuCfgFileBackupPath)
+		menuCfgFileBackupPath =  ftgMain.menuCfgPath + "/" + menuCfgFileBackup
+		shutil.copy2(ftgMain.menuCfgFilePath, menuCfgFileBackupPath)
 		print("Creating backup of chunk definitions...\nBackup file: " + str(menuCfgFileBackup) + "\n")
 
 
 	def selectWorkFolder(self):
 		if self.lineEdit_wfolder.text() == "" or self.lineEdit_wfolder.text() ==  None:
-			sel_folder = Metashape.app.getExistingDirectory("Choose Work Folder", autoftg_main.selected_data_folder)
+			sel_folder = Metashape.app.getExistingDirectory("Choose Work Folder", ftgMain.selected_data_folder)
 		else:
 			cur_folder = self.lineEdit_wfolder.text()
 			sel_folder = Metashape.app.getExistingDirectory("Choose Work Folder", cur_folder)
@@ -875,7 +875,7 @@ class Ui_DialogChunkSettings(QtWidgets.QDialog):
 
 	def selectExportFolder(self):
 		if self.lineEdit_efolder.text() == "" or self.lineEdit_efolder.text() ==  None:
-			sel_folder = Metashape.app.getExistingDirectory("Choose Export Folder", autoftg_main.selected_data_folder)
+			sel_folder = Metashape.app.getExistingDirectory("Choose Export Folder", ftgMain.selected_data_folder)
 		else:
 			cur_folder = self.lineEdit_efolder.text()
 			sel_folder = Metashape.app.getExistingDirectory("Choose Export Folder", cur_folder)
