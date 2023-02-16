@@ -5,6 +5,20 @@ Release notes for AutoFTG python script
 
 ---
 
+### 2023/02/12
+
+## `2.6.3`
+
+- Reorganized functions to separate files for easier further development
+- Added settings dialog for Point Cloud processing in Batch Chunk Creator
+- Changed status icons in tree list for processing/processed items
+- Added columt to display chunk name for existing items, or processing time for items processed
+- Added total time of processing for processed queue
+- Some minor bug-fixes and improvements
+
+
+---
+
 ### 2023/02/01
 
 ## `2.6.2`

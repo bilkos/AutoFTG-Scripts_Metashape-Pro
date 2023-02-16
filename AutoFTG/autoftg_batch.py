@@ -8,6 +8,7 @@ import os
 import shutil
 import sys
 import time
+import datetime
 import subprocess
 import csv
 from configparser import ConfigParser
@@ -135,7 +136,11 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		icon6 = QIcon()
 		icon6.addFile(u":/icons/icons8-cloud-development-48.png", QSize(), QIcon.Normal, QIcon.Off)
 		self.treeWidget.headerItem().setText(6, "")
+		iconProcess = QIcon()
+		iconProcess.addFile(u":/icons/icons8-loading-96.png", QSize(), QIcon.Normal, QIcon.Off)
+		self.treeWidget.headerItem().setText(7, "")
 		__qtreewidgetitem = QTreeWidgetItem()
+		__qtreewidgetitem.setIcon(7, iconProcess);
 		__qtreewidgetitem.setIcon(6, icon6);
 		__qtreewidgetitem.setIcon(5, icon5);
 		__qtreewidgetitem.setIcon(4, icon4);
@@ -209,7 +214,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.treeWidget.setTabKeyNavigation(True)
 		self.treeWidget.setProperty("showDropIndicator", False)
 		self.treeWidget.setAlternatingRowColors(True)
-		self.treeWidget.setSelectionMode(QAbstractItemView.MultiSelection)
+		self.treeWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
 		self.treeWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
 		self.treeWidget.setIconSize(QSize(20, 20))
 		self.treeWidget.setUniformRowHeights(True)
@@ -1385,11 +1390,12 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 					if row[2] == folder_chunk:
 						__qtreewidgetitem1.setIcon(3, iconDone);
 						if row[9] == 'PC':
-							__qtreewidgetitem1.setIcon(6, iconToDo);
+							__qtreewidgetitem1.setIcon(6, iconDone);
 						if row[8] == 'M' or row[8] == 'M+T':
-							__qtreewidgetitem1.setIcon(5, iconToDo);
+							__qtreewidgetitem1.setIcon(5, iconDone);
 						if row[7] == 'A':
-							__qtreewidgetitem1.setIcon(4, iconToDo);
+							__qtreewidgetitem1.setIcon(4, iconDone);
+						__qtreewidgetitem1.setText(7, str(row[2]))
 
 			points_file = image_folder + "/" + folder + ".txt"
 			points_file_exists = os.path.isfile(points_file);
@@ -1431,6 +1437,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 		self.treeWidget.resizeColumnToContents(4)
 		self.treeWidget.resizeColumnToContents(5)
 		self.treeWidget.resizeColumnToContents(6)
+		self.treeWidget.resizeColumnToContents(7)
 		self.treeWidget.sortItems(0, Qt.AscendingOrder)
 		self.treeWidget.scrollToBottom()
 		self.pushButton_4.setIcon(iconReload)
@@ -1516,6 +1523,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 
 	# Process selected folders automatically (no user interaction)
 	def processBatchAuto(self):
+		timeProcStart = datetime.now()
 		self.sel_items = self.treeWidget.selectedItems()
 		sel_count = len(self.sel_items)
 		item_menu = self.cbChunkSettings.currentText()
@@ -1556,6 +1564,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			self.pushButton_3.setText(u"Processing...")
 			
 			for item in self.sel_items:
+				timeItemStart = datetime.now()
 				i_cnt = i_cnt + 1
 				self.progressBar.setFormat(u"Completed %v of %m")
 				self.pushButton_3.setEnabled(False)
@@ -1563,7 +1572,10 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 				self.pushButton_3.setText(u"Processing...")
 				
 				updItem = QTreeWidgetItem
-				
+				updItem.setIcon(item, 3, iconProcess)
+				updItem.setText(item, 7, u"Processing...")
+				self.treeWidget.resizeColumnToContents(3)
+
 				doc = Metashape.app.document
 				netpath = Metashape.app.document.path
 				netroot = self.lineEdit.text()
@@ -1578,12 +1590,13 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 				doc.chunk = chunk
 				doc.save(netpath)
 				Metashape.app.update()
-				time.sleep(3)
+				time.sleep(1)
 				autoftg_main.readCameraSettings(item_cam)
 				autoftg_main.useCameraSettings()
 				if self.checkBox_2.isChecked() == True:
 					self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " | Current: <b>" + str(item.text(0)) + " (" + chunk_key + ")</b> - Processing Markers...")
 					chunk.detectMarkers(target_type=Metashape.CircularTarget12bit, tolerance=98)
+					doc.save(netpath)
 					Metashape.app.update()
 
 				if self.checkBox.isChecked() == True:
@@ -1597,14 +1610,15 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 					else:
 						ms_pntfile = "None"
 					
-					Metashape.app.update()
-					doc.save(netpath)
-					updItem.setIcon(item, 3, iconProgDone)
-
-
+				updItem.setIcon(item, 3, iconProgDone)
+				doc.save(netpath)
+				Metashape.app.update()
+				
+				
 				align_done = ""
 				# Metashape.ReferencePreselectionMode.[ReferencePreselectionSource, ReferencePreselectionEstimated, ReferencePreselectionSequential]
 				if self.checkBox_align.isChecked() == True:
+					updItem.setIcon(item, 4, iconProcess)
 					align_quality_text = autoftg_main.menuCfg.get(chunkSet, "align_quality")
 					if align_quality_text == "Highest":
 						align_quality = 0
@@ -1647,14 +1661,15 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 					chunk.alignCameras(subdivide_task = True)
 					doc.save(netpath)
 					align_done = "A"
-					updItem.setIcon(item, 4, iconToDo)
+					updItem.setIcon(item, 4, iconProgDone)
 					Metashape.app.update()
 
 
 				mesh_done = ''
 				if self.checkBox_mesh.isChecked() == True:
 					self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " | Current: <b>" + str(item.text(0)) + " (" + chunk_key + ")</b> - Building Model...")
-					
+					updItem.setIcon(item, 5, iconProcess)
+
 					if self.mesh_depthmaps == "Ultra High":
 						depth_quality = 0
 					elif self.mesh_depthmaps == "High":
@@ -1720,12 +1735,13 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 						doc.save(netpath)
 
 					mesh_done = mesh_buildModel + model_buildTex
-					updItem.setIcon(item, 5, iconToDo)
+					updItem.setIcon(item, 5, iconProgDone)
 					Metashape.app.update()
 
 
 				ptcloud_done = ""
 				if self.checkBox_pcloud.isChecked() == True:
+					updItem.setIcon(item, 6, iconProcess)
 					source_data = Metashape.DataSource.DepthMapsData
 					point_colors = True
 					point_confidence = False
@@ -1738,7 +1754,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 					chunk.buildPointCloud(source_data=source_data, point_color=point_colors, point_confidence=point_confidence, keep_depth=keep_depth, uniform_sampling=uniform_sampling, points_spacing=points_spacing, subdivide_task=subdivide_task)
 					doc.save(netpath)
 					ptcloud_done = 'PC'
-					updItem.setIcon(item, 6, iconToDo)
+					updItem.setIcon(item, 6, iconProgDone)
 					Metashape.app.update()
 
 
@@ -1757,19 +1773,26 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 						Metashape.app.update()
 
 					
-				now = datetime.now()
-				dt_string = now.strftime("%d.%m.%Y")
-				tm_string = now.strftime("%H:%M")
+				timeItemEnd = datetime.now()
+				timeItemDelta = (timeItemEnd - timeItemStart)
+				timeItemText = str(timeItemDelta).split('.')[0]
+				dt_string = timeItemEnd.strftime("%d.%m.%Y")
+				tm_string = timeItemEnd.strftime("%H:%M:%S")
 				ms_data = [dt_string, tm_string, chunk_name, chunk_key, str(len(photos)), ms_pntfile, item_cam, align_done, mesh_done, ptcloud_done, image_folder, output_folder, chunk_emodel, chunk_eptc]
 				self.logWriteArchive(ms_data)
-				updItem.setIcon(item, 3, iconDone);
-				self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " | Current: <b>" + str(item.text(0)) + " (" + chunk_key + ")</b> - Done.")
+				updItem.setIcon(item, 3, iconDone)
+				updItem.setText(item, 7, timeItemText)
+				self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " | Current: <b>" + str(item.text(0)) + " (" + chunk_key + ")</b> done in " + timeItemText)
 				self.treeWidget.setItemSelected(item, False)
 				self.progressBar.setValue(i_cnt)
 				Metashape.app.update()
 				doc.save(netpath)
 				time.sleep(1)
 
+			timeProcEnd = datetime.now()
+			timeProcDelta = timeProcEnd - timeProcStart
+			timeProcText = str(timeProcDelta).split('.')[0]
+			self.progressBar.setFormat(u"Completed %v of %m chunk(s) in " + timeProcText)
 
 			if i_cnt < sel_count:
 				updItem.setIcon(item, 3, iconError)
@@ -1779,7 +1802,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			else:
 				self.pushButton_3.setIcon(iconOk)
 				self.pushButton_3.setText(u"Finished")
-				self.label_8.setText(u"<html><head/><body><p><b>Processing Finished!</b> / Imported " + str(i_cnt) + " of " + str(sel_count) + "</p></body></html>")
+				self.label_8.setText(u"<html><head/><body><p><b>Processing done!</b> / Imported <b>" + str(i_cnt) + "</b> chunks in <b>" + str(timeProcText) + "</b>.</p></body></html>")
 
 
 			Metashape.app.update()
