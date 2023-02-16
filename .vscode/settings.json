@@ -3,4 +3,77 @@
 	"pyside2-vsc.uic.compile.filepath": "${ui_name}.py",
 	"editor.insertSpaces": false,
 	"editor.detectIndentation": false,
+	"editor.tokenColorCustomizations": {
+		//"functions": "#e9d682",
+		//"keywords": "#e049ee",
+		//"types": "#9aee39",
+		////"variables": "#8acae6",   // #bbecff
+		//"strings": "#e6a75f",
+		"[Default Dark+ Experimental]": {
+		  "textMateRules": [
+			  /*{
+				  "scope":"string",
+				  "settings": {
+					  "foreground": "#e29a60",
+				  }
+			  },*/
+			  /*{
+				  "scope": "keyword.operator",
+				  "settings": {
+					  "foreground": "#fbffc4"
+				  }
+			  },*/
+			  {
+				  "scope":"keyword.control",
+				  "settings": {
+					  "foreground": "#db3869",
+				  }
+			  },
+			  {
+				  "scope":"variable",
+				  "settings": {
+					  "foreground": "#e9e767"
+				  }
+			  },
+			  {
+				  "scope":"variable.parameter",
+				  "settings": {
+					  "foreground": "#6caa32",
+					  "fontStyle": "bold"
+				  }
+			  },
+			  {
+				  "scope":"variable.other.readwrite",
+				  "settings": {
+					  "foreground": "#99d6ff"
+				  }
+			  },
+			  {
+				  "scope":"storage.modifier",
+				  "settings": {
+					  "foreground": "#346fb3",
+					  "fontStyle": "bold"
+				  }
+			  },
+			  {
+				  "scope":"entity.name.selector",
+				  "settings": {
+					  "foreground": "#58f858",
+				  }
+			  },
+			  {
+				  "scope":"entity.name.type",
+				  "settings": {
+					  "foreground": "#a3f357",
+				  }
+			  },
+			  {
+				  "scope":"entity.name.class",
+				  "settings": {
+					  "foreground": "#983feb",
+				  }
+			  }
+			]
+		}
+	}
 }
