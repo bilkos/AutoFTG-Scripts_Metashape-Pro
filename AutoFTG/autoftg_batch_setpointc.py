@@ -15,7 +15,7 @@ from PySide2.QtWidgets import *
 import AutoFTG.autoftg_batch as autoftg_batch
 import AutoFTG.autoftg_main as autoftg_main
 from AutoFTG.autoftg_batch import *
-from AutoFTG.qtresources import *
+from AutoFTG.qtresources_rc2 import *
 
 
 class Ui_DialogPCloudSet(QtWidgets.QDialog):

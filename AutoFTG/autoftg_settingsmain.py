@@ -15,7 +15,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 import AutoFTG.autoftg_main as autoftg_main
-from AutoFTG.qtresources import *
+from AutoFTG.qtresources_rc2 import *
 
 
 class Ui_settingsDialog(QtWidgets.QDialog):

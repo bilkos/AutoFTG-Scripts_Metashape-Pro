@@ -55,7 +55,8 @@ from AutoFTG.autoftg_settingscamedit import *
 from AutoFTG.autoftg_settingschunk import *
 from AutoFTG.autoftg_settingsmain import *
 from AutoFTG.autoftg_copyregion import *
-from AutoFTG.qtresources import *
+import AutoFTG.qtresources_rc2
+from AutoFTG.qtresources_rc2 import *
 
 # App info
 app_name = "AutoFTG"

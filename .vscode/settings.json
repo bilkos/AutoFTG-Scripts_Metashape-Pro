@@ -1,6 +1,4 @@
 {
-	"pyside2-vsc.rcc.compile.filepath": "${qrc_name}.py",
-	"pyside2-vsc.uic.compile.filepath": "${ui_name}.py",
 	"editor.insertSpaces": false,
 	"editor.detectIndentation": false,
 	"editor.tokenColorCustomizations": {
@@ -75,5 +73,11 @@
 			  }
 			]
 		}
-	}
+	},
+	"qtForPython.uic.liveExecution": false,
+	"pyside2-vsc.rcc.compile.filepath": "${qrc_name}_rc2.py",
+	"qtForPython.rcc.options": [
+		"-o",
+		"${resourceDirname}${pathSeparator}${resourceBasenameNoExtension}_rc6.py"
+	]
 }

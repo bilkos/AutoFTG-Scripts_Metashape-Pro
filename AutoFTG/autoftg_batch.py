@@ -27,7 +27,10 @@ from AutoFTG.autoftg_batch_setmesh import *
 from AutoFTG.autoftg_batch_setalign import *
 from AutoFTG.autoftg_batch_setpointc import *
 
-from AutoFTG.qtresources import *
+from AutoFTG.qtresources_rc2 import *
+
+# create definition for replacing comma with space character
+
 
 FILEBROWSER_PATH = os.path.join(os.getenv('WINDIR'), 'explorer.exe')
 

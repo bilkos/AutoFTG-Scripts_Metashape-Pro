@@ -17,7 +17,7 @@ from PySide2.QtWidgets import *
 from AutoFTG.autoftg_batch import *
 from AutoFTG.autoftg_settingschunk import *
 from AutoFTG.autoftg_settingsmain import *
-from AutoFTG.qtresources import *
+from AutoFTG.qtresources_rc2 import *
 
 
 class CopyBoundingBoxDlg(QtWidgets.QDialog):

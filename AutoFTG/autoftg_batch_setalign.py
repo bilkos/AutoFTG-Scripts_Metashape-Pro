@@ -20,7 +20,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 import AutoFTG.autoftg_main as autoftg_main
-from AutoFTG.qtresources import *
+from AutoFTG.qtresources_rc2 import *
 import AutoFTG.autoftg_batch as autoftg_batch
 from AutoFTG.autoftg_batch import *
 
