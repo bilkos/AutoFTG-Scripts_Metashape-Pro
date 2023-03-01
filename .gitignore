@@ -6,3 +6,7 @@ AutoFTG/templates/
 AutoFTG_*.zip
 AutoFTG/qtGui/
 sync.ffs_db
+AutoFTG/,backup/*
+AutoFTG/cameras/dibit*
+AutoFTG/cameras/DJI-*
+AutoFTG/templates/
