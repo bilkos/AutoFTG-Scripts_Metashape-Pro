@@ -7,6 +7,15 @@ Release notes for AutoFTG python script
 
 ### 2023/02/12
 
+## `2.6.4`
+
+- Fixed camera selection bug that prevented to define new settings
+
+
+---
+
+### 2023/02/12
+
 ## `2.6.3`
 
 - Reorganized functions to separate files for easier further development

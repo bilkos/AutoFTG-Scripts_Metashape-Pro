@@ -17,11 +17,10 @@ from PySide2.QtWidgets import *
 import AutoFTG.autoftg_main as autoftg_main
 from AutoFTG.qtresources_rc2 import *
 
+selected_camera = None
 
 class Ui_DialogAddEditCam(QtWidgets.QDialog):
 	def __init__(self, parent, camnew, camname):
-		global cameraXmlSource
-		global cameraXmlDest
 		global camOrigName
 		camOrigName = camname
 		QtWidgets.QDialog.__init__(self, parent)
@@ -287,8 +286,8 @@ class Ui_DialogAddEditCam(QtWidgets.QDialog):
 		QWidget.setTabOrder(self.pushButton_2, self.pushButton)
 
 		if camnew == True:
-			cameraXmlSource = ''
-			cameraXmlDest = ''
+			autoftg_main.cameraXmlSource = ''
+			autoftg_main.cameraXmlDest = ''
 			self.setWindowTitle(u"Add New Camera")
 			self.pushButton_2.setText(u"Add Camera")
 		else:
@@ -297,8 +296,8 @@ class Ui_DialogAddEditCam(QtWidgets.QDialog):
 			selCamSubType = autoftg_main.camCfg.get(camname, "SubType")
 			selCamRes = autoftg_main.camCfg.get(camname, "Resolution")
 			selCamFile = autoftg_main.camCfg.get(camname, "File")
-			cameraXmlSource = selCamFile
-			cameraXmlDest = selCamFile
+			autoftg_main.cameraXmlSource = selCamFile
+			autoftg_main.cameraXmlDest = selCamFile
 			self.lineEdit_2.setText(camname)
 			self.comboBox.setCurrentText(selCamType)
 			self.comboBox_2.setCurrentText(selCamSubType)
@@ -315,17 +314,13 @@ class Ui_DialogAddEditCam(QtWidgets.QDialog):
 
 	
 	def selectCameraFile(self):
-		global cameraXmlSource
-		global cameraXmlDest
-		cameraXmlSource = Metashape.app.getOpenFileName(hint="Select Camera Calibration", dir=str(autoftg_main.selected_data_folder), filter="Metashape Camera Calibration (*.xml)")
-		camXmlFile = os.path.basename(cameraXmlSource)
-		cameraXmlDest = autoftg_main.camCfgPath + camXmlFile
+		autoftg_main.cameraXmlSource = Metashape.app.getOpenFileName(hint="Select Camera Calibration", dir=str(autoftg_main.selected_data_folder), filter="Metashape Camera Calibration (*.xml)")
+		camXmlFile = os.path.basename(autoftg_main.cameraXmlSource)
+		autoftg_main.cameraXmlDest = autoftg_main.camCfgPath + camXmlFile
 		self.lineEdit_3.setText(camXmlFile)
 
 
 	def saveCamera(self):
-		global cameraXmlSource
-		global cameraXmlDest
 		cameraNameAdd = self.lineEdit_2.text()
 		camDesc = self.lineEdit_4.text()
 		cameraTypeAdd = self.comboBox.currentText()
@@ -341,27 +336,27 @@ class Ui_DialogAddEditCam(QtWidgets.QDialog):
 				cameraFileAdd = "None"
 			autoftg_main.saveCamConfig(camOrigName, cameraNameAdd, camDesc, cameraTypeAdd, cameraSubTypeAdd, cameraResAdd, cameraFileAdd)
 			autoftg_main.camCfgLoad()
-			cameraXmlSource = ''
-			cameraXmlDest = ''
+			autoftg_main.cameraXmlSource = ''
+			autoftg_main.cameraXmlDest = ''
 			self.close()
 
 
 	def copyXml(self):
-		if cameraXmlSource != cameraXmlDest:
-			cameraXmlDestExists = os.path.isfile(cameraXmlDest)
+		if autoftg_main.cameraXmlSource != autoftg_main.cameraXmlDest:
+			cameraXmlDestExists = os.path.isfile(autoftg_main.cameraXmlDest)
 			if cameraXmlDestExists == False:
 				try:
-					shutil.copy2(cameraXmlSource, cameraXmlDest)
+					shutil.copy2(autoftg_main.cameraXmlSource, autoftg_main.cameraXmlDest)
 				except:
 					Metashape.app.messageBox("Error! Could not copy calibration file...")
 			else:
 				try:
-					os.remove(cameraXmlDest)
+					os.remove(autoftg_main.cameraXmlDest)
 				except:
 					Metashape.app.messageBox("Error! Failed to remove old calibration file...")
 
 				try:
-					shutil.copy2(cameraXmlSource, cameraXmlDest)
+					shutil.copy2(autoftg_main.cameraXmlSource, autoftg_main.cameraXmlDest)
 				except:
 					Metashape.app.messageBox("Error! Failed to copy calibration file...")
 
@@ -719,7 +714,7 @@ class Ui_dialogChooseCamera(QtWidgets.QDialog):
 		
 		self.verticalLayout.addLayout(self.horizontalLayout_2)
 
-		self.listWidget.setCurrentRow(autoftg_main.cam_list.index(selected_camera))
+		self.listWidget.setCurrentRow(autoftg_main.cam_list.index(autoftg_main.selected_camera))
 
 		self.listWidget.setSortingEnabled(False)
 
@@ -729,8 +724,7 @@ class Ui_dialogChooseCamera(QtWidgets.QDialog):
 		self.exec()
 
 	def selectCam(self):
-		global selected_camera
-		selected_camera = self.listWidget.currentItem().text()
+		autoftg_main.selected_camera = self.listWidget.currentItem().text()
 		self.close()
 
 

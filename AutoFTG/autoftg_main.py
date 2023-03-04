@@ -49,18 +49,24 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
+import AutoFTG.autoftg_batch
+import AutoFTG.autoftg_chunkquickadd
+import AutoFTG.autoftg_copyregion
+import AutoFTG.autoftg_settingscamedit
+import AutoFTG.autoftg_settingschunk
+import AutoFTG.autoftg_settingsmain
+import AutoFTG.qtresources_rc2
 from AutoFTG.autoftg_batch import *
 from AutoFTG.autoftg_chunkquickadd import *
+from AutoFTG.autoftg_copyregion import *
 from AutoFTG.autoftg_settingscamedit import *
 from AutoFTG.autoftg_settingschunk import *
 from AutoFTG.autoftg_settingsmain import *
-from AutoFTG.autoftg_copyregion import *
-import AutoFTG.qtresources_rc2
 from AutoFTG.qtresources_rc2 import *
 
 # App info
 app_name = "AutoFTG"
-app_ver = "2.6.3"
+app_ver = "2.6.4"
 appsettings_ver = "6"
 app_author = "Author: Boris Bilc\n\n"
 app_repo = "Repository URL:\nhttps://github.com/bilkos/AutoFTG-Scripts_Metashape-Pro"
