@@ -10,6 +10,7 @@ Release notes for AutoFTG python script
 ## `2.6.4`
 
 - Fixed camera selection bug that prevented to define new settings
+- Fixed variables in Chunk Quick Add
 
 
 ---

@@ -159,18 +159,18 @@ class Ui_DialogAddChunkQuick(QtWidgets.QDialog):
 
 
 	def startProcess(self):
-		global selected_pre
-		global selected_suf
-		selected_menu = self.cbChunkSettings.currentText()
-		selected_pre = autoftg_main.menuCfg.get(selected_menu, "chunk_name_prefix")
-		selected_suf = autoftg_main.menuCfg.get(selected_menu, "chunk_name_suffix")
-		selected_workfolder = autoftg_main.menuCfg.get(selected_menu, "work_folder")
+		# global selected_pre
+		# global selected_suf
+		autoftg_main.selected_menu = self.cbChunkSettings.currentText()
+		autoftg_main.selected_pre = autoftg_main.menuCfg.get(autoftg_main.selected_menu, "chunk_name_prefix")
+		autoftg_main.selected_suf = autoftg_main.menuCfg.get(autoftg_main.selected_menu, "chunk_name_suffix")
+		selected_workfolder = autoftg_main.menuCfg.get(autoftg_main.selected_menu, "work_folder")
 
 		if self.checkBoxAutoProc.isChecked == False:
 			self.accept()
-			autoftg_main.newchunk_manual(selected_pre, selected_suf, selected_workfolder)
+			autoftg_main.newchunk_manual(autoftg_main.selected_pre, autoftg_main.selected_suf, selected_workfolder)
 		else:
 			self.accept()
-			autoftg_main.newchunk_auto(selected_pre, selected_suf, selected_workfolder)		
+			autoftg_main.newchunk_auto(autoftg_main.selected_pre, autoftg_main.selected_suf, selected_workfolder)		
 
 
