@@ -1524,6 +1524,18 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			print("Nothing selected?!?")
 
 
+	def loadingTime(self, n):
+
+		for i in range(0, n):
+			for j in range(0, i+1):
+			
+				print('>', end=' ')
+
+				# adding two second of time delay
+				time.sleep(0.5)
+			print(' ')
+ 
+
 	# Process selected folders automatically (no user interaction)
 	def processBatchAuto(self):
 		timeProcStart = datetime.now()
@@ -1565,7 +1577,8 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 			self.pushButton_3.setEnabled(False)
 			self.pushButton_3.setIcon(iconProcess)
 			self.pushButton_3.setText(u"Processing...")
-			
+			num = 6
+
 			for item in self.sel_items:
 				timeItemStart = datetime.now()
 				i_cnt = i_cnt + 1
@@ -1588,12 +1601,13 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 				chunk_key = str(chunk.key)
 				self.label_8.setText(u"Processing folder " + str(i_cnt) + " of " + str(sel_count) + " | Current: <b>" + str(item.text(0)) + " (" + chunk_key + ")</b> - Data Import...")
 				chunk.addPhotos(photos)
+				self.loadingTime(6)
 				chunk_name = item_pre + item.text(0) + item_suf
 				chunk.label = chunk_name
 				doc.chunk = chunk
 				doc.save(netpath)
 				Metashape.app.update()
-				time.sleep(1)
+				self.loadingTime(4)
 				autoftg_main.readCameraSettings(item_cam)
 				autoftg_main.useCameraSettings()
 				if self.checkBox_2.isChecked() == True:
@@ -1790,7 +1804,7 @@ class Ui_DialogBatchChunk(QtWidgets.QDialog):
 				self.progressBar.setValue(i_cnt)
 				Metashape.app.update()
 				doc.save(netpath)
-				time.sleep(1)
+				self.loadingTime(4)
 
 			timeProcEnd = datetime.now()
 			timeProcDelta = timeProcEnd - timeProcStart
